@@ -11,16 +11,15 @@
   <meta name="twitter:title" content="elastic" />
 
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/tags/elastic/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/tags/elastic/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -29,7 +28,7 @@
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -80,7 +79,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -249,12 +248,11 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 July 9, 2020
+                
               </p>
               <div class="post-entry">
                 
-                  <p>在本系列文章中，我们将学习如何使用 Elastic 技术栈来为 Kubernetes 构建监控环境。可观测性的目标是为生产环境提供运维工具来检测服务不可用的情况（比如服务宕机、错误或者响应变慢等），并且保留一些可以排查的信息，以帮助我们定位问题。总的来说主要包括3个方面：</p>
-
+                  <p>在本系列文章中，我们将学习如何使用 Elastic 技术栈来为 Kubernetes 构建监控环境。可观测性的目标是为生产环境提供运维工具来检测服务不可用的情况（比如服务宕机、错误或者响应变慢等），并且保留一些可以排查的信息，以帮助我们定位问题。总的来说主要包括 3 个方面：</p>
 <ul>
 <li>监控指标提供系统各个组件的时间序列数据，比如 CPU、内存、磁盘、网络等信息，通常可以用来显示系统的整体状况以及检测某个时间的异常行为</li>
 <li>日志为运维人员提供了一个数据来分析系统的一些错误行为，通常将系统、服务和应用的日志集中收集在同一个数据库中</li>
@@ -290,12 +288,11 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 July 9, 2020
+                
               </p>
               <div class="post-entry">
                 
                   <p><a href="https://www.qikqiak.com/post/k8s-monitor-use-elastic-stack-1/">前面文章我们已经安装配置了 ElasticSearch 的集群</a>，本文我们将来使用 Metricbeat 对 Kubernetes 集群进行监控。Metricbeat 是一个服务器上的轻量级采集器，用于定期收集主机和服务的监控指标。这也是我们构建 Kubernetes 全栈监控的第一个部分。</p>
-
 <p>Metribeat 默认采集系统的指标，但是也包含了大量的其他模块来采集有关服务的指标，比如 Nginx、Kafka、MySQL、Redis 等等，支持的完整模块可以在 Elastic 官方网站上查看到 <a href="https://www.elastic.co/guide/en/beats/metricbeat/current/metricbeat-modules.html">https://www.elastic.co/guide/en/beats/metricbeat/current/metricbeat-modules.html</a>。</p>
                   <a href="https://www.qikqiak.com/post/k8s-monitor-use-elastic-stack-2/" class="post-read-more">[阅读全文]</a>
                 
@@ -327,7 +324,7 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 July 9, 2020
+                
               </p>
               <div class="post-entry">
                 
@@ -362,12 +359,11 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 July 9, 2020
+                
               </p>
               <div class="post-entry">
                 
                   <p><strong>Elastic APM</strong> 是 Elastic Stack 上用于应用性能监控的工具，它允许我们通过收集传入请求、数据库查询、缓存调用等方式来实时监控应用性能。这可以让我们更加轻松快速定位性能问题。</p>
-
 <p>Elastic APM 是兼容 OpenTracing 的，所以我们可以使用大量现有的库来跟踪应用程序性能。</p>
                   <a href="https://www.qikqiak.com/post/k8s-monitor-use-elastic-stack-4/" class="post-read-more">[阅读全文]</a>
                 
@@ -453,7 +449,7 @@ autocomplete('#aa-search-input',
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -465,7 +461,7 @@ autocomplete('#aa-search-input',
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -482,7 +478,7 @@ autocomplete('#aa-search-input',
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -491,7 +487,7 @@ autocomplete('#aa-search-input',
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

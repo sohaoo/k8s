@@ -11,16 +11,15 @@
   <meta name="twitter:title" content="Posts" />
 
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/post/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/post/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -29,7 +28,7 @@
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -80,7 +79,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -238,6 +237,113 @@ autocomplete('#aa-search-input',
         <div class="posts-list">
           
             <article class="post-preview">
+              <a href="https://www.qikqiak.com/post/speed-up-develop-flow-dockerfile-best-practices/">
+                <h2 class="post-title">加速开发流程的 Dockerfile 最佳实践</h2>
+
+                
+              </a>
+
+              <p class="post-meta">
+                
+              </p>
+              <div class="post-entry">
+                
+                  <p>Dockerfile 是创建 Docker 镜像的起点，该文件提供了一组定义良好的指令，可以让我们复制文件或文件夹，运行命令，设置环境变量以及执行创建容器镜像所需的其他任务。编写 Dockerfile 来确保生成的镜像安全、小巧、快速构建和快速更新非常重要。</p>
+<p>本文我们将看到如何编写良好的 Dockerfile 来加快开发流程，确保构建的可重用性，并生成可放心部署到生产中的镜像。</p>
+                  <a href="https://www.qikqiak.com/post/speed-up-develop-flow-dockerfile-best-practices/" class="post-read-more">[阅读全文]</a>
+                
+              </div>
+
+              
+                <span class="post-meta">
+                  
+                    #<a href="https://www.qikqiak.com/tags/kubernetes/">kubernetes</a>&nbsp;
+                  
+                    #<a href="https://www.qikqiak.com/tags/docker/">docker</a>&nbsp;
+                  
+                    #<a href="https://www.qikqiak.com/tags/dockerfile/">Dockerfile</a>&nbsp;
+                  
+                </span>
+              
+
+            </article>
+          
+            <article class="post-preview">
+              <a href="https://www.qikqiak.com/post/install-efk-stack-on-k8s/">
+                <h2 class="post-title">在 Kubernetes 上搭建 EFK 日志收集系统[更新]</h2>
+
+                
+                  <h3 class="post-subtitle">
+                    一文彻底搞定 EFK 日志收集
+                  </h3>
+                
+              </a>
+
+              <p class="post-meta">
+                
+              </p>
+              <div class="post-entry">
+                
+                  <p><a href="https://www.qikqiak.com/post/kubernetes-logs-architecture/">上节课和大家介绍了 <code>Kubernetes</code> 集群中的几种日志收集方案</a>，Kubernetes 中比较流行的日志收集解决方案是 <code>Elasticsearch</code>、<code>Fluentd</code> 和 <code>Kibana</code>（EFK）技术栈，也是官方现在比较推荐的一种方案。</p>
+<p><code>Elasticsearch</code> 是一个实时的、分布式的可扩展的搜索引擎，允许进行全文、结构化搜索，它通常用于索引和搜索大量日志数据，也可用于搜索许多不同类型的文档。</p>
+<p>Elasticsearch 通常与 <code>Kibana</code> 一起部署，Kibana 是 Elasticsearch 的一个功能强大的数据可视化 Dashboard，Kibana 允许你通过 web 界面来浏览 Elasticsearch 日志数据。</p>
+<p><code>Fluentd</code>是一个流行的开源数据收集器，我们将在 Kubernetes 集群节点上安装 Fluentd，通过获取容器日志文件、过滤和转换日志数据，然后将数据传递到 Elasticsearch 集群，在该集群中对其进行索引和存储。</p>
+                  <a href="https://www.qikqiak.com/post/install-efk-stack-on-k8s/" class="post-read-more">[阅读全文]</a>
+                
+              </div>
+
+              
+                <span class="post-meta">
+                  
+                    #<a href="https://www.qikqiak.com/tags/kubernetes/">kubernetes</a>&nbsp;
+                  
+                    #<a href="https://www.qikqiak.com/tags/efk/">EFK</a>&nbsp;
+                  
+                    #<a href="https://www.qikqiak.com/tags/elasticsearch/">Elasticsearch</a>&nbsp;
+                  
+                    #<a href="https://www.qikqiak.com/tags/fluentd/">Fluentd</a>&nbsp;
+                  
+                    #<a href="https://www.qikqiak.com/tags/kibana/">Kibana</a>&nbsp;
+                  
+                </span>
+              
+
+            </article>
+          
+            <article class="post-preview">
+              <a href="https://www.qikqiak.com/post/use-cdk8s-define-k8s-apps/">
+                <h2 class="post-title">使用编程语言描述 Kubernetes 应用 - cdk8s</h2>
+
+                
+              </a>
+
+              <p class="post-meta">
+                
+              </p>
+              <div class="post-entry">
+                
+                  <p><a href="https://github.com/awslabs/cdk8s">cdk8s</a> 是 AWS Labs 发布的一个使用 TypeScript 编写的新框架，它允许我们使用一些面向对象的编程语言来定义 Kubernetes 的资源清单，cdk8s 最终也是生成原生的 Kubernetes YAML 文件，所以我们可以在任何地方使用 cdk8s 来定义运行的 Kubernetes 应用资源。</p>
+                  <a href="https://www.qikqiak.com/post/use-cdk8s-define-k8s-apps/" class="post-read-more">[阅读全文]</a>
+                
+              </div>
+
+              
+                <span class="post-meta">
+                  
+                    #<a href="https://www.qikqiak.com/tags/kubernetes/">kubernetes</a>&nbsp;
+                  
+                    #<a href="https://www.qikqiak.com/tags/cdk8s/">cdk8s</a>&nbsp;
+                  
+                    #<a href="https://www.qikqiak.com/tags/python/">python</a>&nbsp;
+                  
+                    #<a href="https://www.qikqiak.com/tags/helm/">helm</a>&nbsp;
+                  
+                </span>
+              
+
+            </article>
+          
+            <article class="post-preview">
               <a href="https://www.qikqiak.com/post/use-nodelocal-dns-cache/">
                 <h2 class="post-title">在 Kubernetes 集群中使用 NodeLocal DNSCache</h2>
 
@@ -245,11 +351,11 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 April 23, 2020
+                
               </p>
               <div class="post-entry">
                 
-                  <p>之前在解决 CoreDNS 的5秒超时问题的时候，除了通过 <code>dnsConfig</code> 去强制使用 tcp 方式解析之外，我们提到过使用 <code>NodeLocal DNSCache</code> 来解决这个问题。<code>NodeLocal DNSCache</code> 通过在集群节点上运行一个 DaemonSet 来提高 clusterDNS 性能和可靠性。处于 <code>ClusterFirst</code> 的 DNS 模式下的 Pod 可以连接到 <code>kube-dns</code> 的 serviceIP 进行 DNS 查询。通过 <code>kube-proxy</code> 组件添加的 <code>iptables</code> 规则将其转换为 <code>CoreDNS</code> 端点。通过在每个集群节点上运行 DNS 缓存，NodeLocal DNSCache 可以缩短 DNS 查找的延迟时间、使 DNS 查找时间更加一致，以及减少发送到 kube-dns 的 DNS 查询次数。</p>
+                  <p>之前在解决 CoreDNS 的 5 秒超时问题的时候，除了通过 <code>dnsConfig</code> 去强制使用 tcp 方式解析之外，我们提到过使用 <code>NodeLocal DNSCache</code> 来解决这个问题。<code>NodeLocal DNSCache</code> 通过在集群节点上运行一个 DaemonSet 来提高 clusterDNS 性能和可靠性。处于 <code>ClusterFirst</code> 的 DNS 模式下的 Pod 可以连接到 <code>kube-dns</code> 的 serviceIP 进行 DNS 查询。通过 <code>kube-proxy</code> 组件添加的 <code>iptables</code> 规则将其转换为 <code>CoreDNS</code> 端点。通过在每个集群节点上运行 DNS 缓存，NodeLocal DNSCache 可以缩短 DNS 查找的延迟时间、使 DNS 查找时间更加一致，以及减少发送到 kube-dns 的 DNS 查询次数。</p>
                   <a href="https://www.qikqiak.com/post/use-nodelocal-dns-cache/" class="post-read-more">[阅读全文]</a>
                 
               </div>
@@ -274,14 +380,12 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 April 7, 2020
+                
               </p>
               <div class="post-entry">
                 
                   <p>在前面的学习中我们使用用一个 <code>kubectl scale</code> 命令可以来实现 Pod 的扩缩容功能，但是这个毕竟是完全手动操作的，要应对线上的各种复杂情况，我们需要能够做到自动化去感知业务，来自动进行扩缩容。为此，Kubernetes 也为我们提供了这样的一个资源对象：<code>Horizontal Pod Autoscaling（Pod 水平自动伸缩）</code>，简称<code>HPA</code>，HPA 通过监控分析一些控制器控制的所有 Pod 的负载变化情况来确定是否需要调整 Pod 的副本数量，这是 HPA 最基本的原理：</p>
-
-<p><img src="https://www.qikqiak.com/k8strain/assets/img/controller/horizontal-pod-autoscaler.svg" alt="HPA" /></p>
-
+<p><img src="https://www.qikqiak.com/k8strain/assets/img/controller/horizontal-pod-autoscaler.svg" alt="HPA"></p>
 <p>我们可以简单的通过 <code>kubectl autoscale</code> 命令来创建一个 HPA 资源对象，<code>HPA Controller</code>默认<code>30s</code>轮询一次（可通过 <code>kube-controller-manager</code> 的<code>--horizontal-pod-autoscaler-sync-period</code> 参数进行设置），查询指定的资源中的 Pod 资源使用率，并且与创建时设定的值和指标做对比，从而实现自动伸缩的功能。</p>
                   <a href="https://www.qikqiak.com/post/k8s-hpa-usage/" class="post-read-more">[阅读全文]</a>
                 
@@ -309,7 +413,7 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 April 3, 2020
+                
               </p>
               <div class="post-entry">
                 
@@ -340,12 +444,11 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 March 30, 2020
+                
               </p>
               <div class="post-entry">
                 
-                  <p><a href="https://www.qikqiak.com/post/ingress-nginx-how-to-work/"><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200331110423.png" alt="ingress-nginx 控制器工作原理" /></a></p>
-
+                  <p><a href="https://www.qikqiak.com/post/ingress-nginx-how-to-work/"><img src="https://picdn.youdianzhishi.com/images/20200331110423.png" alt="ingress-nginx 控制器工作原理"></a></p>
 <p>本文的目的是解释 Nginx Ingress 控制器的工作原理，特别是 Nginx 模型的构建方式以及我们为何需要这个模型。</p>
                   <a href="https://www.qikqiak.com/post/ingress-nginx-how-to-work/" class="post-read-more">[阅读全文]</a>
                 
@@ -375,7 +478,7 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 March 27, 2020
+                
               </p>
               <div class="post-entry">
                 
@@ -408,7 +511,7 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 March 26, 2020
+                
               </p>
               <div class="post-entry">
                 
@@ -439,7 +542,7 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 March 19, 2020
+                
               </p>
               <div class="post-entry">
                 
@@ -472,7 +575,7 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 March 17, 2020
+                
               </p>
               <div class="post-entry">
                 
@@ -507,7 +610,7 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 March 16, 2020
+                
               </p>
               <div class="post-entry">
                 
@@ -524,105 +627,6 @@ autocomplete('#aa-search-input',
                     #<a href="https://www.qikqiak.com/tags/scheduler/">scheduler</a>&nbsp;
                   
                     #<a href="https://www.qikqiak.com/tags/descheduler/">descheduler</a>&nbsp;
-                  
-                </span>
-              
-
-            </article>
-          
-            <article class="post-preview">
-              <a href="https://www.qikqiak.com/post/k8s-ui-kubevious/">
-                <h2 class="post-title">带时光机的 Kubernetes Dashboard - Kubevious</h2>
-
-                
-              </a>
-
-              <p class="post-meta">
-                发表于 March 10, 2020
-              </p>
-              <div class="post-entry">
-                
-                  <p><a href="https://github.com/kubevious/kubevious">Kubevious</a> 是一个开源的 Kubernetes Dashboard，但是和我们主流的 Dashboard 却不太一样，可以说非常有特色，他将应用程序相关得所有配置都集中在一起，这可以大大节省操作人员得时间，其实这都不是最主要的，主要的是他具有一个 <code>Time Machine</code>（时光机）功能，允许我们回到之前的时间去查看应用的错误信息。</p>
-                  <a href="https://www.qikqiak.com/post/k8s-ui-kubevious/" class="post-read-more">[阅读全文]</a>
-                
-              </div>
-
-              
-                <span class="post-meta">
-                  
-                    #<a href="https://www.qikqiak.com/tags/kubernetes/">kubernetes</a>&nbsp;
-                  
-                    #<a href="https://www.qikqiak.com/tags/kubevious/">kubevious</a>&nbsp;
-                  
-                </span>
-              
-
-            </article>
-          
-            <article class="post-preview">
-              <a href="https://www.qikqiak.com/post/create-cli-app-with-cobra/">
-                <h2 class="post-title">在 Golang 中使用 Cobra 创建 CLI 应用</h2>
-
-                
-              </a>
-
-              <p class="post-meta">
-                发表于 March 9, 2020
-              </p>
-              <div class="post-entry">
-                
-                  <p><a href="https://www.qikqiak.com/post/create-cli-app-with-cobra/"><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200309153711.png" alt="create CLI app with cobra" /></a></p>
-
-<p>虽然现在我们使用的大多数软件都是可视化的，很容易上手，但是这并不代表 CLI（命令行）应用就没有用武之地了，特别是对于开发人员来说，还是会经常和 CLI 应用打交道。而 Golang 就非常适合用来构建 CLI 应用，下面我们就将来介绍如何在 Golang 中构建一个 CLI 应用。</p>
-
-<p>对于开发人员来说平时可能就需要使用到很多 CLI 工具，比如 npm、node、go、python、docker、kubectl 等等，因为这些工具非常小巧、没有依赖性、非常适合系统管理或者一些自动化任务等等。</p>
-                  <a href="https://www.qikqiak.com/post/create-cli-app-with-cobra/" class="post-read-more">[阅读全文]</a>
-                
-              </div>
-
-              
-                <span class="post-meta">
-                  
-                    #<a href="https://www.qikqiak.com/tags/golang/">golang</a>&nbsp;
-                  
-                    #<a href="https://www.qikqiak.com/tags/cobra/">cobra</a>&nbsp;
-                  
-                </span>
-              
-
-            </article>
-          
-            <article class="post-preview">
-              <a href="https://www.qikqiak.com/post/changelog/">
-                <h2 class="post-title">优点知识更新日志</h2>
-
-                
-              </a>
-
-              <p class="post-meta">
-                发表于 March 4, 2020
-              </p>
-              <div class="post-entry">
-                
-                  <p>近期对我们的在线学习网站 <a href="https://youdianzhishi.com">优点知识</a> 做了一些功能更新，无论是体验还是功能都更加完善了。大家对网站有任何的建议或者反馈都可以随时交流。</p>
-
-<p>1.课程目录优化</p>
-
-<p>用不同的 icon 区分视频、文档、直播，并记录每节课的学习进度，用不同的 icon 标识学习状态，更加清晰明了，增加“我已掌握”工，用户可以手动标记是否已经掌握某节课，否则需要学习完本节课后才会变成已学完的状态。</p>
-
-<p><a href="https://youdianzhishi.com"><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200304110222.png" alt="课程章节" /></a></p>
-
-<p>2.重构个人中心</p>
-                  <a href="https://www.qikqiak.com/post/changelog/" class="post-read-more">[阅读全文]</a>
-                
-              </div>
-
-              
-                <span class="post-meta">
-                  
-                    #<a href="https://www.qikqiak.com/tags/%E8%AF%BE%E7%A8%8B/">课程</a>&nbsp;
-                  
-                    #<a href="https://www.qikqiak.com/tags/changelog/">changelog</a>&nbsp;
                   
                 </span>
               
@@ -706,7 +710,7 @@ autocomplete('#aa-search-input',
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -718,7 +722,7 @@ autocomplete('#aa-search-input',
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -735,7 +739,7 @@ autocomplete('#aa-search-input',
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -744,7 +748,7 @@ autocomplete('#aa-search-input',
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

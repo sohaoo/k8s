@@ -11,25 +11,21 @@
   <meta name="twitter:title" content="kubernetes 日志收集方案" />
 
   <meta name="description" content="完善的日志系统是保证系统持续稳定运行的基石，帮助提升运维、运营效率，建立大数据时代的海量日志处理等能力都需要日志系统的支持，所以搭建一套行之有效的日志系统至关重要。
-
 本文将介绍两种kubernetes 集群下日志收集的方案：阿里云日志服务或者EFK方案">
   <meta property="og:description" content="完善的日志系统是保证系统持续稳定运行的基石，帮助提升运维、运营效率，建立大数据时代的海量日志处理等能力都需要日志系统的支持，所以搭建一套行之有效的日志系统至关重要。
-
 本文将介绍两种kubernetes 集群下日志收集的方案：阿里云日志服务或者EFK方案">
   <meta name="twitter:description" content="完善的日志系统是保证系统持续稳定运行的基石，帮助提升运维、运营效率，建立大数据时代的海量日志处理等能力都需要日志系统的支持，所以搭建一套行之有效的日志系统至关重要。
-
 本文将介绍两种kubernetes 集群下日志收集的方案：阿里云日志服务或者EFK方案">
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/post/kubernetes-logs-collect/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/post/kubernetes-logs-collect/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -38,7 +34,7 @@
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -89,7 +85,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -247,12 +243,8 @@ autocomplete('#aa-search-input',
                   
                   
                     <span class="post-meta">
-  
-    发表于 November 22, 2017
-  
-  
+  发表于 November 22, 2017  
 </span>
-
 
                   
               </div>
@@ -274,12 +266,8 @@ autocomplete('#aa-search-input',
                 
                 
                   <span class="post-meta">
-  
-    发表于 November 22, 2017
-  
-  
+  发表于 November 22, 2017  
 </span>
-
 
                 
             </div>
@@ -334,29 +322,19 @@ autocomplete('#aa-search-input',
           
 
           <p>完善的日志系统是保证系统持续稳定运行的基石，帮助提升运维、运营效率，建立大数据时代的海量日志处理等能力都需要日志系统的支持，所以搭建一套行之有效的日志系统至关重要。</p>
-
 <p>本文将介绍两种kubernetes 集群下日志收集的方案：阿里云日志服务或者<code>EFK</code>方案</p>
-
 <h2 id="阿里云日志服务">阿里云日志服务</h2>
-
 <blockquote>
 <p>阿里云日志服务（Log Service，简称 Log）是针对日志类数据一站式服务，在阿里巴巴集团经历了大量大数据场景锤炼而成。用户无需开发就能快捷完成数据采集、消费、投递以及查询分析等功能，帮助提升运维、运营效率，建立 DT 时代海量日志处理能力。</p>
 </blockquote>
-
 <p>实际上对于小团队自己搭建<code>ELK</code>或者<code>EFK</code>成本是很高的，特别是<code>ElasticSearch</code>本身非常消耗资源不说，能够将其性能优化到一定程度都是非常不容易的一件事情，所以对于中小团队能使用第三方的日志服务更加方便，即使你一定要使用<code>ES</code>的话，我也推荐使用阿里云的<code>ElasticSearch</code>的云服务。</p>
-
 <p>同样的我们可以集成阿里云日志服务来查看和管理您的<code>Kubernetes</code>集群应用的日志。</p>
-
 <h4 id="创建日志项目">创建日志项目</h4>
-
 <p>首先登录<a href="https://sls.console.aliyun.com/?spm=a3c0i.o55339zh.a3.1.5f5559eecVCIMa#/">日志服务管理控制台</a>，创建一个项目(Project)：<code>k8slog-project</code></p>
-
-<h4 id="创建日志收集-agent">创建日志收集<code>Agent</code></h4>
-
+<h4 id="创建日志收集agent">创建日志收集<code>Agent</code></h4>
 <p>直接使用阿里云提供的<code>fluentd</code>组件</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ curl http://aliacs-k8s.oss.aliyuncs.com/conf%2Flogging%2Ffluentd-pilot.yml &gt; fluentd-pilot.yml</code></pre></div>
-<p>将上面yaml 文件中对应的env 环境值更改成实际的值，其中：</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ curl http://aliacs-k8s.oss.aliyuncs.com/conf%2Flogging%2Ffluentd-pilot.yml &gt; fluentd-pilot.yml
+</span></span></code></pre></div><p>将上面yaml 文件中对应的env 环境值更改成实际的值，其中：</p>
 <ul>
 <li><strong>FLUENTD_OUTPUT：</strong> 固定值 aliyun_sls，代表将日志收集到阿里云日志服务。</li>
 <li><strong>ALIYUNSLS_PROJECT：</strong> 您第一步创建的阿里云日志服务的 project 名称.</li>
@@ -365,83 +343,82 @@ autocomplete('#aa-search-input',
 <li><strong>ALIYUNSLS_ACCESS_KEY_SECRET:</strong> 您的阿里云账号的 access_key_secret。</li>
 <li><strong>ALIYUNSLS_NEED_CREATE_LOGSTORE:</strong> 当 Logstore 不存在的时候是否自动创建，<code>true</code> 表示自动创建。</li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: extensions/v1beta1
-kind: DaemonSet
-metadata:
-  name: fluentd-pilot
-  namespace: kube-system
-  labels:
-    k8s-app: fluentd-pilot
-    kubernetes.io/cluster-service: <span style="color:#f1fa8c">&#34;true&#34;</span>
-spec:
-  template:
-    metadata:
-      labels:
-        k8s-app: fluentd-es
-        kubernetes.io/cluster-service: <span style="color:#f1fa8c">&#34;true&#34;</span>
-        version: v1.<span style="color:#bd93f9">22</span>
-      annotations:
-        scheduler.alpha.kubernetes.io/critical-pod: <span style="color:#f1fa8c">&#39;&#39;</span>
-        scheduler.alpha.kubernetes.io/tolerations: <span style="color:#f1fa8c">&#39;[{&#34;key&#34;: &#34;node.alpha.kubernetes.io/ismaster&#34;, &#34;effect&#34;: &#34;NoSchedule&#34;}]&#39;</span>
-    spec:
-      containers:
-      - name: fluentd-pilot
-        image: registry.cn-hangzhou.aliyuncs.com/wangbs/fluentd-pilot:latest
-        resources:
-          limits:
-            memory: 200Mi
-          requests:
-            cpu: 100m
-            memory: 200Mi
-        env:
-          - name: <span style="color:#f1fa8c">&#34;FLUENTD_OUTPUT&#34;</span>
-            value: <span style="color:#f1fa8c">&#34;aliyun_sls&#34;</span>
-          - name: <span style="color:#f1fa8c">&#34;ALIYUNSLS_PROJECT&#34;</span>
-            value: <span style="color:#f1fa8c">&#34;k8slog-project&#34;</span>
-          - name: <span style="color:#f1fa8c">&#34;ALIYUNSLS_REGION_ENDPOINT&#34;</span>
-            value: <span style="color:#f1fa8c">&#34;cn-shanghai.log.aliyuncs.com&#34;</span>
-          - name: <span style="color:#f1fa8c">&#34;ALIYUNSLS_ACCESS_KEY_ID&#34;</span>
-            value: <span style="color:#f1fa8c">&#34;xxxxxxx&#34;</span>
-          - name: <span style="color:#f1fa8c">&#34;ALIYUNSLS_ACCESS_KEY_SECRET&#34;</span>
-            value: <span style="color:#f1fa8c">&#34;xxxxxx&#34;</span>
-          - name: <span style="color:#f1fa8c">&#34;ALIYUNSLS_NEED_CREATE_LOGSTORE&#34;</span>
-            value: <span style="color:#f1fa8c">&#34;true&#34;</span>
-        volumeMounts:
-        - name: sock
-          mountPath: /var/run/docker.sock
-        - name: root
-          mountPath: /host
-          readOnly: <span style="color:#ff79c6">true</span>
-      terminationGracePeriodSeconds: <span style="color:#bd93f9">30</span>
-      volumes:
-      - name: sock
-        hostPath:
-          path: /var/run/docker.sock
-      - name: root
-        hostPath:
-          path: /</code></pre></div>
-<p>创建完成后可以查看运行状态：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl get ds -n kube-system
-NAME              DESIRED   CURRENT   READY     UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
-fluentd-pilot     <span style="color:#bd93f9">4</span>         <span style="color:#bd93f9">4</span>         <span style="color:#bd93f9">4</span>         <span style="color:#bd93f9">4</span>            <span style="color:#bd93f9">4</span>           &lt;none&gt;          5h</code></pre></div>
-<h4 id="收集应用日志">收集应用日志</h4>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: extensions/v1beta1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: DaemonSet
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: fluentd-pilot
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">namespace</span>: kube-system
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">labels</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">k8s-app</span>: fluentd-pilot
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">kubernetes.io/cluster-service</span>: <span style="color:#f1fa8c">&#34;true&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">template</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">labels</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">k8s-app</span>: fluentd-es
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">kubernetes.io/cluster-service</span>: <span style="color:#f1fa8c">&#34;true&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">version</span>: v1.22
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">annotations</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">scheduler.alpha.kubernetes.io/critical-pod</span>: <span style="color:#f1fa8c">&#39;&#39;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">scheduler.alpha.kubernetes.io/tolerations</span>: <span style="color:#f1fa8c">&#39;[{&#34;key&#34;: &#34;node.alpha.kubernetes.io/ismaster&#34;, &#34;effect&#34;: &#34;NoSchedule&#34;}]&#39;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">containers</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ff79c6">name</span>: fluentd-pilot
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">image</span>: registry.cn-hangzhou.aliyuncs.com/wangbs/fluentd-pilot:latest
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">resources</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">limits</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">memory</span>: 200Mi
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">requests</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">cpu</span>: 100m
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">memory</span>: 200Mi
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">env</span>:
+</span></span><span style="display:flex;"><span>          - <span style="color:#ff79c6">name</span>: <span style="color:#f1fa8c">&#34;FLUENTD_OUTPUT&#34;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">value</span>: <span style="color:#f1fa8c">&#34;aliyun_sls&#34;</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#ff79c6">name</span>: <span style="color:#f1fa8c">&#34;ALIYUNSLS_PROJECT&#34;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">value</span>: <span style="color:#f1fa8c">&#34;k8slog-project&#34;</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#ff79c6">name</span>: <span style="color:#f1fa8c">&#34;ALIYUNSLS_REGION_ENDPOINT&#34;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">value</span>: <span style="color:#f1fa8c">&#34;cn-shanghai.log.aliyuncs.com&#34;</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#ff79c6">name</span>: <span style="color:#f1fa8c">&#34;ALIYUNSLS_ACCESS_KEY_ID&#34;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">value</span>: <span style="color:#f1fa8c">&#34;xxxxxxx&#34;</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#ff79c6">name</span>: <span style="color:#f1fa8c">&#34;ALIYUNSLS_ACCESS_KEY_SECRET&#34;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">value</span>: <span style="color:#f1fa8c">&#34;xxxxxx&#34;</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#ff79c6">name</span>: <span style="color:#f1fa8c">&#34;ALIYUNSLS_NEED_CREATE_LOGSTORE&#34;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">value</span>: <span style="color:#f1fa8c">&#34;true&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">volumeMounts</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">name</span>: sock
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">mountPath</span>: /var/run/docker.sock
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">name</span>: root
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">mountPath</span>: /host
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">readOnly</span>: <span style="color:#ff79c6">true</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">terminationGracePeriodSeconds</span>: <span style="color:#bd93f9">30</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">volumes</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ff79c6">name</span>: sock
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">hostPath</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">path</span>: /var/run/docker.sock
+</span></span><span style="display:flex;"><span>      - <span style="color:#ff79c6">name</span>: root
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">hostPath</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">path</span>: /
+</span></span></code></pre></div><p>创建完成后可以查看运行状态：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl get ds -n kube-system
+</span></span><span style="display:flex;"><span>NAME              DESIRED   CURRENT   READY     UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+</span></span><span style="display:flex;"><span>fluentd-pilot     <span style="color:#bd93f9">4</span>         <span style="color:#bd93f9">4</span>         <span style="color:#bd93f9">4</span>         <span style="color:#bd93f9">4</span>            <span style="color:#bd93f9">4</span>           &lt;none&gt;          5h
+</span></span></code></pre></div><h4 id="收集应用日志">收集应用日志</h4>
 <p>为了让<code>Fluentd</code>收集您的应用日志，您需要在应用的环境变量中设置参数 <code>aliyun_logs_fluentd=stdout</code> 来启用应用的日志收集功能。其中，<code>fluentd</code> 是您上面创建的日志 Project 的<code>Logstore</code>，如果该 Logstore 不存在，系统会自动为您创建该名称的 Logstore；<code>stdout</code> 代表收集标准输出的日志，您还可以配置收集文件日志，具体使用方式请参考 Fluentd-pilot。</p>
-
 <p>这里我们按照上面的方式在<code>kubedns</code>上面添加环境变量：<code>aliyun_logs_kubedns=stuout</code>，然后更新<code>kubedns</code>，设置好应用后，就可以前往 <a href="https://sls.console.aliyun.com/?spm=5176.2020520001.1001.148.e5PUEp#/">日志服务管理控制台</a> 查看并使用日志了。</p>
-
-<figure><img src="https://www.qikqiak.com/img/posts/WX20171114-171959.png" alt="aliyun log server"><figcaption>aliyun log server</figcaption></figure>
-
+<p><img src="https://www.qikqiak.com/img/posts/WX20171114-171959.png" alt="aliyun log server"></p>
 <h2 id="efk-方案">EFK 方案</h2>
-
 <p>参考文章：<a href="https://www.qikqiak.com/post/install-efk-stack-on-k8s/">在 Kubernetes 上搭建 EFK 日志收集系统</a></p>
-
-<p><a href="https://youdianzhishi.com/web/course/1030" title="从 Docker 到 Kubernetes 进阶课程"><img src="https://sdn.youdianzhishi.com/images/2019/10/24/65f2cfb229184268a18745fe202b281b.jpg?imageView2/2/format/webp" alt="Kubernetes进阶训练营"></a></p>
-
+<!-- raw HTML omitted -->
 
           <h2>微信公众号</h2>
-<p>扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的 kubernetes 讨论群里面共同学习。</p>
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/qrcode.png" alt="wechat-account-qrcode">
+<p>
+  扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的
+  kubernetes 讨论群里面共同学习。
+</p>
+<img
+  src="https://picdn.youdianzhishi.com/images/qrcode.png"
+  alt="wechat-account-qrcode"
+/>
 
   
           
@@ -529,12 +506,12 @@ fluentd-pilot     <span style="color:#bd93f9">4</span>         <span style="colo
         <ul class="pager blog-pager">
           
             <li class="previous">
-              <a href="https://www.qikqiak.com/post/socketio-multiple-nodes-in-kubernetes/" data-toggle="tooltip" data-placement="top" title="kubernetes 下实现socket.io 的集群模式">&larr; 前一篇</a>
+              <a href="https://www.qikqiak.com/post/update-prometheus-2-in-kubernetes/" data-toggle="tooltip" data-placement="top" title="Kubernetes 下升级Prometheus2.0">&larr; 前一篇</a>
             </li>
           
           
             <li class="next">
-              <a href="https://www.qikqiak.com/post/update-prometheus-2-in-kubernetes/" data-toggle="tooltip" data-placement="top" title="Kubernetes 下升级Prometheus2.0">后一篇 &rarr;</a>
+              <a href="https://www.qikqiak.com/post/a-better-git-log/" data-toggle="tooltip" data-placement="top" title="更优雅的git log">后一篇 &rarr;</a>
             </li>
           
         </ul>
@@ -642,7 +619,7 @@ fluentd-pilot     <span style="color:#bd93f9">4</span>         <span style="colo
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -654,7 +631,7 @@ fluentd-pilot     <span style="color:#bd93f9">4</span>         <span style="colo
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -671,7 +648,7 @@ fluentd-pilot     <span style="color:#bd93f9">4</span>         <span style="colo
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -680,7 +657,7 @@ fluentd-pilot     <span style="color:#bd93f9">4</span>         <span style="colo
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

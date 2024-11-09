@@ -11,25 +11,21 @@
   <meta name="twitter:title" content="使用 kube-vip 搭建高可用 Kubernetes 集群" />
 
   <meta name="description" content="kube-vip 可以在你的控制平面节点上提供一个 Kubernetes 原生的 HA 负载均衡，我们不需要再在外部设置 HAProxy 和 Keepalived 来实现集群的高可用了。
-
 kube-vip 是一个为 Kubernetes 集群内部和外部提供高可用和负载均衡的开源项目，在 Vmware 的 Tanzu 项目中已经使用 kube-vip 替换了用于 vSphere 部署的 HAProxy 负载均衡器，本文我们将先来了解 kube-vip 如何用于 Kubernetes 控制平面的高可用和负载均衡功能。">
   <meta property="og:description" content="kube-vip 可以在你的控制平面节点上提供一个 Kubernetes 原生的 HA 负载均衡，我们不需要再在外部设置 HAProxy 和 Keepalived 来实现集群的高可用了。
-
 kube-vip 是一个为 Kubernetes 集群内部和外部提供高可用和负载均衡的开源项目，在 Vmware 的 Tanzu 项目中已经使用 kube-vip 替换了用于 vSphere 部署的 HAProxy 负载均衡器，本文我们将先来了解 kube-vip 如何用于 Kubernetes 控制平面的高可用和负载均衡功能。">
   <meta name="twitter:description" content="kube-vip 可以在你的控制平面节点上提供一个 Kubernetes 原生的 HA 负载均衡，我们不需要再在外部设置 HAProxy 和 Keepalived 来实现集群的高可用了。
-
 kube-vip 是一个为 Kubernetes 集群内部和外部提供高可用和负载均衡的开源项目，在 Vmware 的 Tanzu 项目中已经使用 kube-vip 替换了用于 vSphere …">
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/post/use-kube-vip-ha-k8s-lb/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/post/use-kube-vip-ha-k8s-lb/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -38,7 +34,7 @@ kube-vip 是一个为 Kubernetes 集群内部和外部提供高可用和负载�
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -89,7 +85,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -232,7 +228,7 @@ autocomplete('#aa-search-input',
 
 
   
-    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20210617105319.png" data-img-desc-1="https://unsplash.com/photos/QsgE8vzTTSo"></div>
+    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://picdn.youdianzhishi.com/images/20210617105319.png" data-img-desc-1="https://unsplash.com/photos/QsgE8vzTTSo"></div>
   
 
   <header class="header-section has-img">
@@ -247,12 +243,8 @@ autocomplete('#aa-search-input',
                   
                   
                     <span class="post-meta">
-  
-    发表于 June 17, 2021
-  
-  
+  发表于 June 17, 2021  
 </span>
-
 
                   
               </div>
@@ -274,12 +266,8 @@ autocomplete('#aa-search-input',
                 
                 
                   <span class="post-meta">
-  
-    发表于 June 17, 2021
-  
-  
+  发表于 June 17, 2021  
 </span>
-
 
                 
             </div>
@@ -321,20 +309,18 @@ autocomplete('#aa-search-input',
             
 <aside class="toc">
   <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#特点">特点</a></li>
-<li><a href="#haproxy-和-kube-vip-的-ha-集群">HAProxy 和 kube-vip 的 HA 集群</a></li>
-<li><a href="#kube-vip-架构">kube-vip 架构</a>
-<ul>
-<li><a href="#cluster">Cluster</a></li>
-<li><a href="#虚拟ip">虚拟IP</a></li>
-<li><a href="#arp">ARP</a></li>
-</ul></li>
-<li><a href="#使用-kube-vip">使用 kube-vip</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#特点">特点</a></li>
+    <li><a href="#haproxy-和-kube-vip-的-ha-集群">HAProxy 和 kube-vip 的 HA 集群</a></li>
+    <li><a href="#kube-vip-架构">kube-vip 架构</a>
+      <ul>
+        <li><a href="#cluster">Cluster</a></li>
+        <li><a href="#虚拟-ip">虚拟 IP</a></li>
+        <li><a href="#arp">ARP</a></li>
+      </ul>
+    </li>
+    <li><a href="#使用-kube-vip">使用 kube-vip</a></li>
+  </ul>
 </nav>
 </aside>
 
@@ -353,16 +339,12 @@ autocomplete('#aa-search-input',
           
 
           <p><a href="https://kube-vip.io/">kube-vip</a> 可以在你的控制平面节点上提供一个 Kubernetes 原生的 HA 负载均衡，我们不需要再在外部设置 HAProxy 和 Keepalived 来实现集群的高可用了。</p>
-
 <p><code>kube-vip</code> 是一个为 Kubernetes 集群内部和外部提供高可用和负载均衡的开源项目，在 Vmware 的 Tanzu 项目中已经<a href="https://docs.vmware.com/en/VMware-Tanzu-Kubernetes-Grid/1.2/rn/VMware-Tanzu-Kubernetes-Grid-12-Release-Notes.html">使用 kube-vip 替换了用于 vSphere 部署的 HAProxy 负载均衡器</a>，本文我们将先来了解 kube-vip 如何用于 Kubernetes 控制平面的高可用和负载均衡功能。</p>
-
 <h2 id="特点">特点</h2>
-
 <p>Kube-Vip 最初是为 Kubernetes 控制平面提供 HA 解决方案而创建的，随着时间的推移，它已经发展为将相同的功能合并到 Kubernetes 的 LoadBalancer 类型的 Service 中了。</p>
-
 <ul>
 <li>VIP 地址可以是 IPv4 或 IPv6</li>
-<li>带有 ARP（第2层）或 BGP（第3层）的控制平面</li>
+<li>带有 ARP（第 2 层）或 BGP（第 3 层）的控制平面</li>
 <li>使用领导选举或 raft 控制平面</li>
 <li>带有 kubeadm（静态 Pod）的控制平面 HA</li>
 <li>带有 K3s/和其他（DaemonSets）的控制平面 HA</li>
@@ -371,149 +353,120 @@ autocomplete('#aa-search-input',
 <li>每个命名空间或全局的 Service LoadBalancer 地址池</li>
 <li>Service LoadBalancer 地址通过 UPNP 暴露给网关</li>
 </ul>
-
 <h2 id="haproxy-和-kube-vip-的-ha-集群">HAProxy 和 kube-vip 的 HA 集群</h2>
-
-<p>在以前我们在私有环境下创建 Kubernetes 集群时，我们需要准备一个硬件/软件的负载均衡器来创建多控制面集群，更多的情况下我们会选择使用 HAProxy + Keepalived 来实现这个功能。一般情况下我们创建2个负载均衡器的虚拟机，然后分配一个 VIP，然后使用 VIP 为负载均衡器提供服务，通过 VIP 将流量重定向到后端的某个 Kubernetes 控制器平面节点上。</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20210616142006.png" alt="haproxy+keepalived"><figcaption>haproxy+keepalived</figcaption></figure>
-
+<p>在以前我们在私有环境下创建 Kubernetes 集群时，我们需要准备一个硬件/软件的负载均衡器来创建多控制面集群，更多的情况下我们会选择使用 HAProxy + Keepalived 来实现这个功能。一般情况下我们创建 2 个负载均衡器的虚拟机，然后分配一个 VIP，然后使用 VIP 为负载均衡器提供服务，通过 VIP 将流量重定向到后端的某个 Kubernetes 控制器平面节点上。</p>
+<p><img src="https://picdn.youdianzhishi.com/images/20210616142006.png" alt="haproxy+keepalived"></p>
 <p>接下来我们再来看看如果我们使用 kube-vip 的话会怎样呢？</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20210616142207.png" alt="kube-vip"><figcaption>kube-vip</figcaption></figure>
-
-<p>kube-vip 可以通过静态 pod 运行在控制平面节点上，这些 pod 通过ARP 对话来识别每个节点上的其他主机，所以需要在 hosts 文件中设置每个节点的 IP 地址，我们可以选择 BGP 或 ARP 来设置负载平衡器，这与 Metal LB 比较类似。这里我们没有 BGP 服务，只是想快速测试一下，所以这里我们使用 ARP 与静态 pod 的方式。</p>
-
+<p><img src="https://picdn.youdianzhishi.com/images/20210616142207.png" alt="kube-vip"></p>
+<p>kube-vip 可以通过静态 pod 运行在控制平面节点上，这些 pod 通过 ARP 对话来识别每个节点上的其他主机，所以需要在 hosts 文件中设置每个节点的 IP 地址，我们可以选择 BGP 或 ARP 来设置负载平衡器，这与 Metal LB 比较类似。这里我们没有 BGP 服务，只是想快速测试一下，所以这里我们使用 ARP 与静态 pod 的方式。</p>
 <h2 id="kube-vip-架构">kube-vip 架构</h2>
-
-<p>kube-vip 有许多功能设计选择提供高可用性或网络功能，作为VIP/负载平衡解决方案的一部分。</p>
-
+<p>kube-vip 有许多功能设计选择提供高可用性或网络功能，作为 VIP/负载平衡解决方案的一部分。</p>
 <h3 id="cluster">Cluster</h3>
-
 <p>kube-vip 建立了一个多节点或多模块的集群来提供高可用性。在 ARP 模式下，会选出一个领导者，这个节点将继承虚拟 IP 并成为集群内负载均衡的领导者，而在 BGP 模式下，所有节点都会通知 VIP 地址。</p>
-
 <p>当使用 ARP 或 layer2 时，它将使用领导者选举，当然也可以使用 raft 集群技术，但这种方法在很大程度上已经被领导者选举所取代，特别是在集群中运行时。</p>
-
-<h3 id="虚拟ip">虚拟IP</h3>
-
+<h3 id="虚拟-ip">虚拟 IP</h3>
 <p>集群中的领导者将分配 vip，并将其绑定到配置中声明的选定接口上。当领导者改变时，它将首先撤销 vip，或者在失败的情况下，vip 将直接由下一个当选的领导者分配。</p>
-
-<p>当 vip 从一个主机移动到另一个主机时，任何使用 vip 的主机将保留以前的 <code>vip &lt;-&gt; MAC</code> 地址映射，直到 ARP 过期（通常是30秒）并检索到一个新的 <code>vip &lt;-&gt; MAC</code> 映射，这可以通过使用无偿的 ARP 广播来优化。</p>
-
+<p>当 vip 从一个主机移动到另一个主机时，任何使用 vip 的主机将保留以前的 <code>vip &lt;-&gt; MAC</code> 地址映射，直到 ARP 过期（通常是 30 秒）并检索到一个新的 <code>vip &lt;-&gt; MAC</code> 映射，这可以通过使用无偿的 ARP 广播来优化。</p>
 <h3 id="arp">ARP</h3>
-
-<p>kube-vip可以被配置为广播一个无偿的 arp（可选），通常会立即通知所有本地主机 <code>vip &lt;-&gt; MAC</code> 地址映射已经改变。</p>
-
+<p>kube-vip 可以被配置为广播一个无偿的 arp（可选），通常会立即通知所有本地主机 <code>vip &lt;-&gt; MAC</code> 地址映射已经改变。</p>
 <p>下面我们可以看到，当 ARP 广播被接收时，故障转移通常在几秒钟内完成。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#bd93f9">64</span> bytes from <span style="color:#bd93f9">192</span>.168.0.75: <span style="color:#8be9fd;font-style:italic">icmp_seq</span><span style="color:#ff79c6">=</span><span style="color:#bd93f9">146</span> <span style="color:#8be9fd;font-style:italic">ttl</span><span style="color:#ff79c6">=</span><span style="color:#bd93f9">64</span> <span style="color:#8be9fd;font-style:italic">time</span><span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>.258 ms
-<span style="color:#bd93f9">64</span> bytes from <span style="color:#bd93f9">192</span>.168.0.75: <span style="color:#8be9fd;font-style:italic">icmp_seq</span><span style="color:#ff79c6">=</span><span style="color:#bd93f9">147</span> <span style="color:#8be9fd;font-style:italic">ttl</span><span style="color:#ff79c6">=</span><span style="color:#bd93f9">64</span> <span style="color:#8be9fd;font-style:italic">time</span><span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>.240 ms
-<span style="color:#bd93f9">92</span> bytes from <span style="color:#bd93f9">192</span>.168.0.70: Redirect Host<span style="color:#ff79c6">(</span>New addr: <span style="color:#bd93f9">192</span>.168.0.75<span style="color:#ff79c6">)</span>
-Vr HL TOS  Len   ID Flg  off TTL Pro  cks      Src      Dst
- <span style="color:#bd93f9">4</span>  <span style="color:#bd93f9">5</span>  <span style="color:#bd93f9">00</span> <span style="color:#bd93f9">0054</span> bc98   <span style="color:#bd93f9">0</span> <span style="color:#bd93f9">0000</span>  3f  <span style="color:#bd93f9">01</span> 3d16 <span style="color:#bd93f9">192</span>.168.0.95  <span style="color:#bd93f9">192</span>.168.0.75
-
-Request timeout <span style="color:#ff79c6">for</span> icmp_seq <span style="color:#bd93f9">148</span>
-<span style="color:#bd93f9">92</span> bytes from <span style="color:#bd93f9">192</span>.168.0.70: Redirect Host<span style="color:#ff79c6">(</span>New addr: <span style="color:#bd93f9">192</span>.168.0.75<span style="color:#ff79c6">)</span>
-Vr HL TOS  Len   ID Flg  off TTL Pro  cks      Src      Dst
- <span style="color:#bd93f9">4</span>  <span style="color:#bd93f9">5</span>  <span style="color:#bd93f9">00</span> <span style="color:#bd93f9">0054</span> 75ff   <span style="color:#bd93f9">0</span> <span style="color:#bd93f9">0000</span>  3f  <span style="color:#bd93f9">01</span> 83af <span style="color:#bd93f9">192</span>.168.0.95  <span style="color:#bd93f9">192</span>.168.0.75
-
-Request timeout <span style="color:#ff79c6">for</span> icmp_seq <span style="color:#bd93f9">149</span>
-<span style="color:#bd93f9">92</span> bytes from <span style="color:#bd93f9">192</span>.168.0.70: Redirect Host<span style="color:#ff79c6">(</span>New addr: <span style="color:#bd93f9">192</span>.168.0.75<span style="color:#ff79c6">)</span>
-Vr HL TOS  Len   ID Flg  off TTL Pro  cks      Src      Dst
- <span style="color:#bd93f9">4</span>  <span style="color:#bd93f9">5</span>  <span style="color:#bd93f9">00</span> <span style="color:#bd93f9">0054</span> <span style="color:#bd93f9">2890</span>   <span style="color:#bd93f9">0</span> <span style="color:#bd93f9">0000</span>  3f  <span style="color:#bd93f9">01</span> d11e <span style="color:#bd93f9">192</span>.168.0.95  <span style="color:#bd93f9">192</span>.168.0.75
-
-Request timeout <span style="color:#ff79c6">for</span> icmp_seq <span style="color:#bd93f9">150</span>
-<span style="color:#bd93f9">64</span> bytes from <span style="color:#bd93f9">192</span>.168.0.75: <span style="color:#8be9fd;font-style:italic">icmp_seq</span><span style="color:#ff79c6">=</span><span style="color:#bd93f9">151</span> <span style="color:#8be9fd;font-style:italic">ttl</span><span style="color:#ff79c6">=</span><span style="color:#bd93f9">64</span> <span style="color:#8be9fd;font-style:italic">time</span><span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span>.245 ms</code></pre></div>
-<h2 id="使用-kube-vip">使用 kube-vip</h2>
-
-<p>接下来我们来使用 kube-vip 搭建一个高可用的 Kubernetes 集群。先准备6个节点：</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#bd93f9">64</span> bytes from 192.168.0.75: <span style="color:#8be9fd;font-style:italic">icmp_seq</span><span style="color:#ff79c6">=</span><span style="color:#bd93f9">146</span> <span style="color:#8be9fd;font-style:italic">ttl</span><span style="color:#ff79c6">=</span><span style="color:#bd93f9">64</span> <span style="color:#8be9fd;font-style:italic">time</span><span style="color:#ff79c6">=</span>0.258 ms
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">64</span> bytes from 192.168.0.75: <span style="color:#8be9fd;font-style:italic">icmp_seq</span><span style="color:#ff79c6">=</span><span style="color:#bd93f9">147</span> <span style="color:#8be9fd;font-style:italic">ttl</span><span style="color:#ff79c6">=</span><span style="color:#bd93f9">64</span> <span style="color:#8be9fd;font-style:italic">time</span><span style="color:#ff79c6">=</span>0.240 ms
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">92</span> bytes from 192.168.0.70: Redirect Host<span style="color:#ff79c6">(</span>New addr: 192.168.0.75<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>Vr HL TOS  Len   ID Flg  off TTL Pro  cks      Src      Dst
+</span></span><span style="display:flex;"><span> <span style="color:#bd93f9">4</span>  <span style="color:#bd93f9">5</span>  <span style="color:#bd93f9">00</span> <span style="color:#bd93f9">0054</span> bc98   <span style="color:#bd93f9">0</span> <span style="color:#bd93f9">0000</span>  3f  <span style="color:#bd93f9">01</span> 3d16 192.168.0.95  192.168.0.75
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Request timeout <span style="color:#ff79c6">for</span> icmp_seq <span style="color:#bd93f9">148</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">92</span> bytes from 192.168.0.70: Redirect Host<span style="color:#ff79c6">(</span>New addr: 192.168.0.75<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>Vr HL TOS  Len   ID Flg  off TTL Pro  cks      Src      Dst
+</span></span><span style="display:flex;"><span> <span style="color:#bd93f9">4</span>  <span style="color:#bd93f9">5</span>  <span style="color:#bd93f9">00</span> <span style="color:#bd93f9">0054</span> 75ff   <span style="color:#bd93f9">0</span> <span style="color:#bd93f9">0000</span>  3f  <span style="color:#bd93f9">01</span> 83af 192.168.0.95  192.168.0.75
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Request timeout <span style="color:#ff79c6">for</span> icmp_seq <span style="color:#bd93f9">149</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">92</span> bytes from 192.168.0.70: Redirect Host<span style="color:#ff79c6">(</span>New addr: 192.168.0.75<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>Vr HL TOS  Len   ID Flg  off TTL Pro  cks      Src      Dst
+</span></span><span style="display:flex;"><span> <span style="color:#bd93f9">4</span>  <span style="color:#bd93f9">5</span>  <span style="color:#bd93f9">00</span> <span style="color:#bd93f9">0054</span> <span style="color:#bd93f9">2890</span>   <span style="color:#bd93f9">0</span> <span style="color:#bd93f9">0000</span>  3f  <span style="color:#bd93f9">01</span> d11e 192.168.0.95  192.168.0.75
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Request timeout <span style="color:#ff79c6">for</span> icmp_seq <span style="color:#bd93f9">150</span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">64</span> bytes from 192.168.0.75: <span style="color:#8be9fd;font-style:italic">icmp_seq</span><span style="color:#ff79c6">=</span><span style="color:#bd93f9">151</span> <span style="color:#8be9fd;font-style:italic">ttl</span><span style="color:#ff79c6">=</span><span style="color:#bd93f9">64</span> <span style="color:#8be9fd;font-style:italic">time</span><span style="color:#ff79c6">=</span>0.245 ms
+</span></span></code></pre></div><h2 id="使用-kube-vip">使用 kube-vip</h2>
+<p>接下来我们来使用 kube-vip 搭建一个高可用的 Kubernetes 集群。先准备 6 个节点：</p>
 <ul>
-<li>3个控制平面节点</li>
-<li>3个 worker 节点</li>
+<li>3 个控制平面节点</li>
+<li>3 个 worker 节点</li>
 </ul>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20210616142509.png" alt="kube-vip"><figcaption>kube-vip</figcaption></figure>
-
-<p>首先在宿主机上面安装相关依赖，包括 kubeadm、kubelet、kubectl 以及一个容器运行时，这里我们使用的是 containerd。
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-5376999672787220"
-     data-ad-slot="9165834656"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-
-获取 kube-vip 的 docker 镜像，并在 <code>/etc/kuberentes/manifests</code> 中设置静态 pod 的 yaml 资源清单文件，这样 Kubernetes 就会自动在每个控制平面节点上部署 kube-vip 的 pod 了。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#6272a4"># 设置VIP地址</span>
-<span style="color:#8be9fd;font-style:italic">export</span> <span style="color:#8be9fd;font-style:italic">VIP</span><span style="color:#ff79c6">=</span><span style="color:#bd93f9">192</span>.168.0.100
-<span style="color:#8be9fd;font-style:italic">export</span> <span style="color:#8be9fd;font-style:italic">INTERFACE</span><span style="color:#ff79c6">=</span>eth0
-ctr image pull docker.io/plndr/kube-vip:0.3.1
-ctr run --rm --net-host docker.io/plndr/kube-vip:0.3.1 vip <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>/kube-vip manifest pod <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>--interface <span style="color:#8be9fd;font-style:italic">$INTERFACE</span> <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>--vip <span style="color:#8be9fd;font-style:italic">$VIP</span> <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>--controlplane <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>--services <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>--arp <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>--leaderElection | tee  /etc/kubernetes/manifests/kube-vip.yaml</code></pre></div>
-<p>接下来就可以配置 kubeadm 了，如下所示：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">cat &gt; ~/init_kubelet.yaml <span style="color:#f1fa8c">&lt;&lt;EOF
-</span><span style="color:#f1fa8c">apiVersion: kubeadm.k8s.io/v1beta2
-</span><span style="color:#f1fa8c">kind: InitConfiguration
-</span><span style="color:#f1fa8c">bootstrapTokens:
-</span><span style="color:#f1fa8c">- token: &#34;9a08jv.c0izixklcxtmnze7&#34;
-</span><span style="color:#f1fa8c">description: &#34;kubeadm bootstrap token&#34;
-</span><span style="color:#f1fa8c">ttl: &#34;24h&#34;
-</span><span style="color:#f1fa8c">nodeRegistration:
-</span><span style="color:#f1fa8c">criSocket: &#34;/var/run/containerd/containerd.sock&#34;
-</span><span style="color:#f1fa8c">---
-</span><span style="color:#f1fa8c">apiVersion: kubeadm.k8s.io/v1beta2
-</span><span style="color:#f1fa8c">kind: ClusterConfiguration
-</span><span style="color:#f1fa8c">controlPlaneEndpoint: &#34;192.168.0.100:6443&#34;
-</span><span style="color:#f1fa8c">---
-</span><span style="color:#f1fa8c">apiVersion: kubelet.config.k8s.io/v1beta1
-</span><span style="color:#f1fa8c">kind: KubeletConfiguration
-</span><span style="color:#f1fa8c">cgroupDriver: &#34;systemd&#34;
-</span><span style="color:#f1fa8c">protectKernelDefaults: true
-</span><span style="color:#f1fa8c">EOF</span>
-kubeadm init --config init_kubelet.yaml --upload-certs</code></pre></div>
-<p>然后安装 CNI，比如我们选择使用 Cilium。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
-helm repo add cilium https://helm.cilium.io/
-helm install cilium cilium/cilium --version <span style="color:#bd93f9">1</span>.9.4 <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>--namespace kube-system</code></pre></div>
-<p>在第一个控制平面节点准备好后，让其他节点加入你的集群。对于其他控制平面节点，运行如下命令：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">kubeadm join <span style="color:#bd93f9">192</span>.168.0.100:6443 --token hash.hash<span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>     --discovery-token-ca-cert-hash sha256:hash <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>     --control-plane --certificate-key key</code></pre></div>
-<p>对于工作节点，运行类似命令：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">kubeadm join <span style="color:#bd93f9">192</span>.168.0.100:6443 --token hash.hash<span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>    --discovery-token-ca-cert-hash sha256:hash</code></pre></div>
-<p>正常执行完成后集群就可以启动起来了：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#6272a4"># kubectl get node -o wide</span>
-NAME           STATUS   ROLES                  AGE    VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION     CONTAINER-RUNTIME
-k8s-master-0   Ready    control-plane,master   121m   v1.20.2   <span style="color:#bd93f9">192</span>.168.0.201   &lt;none&gt;        Ubuntu <span style="color:#bd93f9">20</span>.04.2 LTS   <span style="color:#bd93f9">5</span>.4.0-45-generic   containerd://1.4.3
-k8s-master-1   Ready    control-plane,master   114m   v1.20.2   <span style="color:#bd93f9">192</span>.168.0.202   &lt;none&gt;        Ubuntu <span style="color:#bd93f9">20</span>.04.2 LTS   <span style="color:#bd93f9">5</span>.4.0-45-generic   containerd://1.4.3
-k8s-master-2   Ready    control-plane,master   113m   v1.20.2   <span style="color:#bd93f9">192</span>.168.0.203   &lt;none&gt;        Ubuntu <span style="color:#bd93f9">20</span>.04.2 LTS   <span style="color:#bd93f9">5</span>.4.0-45-generic   containerd://1.4.3
-k8s-worker-0   Ready    &lt;none&gt;                 114m   v1.20.2   <span style="color:#bd93f9">192</span>.168.0.204   &lt;none&gt;        Ubuntu <span style="color:#bd93f9">20</span>.04.2 LTS   <span style="color:#bd93f9">5</span>.4.0-45-generic   containerd://1.4.3
-k8s-worker-1   Ready    &lt;none&gt;                 114m   v1.20.2   <span style="color:#bd93f9">192</span>.168.0.205   &lt;none&gt;        Ubuntu <span style="color:#bd93f9">20</span>.04.2 LTS   <span style="color:#bd93f9">5</span>.4.0-45-generic   containerd://1.4.3
-k8s-worker-2   Ready    &lt;none&gt;                 112m   v1.20.2   <span style="color:#bd93f9">192</span>.168.0.206   &lt;none&gt;        Ubuntu <span style="color:#bd93f9">20</span>.04.2 LTS   <span style="color:#bd93f9">5</span>.4.0-45-generic   containerd://1.4.3</code></pre></div>
-<p>现在可以看到我们的控制面的端点是 192.168.0.100，没有其他额外的节点，是不是非常方便。</p>
-
+<p><img src="https://picdn.youdianzhishi.com/images/20210616142509.png" alt="kube-vip"></p>
+<p>首先在宿主机上面安装相关依赖，包括 kubeadm、kubelet、kubectl 以及一个容器运行时，这里我们使用的是 containerd。</p>
+<!-- raw HTML omitted -->
+<p>获取 kube-vip 的 docker 镜像，并在 <code>/etc/kuberentes/manifests</code> 中设置静态 pod 的 yaml 资源清单文件，这样 Kubernetes 就会自动在每个控制平面节点上部署 kube-vip 的 pod 了。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#6272a4"># 设置VIP地址</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">export</span> <span style="color:#8be9fd;font-style:italic">VIP</span><span style="color:#ff79c6">=</span>192.168.0.100
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">export</span> <span style="color:#8be9fd;font-style:italic">INTERFACE</span><span style="color:#ff79c6">=</span>eth0
+</span></span><span style="display:flex;"><span>ctr image pull docker.io/plndr/kube-vip:0.3.1
+</span></span><span style="display:flex;"><span>ctr run --rm --net-host docker.io/plndr/kube-vip:0.3.1 vip <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>/kube-vip manifest pod <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>--interface <span style="color:#8be9fd;font-style:italic">$INTERFACE</span> <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>--vip <span style="color:#8be9fd;font-style:italic">$VIP</span> <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>--controlplane <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>--services <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>--arp <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>--leaderElection | tee  /etc/kubernetes/manifests/kube-vip.yaml
+</span></span></code></pre></div><p>接下来就可以配置 kubeadm 了，如下所示：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>cat &gt; ~/init_kubelet.yaml <span style="color:#f1fa8c">&lt;&lt;EOF
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">apiVersion: kubeadm.k8s.io/v1beta2
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">kind: InitConfiguration
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">bootstrapTokens:
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">- token: &#34;9a08jv.c0izixklcxtmnze7&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">description: &#34;kubeadm bootstrap token&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">ttl: &#34;24h&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">nodeRegistration:
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">criSocket: &#34;/var/run/containerd/containerd.sock&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">---
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">apiVersion: kubeadm.k8s.io/v1beta2
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">kind: ClusterConfiguration
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">controlPlaneEndpoint: &#34;192.168.0.100:6443&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">---
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">apiVersion: kubelet.config.k8s.io/v1beta1
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">kind: KubeletConfiguration
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">cgroupDriver: &#34;systemd&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">protectKernelDefaults: true
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">EOF</span>
+</span></span><span style="display:flex;"><span>kubeadm init --config init_kubelet.yaml --upload-certs
+</span></span></code></pre></div><p>然后安装 CNI，比如我们选择使用 Cilium。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+</span></span><span style="display:flex;"><span>helm repo add cilium https://helm.cilium.io/
+</span></span><span style="display:flex;"><span>helm install cilium cilium/cilium --version 1.9.4 <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>--namespace kube-system
+</span></span></code></pre></div><p>在第一个控制平面节点准备好后，让其他节点加入你的集群。对于其他控制平面节点，运行如下命令：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>kubeadm join 192.168.0.100:6443 --token hash.hash<span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>     --discovery-token-ca-cert-hash sha256:hash <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>     --control-plane --certificate-key key
+</span></span></code></pre></div><p>对于工作节点，运行类似命令：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>kubeadm join 192.168.0.100:6443 --token hash.hash<span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>    --discovery-token-ca-cert-hash sha256:hash
+</span></span></code></pre></div><p>正常执行完成后集群就可以启动起来了：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#6272a4"># kubectl get node -o wide</span>
+</span></span><span style="display:flex;"><span>NAME           STATUS   ROLES                  AGE    VERSION   INTERNAL-IP   EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION     CONTAINER-RUNTIME
+</span></span><span style="display:flex;"><span>k8s-master-0   Ready    control-plane,master   121m   v1.20.2   192.168.0.201   &lt;none&gt;        Ubuntu 20.04.2 LTS   5.4.0-45-generic   containerd://1.4.3
+</span></span><span style="display:flex;"><span>k8s-master-1   Ready    control-plane,master   114m   v1.20.2   192.168.0.202   &lt;none&gt;        Ubuntu 20.04.2 LTS   5.4.0-45-generic   containerd://1.4.3
+</span></span><span style="display:flex;"><span>k8s-master-2   Ready    control-plane,master   113m   v1.20.2   192.168.0.203   &lt;none&gt;        Ubuntu 20.04.2 LTS   5.4.0-45-generic   containerd://1.4.3
+</span></span><span style="display:flex;"><span>k8s-worker-0   Ready    &lt;none&gt;                 114m   v1.20.2   192.168.0.204   &lt;none&gt;        Ubuntu 20.04.2 LTS   5.4.0-45-generic   containerd://1.4.3
+</span></span><span style="display:flex;"><span>k8s-worker-1   Ready    &lt;none&gt;                 114m   v1.20.2   192.168.0.205   &lt;none&gt;        Ubuntu 20.04.2 LTS   5.4.0-45-generic   containerd://1.4.3
+</span></span><span style="display:flex;"><span>k8s-worker-2   Ready    &lt;none&gt;                 112m   v1.20.2   192.168.0.206   &lt;none&gt;        Ubuntu 20.04.2 LTS   5.4.0-45-generic   containerd://1.4.3
+</span></span></code></pre></div><p>现在可以看到我们的控制面的端点是 192.168.0.100，没有其他额外的节点，是不是非常方便。</p>
 <blockquote>
 <p>参考文档：<a href="https://inductor.medium.com/say-good-bye-to-haproxy-and-keepalived-with-kube-vip-on-your-ha-k8s-control-plane-bb7237eca9fc">https://inductor.medium.com/say-good-bye-to-haproxy-and-keepalived-with-kube-vip-on-your-ha-k8s-control-plane-bb7237eca9fc</a></p>
 </blockquote>
-
-<p><a href="https://youdianzhishi.com/web/course/1030" title="从 Docker 到 Kubernetes 进阶课程"><img src="https://sdn.youdianzhishi.com/images/2019/10/24/65f2cfb229184268a18745fe202b281b.jpg?imageView2/2/format/webp" alt="Kubernetes进阶训练营"></a></p>
-
+<!-- raw HTML omitted -->
 
           <h2>微信公众号</h2>
-<p>扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的 kubernetes 讨论群里面共同学习。</p>
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/qrcode.png" alt="wechat-account-qrcode">
+<p>
+  扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的
+  kubernetes 讨论群里面共同学习。
+</p>
+<img
+  src="https://picdn.youdianzhishi.com/images/qrcode.png"
+  alt="wechat-account-qrcode"
+/>
 
   
           
@@ -714,7 +667,7 @@ k8s-worker-2   Ready    &lt;none&gt;                 112m   v1.20.2   <span styl
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -726,7 +679,7 @@ k8s-worker-2   Ready    &lt;none&gt;                 112m   v1.20.2   <span styl
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -743,7 +696,7 @@ k8s-worker-2   Ready    &lt;none&gt;                 112m   v1.20.2   <span styl
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -752,7 +705,7 @@ k8s-worker-2   Ready    &lt;none&gt;                 112m   v1.20.2   <span styl
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

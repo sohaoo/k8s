@@ -11,23 +11,20 @@
   <meta name="twitter:title" content="在 Kubernetes 集群上部署 VSCode" />
 
   <meta name="description" content="近来由于武汉冠状病毒疫情的扩散，很多公司不得不开始了远程办公的模式，远程办公最大的成本自然是沟通成本了，对于我们开发人员来说最重要的自然也是有一个顺手的 IDE 工具，现在在云端作业的工具也在逐渐增长，比如最近比较流行的设计应用 Figma，就完全是云端操作的方式，大有要取代 Sketch 的趋势，对于开发工具来说云端 IDE 也逐渐受到大家重视，特别是对于远程办公的团队，Cloud IDE 允许开发团队在一个统一的开发环境中实时协作的工具，这可以大大提高生产效率。而且只需要通过 web 浏览器就可以访问，还有一个优点就是可以利用集群的能力，这可以大大超过我们之前的个人 PC 的处理能力，我们也不用为本地 IDE 占用了电脑大量资源而苦恼了。
-
 code-server 就是一个可以运行在服务器上面直接通过浏览器来访问的 VSCode，VSCode 是一个现代化的代码编辑器，支持 Git、代码调试器、智能代码提示以及各种定制和扩展功能。接下来我们来介绍下如何在我们的 Kubernetes 集群上运行一个 VSCode。">
   <meta property="og:description" content="近来由于武汉冠状病毒疫情的扩散，很多公司不得不开始了远程办公的模式，远程办公最大的成本自然是沟通成本了，对于我们开发人员来说最重要的自然也是有一个顺手的 IDE 工具，现在在云端作业的工具也在逐渐增长，比如最近比较流行的设计应用 Figma，就完全是云端操作的方式，大有要取代 Sketch 的趋势，对于开发工具来说云端 IDE 也逐渐受到大家重视，特别是对于远程办公的团队，Cloud IDE 允许开发团队在一个统一的开发环境中实时协作的工具，这可以大大提高生产效率。而且只需要通过 web 浏览器就可以访问，还有一个优点就是可以利用集群的能力，这可以大大超过我们之前的个人 PC 的处理能力，我们也不用为本地 IDE 占用了电脑大量资源而苦恼了。
-
 code-server 就是一个可以运行在服务器上面直接通过浏览器来访问的 VSCode，VSCode 是一个现代化的代码编辑器，支持 Git、代码调试器、智能代码提示以及各种定制和扩展功能。接下来我们来介绍下如何在我们的 Kubernetes 集群上运行一个 VSCode。">
   <meta name="twitter:description" content="近来由于武汉冠状病毒疫情的扩散，很多公司不得不开始了远程办公的模式，远程办公最大的成本自然是沟通成本了，对于我们开发人员来说最重要的自然也是有一个顺手的 IDE 工具，现在在云端作业的工具也在逐渐增长，比如最近比较流行的设计应用 Figma，就完全是云端操作的方式，大有要取代 Sketch 的趋势，对于开发工具来说云端 IDE 也逐渐受到大家重视，特别是对于远程办公的团队，Cloud IDE 允许 …">
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/post/deploy-vscode-on-k8s/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/post/deploy-vscode-on-k8s/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -36,7 +33,7 @@ code-server 就是一个可以运行在服务器上面直接通过浏览器来�
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -87,7 +84,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -230,7 +227,7 @@ autocomplete('#aa-search-input',
 
 
   
-    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200204183433.png" data-img-desc-1="awesome vscode"></div>
+    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://picdn.youdianzhishi.com/images/20200204183433.png" data-img-desc-1="awesome vscode"></div>
   
 
   <header class="header-section has-img">
@@ -245,12 +242,8 @@ autocomplete('#aa-search-input',
                   
                   
                     <span class="post-meta">
-  
-    发表于 February 4, 2020
-  
-  
+  发表于 February 4, 2020  
 </span>
-
 
                   
               </div>
@@ -272,12 +265,8 @@ autocomplete('#aa-search-input',
                 
                 
                   <span class="post-meta">
-  
-    发表于 February 4, 2020
-  
-  
+  发表于 February 4, 2020  
 </span>
-
 
                 
             </div>
@@ -330,137 +319,130 @@ autocomplete('#aa-search-input',
           
 
           <p>近来由于武汉冠状病毒疫情的扩散，很多公司不得不开始了远程办公的模式，远程办公最大的成本自然是沟通成本了，对于我们开发人员来说最重要的自然也是有一个顺手的 IDE 工具，现在在云端作业的工具也在逐渐增长，比如最近比较流行的设计应用 Figma，就完全是云端操作的方式，大有要取代 Sketch 的趋势，对于开发工具来说云端 IDE 也逐渐受到大家重视，特别是对于远程办公的团队，Cloud IDE 允许开发团队在一个统一的开发环境中实时协作的工具，这可以大大提高生产效率。而且只需要通过 web 浏览器就可以访问，还有一个优点就是可以利用集群的能力，这可以大大超过我们之前的个人 PC 的处理能力，我们也不用为本地 IDE 占用了电脑大量资源而苦恼了。</p>
-
 <p><a href="https://github.com/cdr/code-server">code-server</a> 就是一个可以运行在服务器上面直接通过浏览器来访问的 <a href="https://code.visualstudio.com/">VSCode</a>，VSCode 是一个现代化的代码编辑器，支持 Git、代码调试器、智能代码提示以及各种定制和扩展功能。接下来我们来介绍下如何在我们的 Kubernetes 集群上运行一个 VSCode。</p>
-
 <h3 id="安装">安装</h3>
-
 <p>首先当然需要一个已经安装好的 Kubernetes 集群，如果想要通过域名来访问我们的 Cloud IDE，则还需要准备一个域名以及一个 Ingress Controller 安装在集群中，我们这里选择的是 Traefik2.1 版本，当然你也可以选择其他的。</p>
-
 <p>我们将 code-server 部署在一个名为 <code>code-server</code> 的命名空间中，然后使用 Deployment 来管理 code-server 的容器，这里我们使用的镜像是<code>codercom/code-server</code>，并在我们通过环境变量 <code>PASSWORD</code> 来设置了访问 IDE 的密码，对应的资源清单文件如下所示：（code-server.yaml）</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: v1
-kind: Namespace
-metadata:
-  name: code-server
----
-apiVersion: v1
-kind: Service
-metadata:
- name: code-server
- namespace: code-server
-spec:
- ports:
- - port: <span style="color:#bd93f9">80</span>
-   targetPort: <span style="color:#bd93f9">8080</span>
- selector:
-   app: code-server
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  labels:
-    app: code-server
-  name: code-server
-  namespace: code-server
-spec:
-  selector:
-    matchLabels:
-      app: code-server
-  template:
-    metadata:
-      labels:
-        app: code-server
-    spec:
-      containers:
-      - image: codercom/code-server
-        imagePullPolicy: IfNotPresent
-        name: code-server
-        ports:
-        - containerPort: <span style="color:#bd93f9">8080</span>
-        env:
-        - name: PASSWORD
-          value: <span style="color:#f1fa8c">&#34;code321&#34;</span></code></pre></div>
-<p>直接创建上面的资源清单即可：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl apply -f code-server.yaml</code></pre></div>
-<p>创建完成后我们可以通过查看 Pod 的状态来了解应用运行情况：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl get pods -n code-server
-NAME                         READY   STATUS    RESTARTS   AGE
-code-server-99dc7566-txk5b   <span style="color:#bd93f9">1</span>/1     Running   <span style="color:#bd93f9">0</span>          5d</code></pre></div>
-<p>当 Pod 是 <code>Running</code> 状态后证明应用部署成功了，这个时候如果我们想要把应用暴露给外部用户，则可以创建一个 Ingress 对象来完成。由于我们这里使用的是 Traefik2.1 版本，所以我们创建 <code>IngressRoute</code> 资源对象即可，对于这部分知识点不清楚的，可以查看文章 <a href="https://www.qikqiak.com/post/traefik-2.1-101/">一文搞懂 Traefik2.1 的使用</a> 了解更多信息。对应的资源清单文件如下所示：（ingress-route.yaml）</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: traefik.containo.us/v1alpha1
-kind: Middleware
-metadata:
-  name: redirect-https
-  namespace: code-server
-spec:
-  redirectScheme:
-    scheme: https
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: code-server
-  namespace: code-server
-spec:
-  entryPoints:
-  - web
-  routes:
-  - kind: Rule
-    match: Host(`code.qikqiak.com`)
-    middlewares:
-    - name: redirect-https
-    services:
-    - kind: Service
-      name: code-server
-      port: <span style="color:#bd93f9">80</span>
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: code-server-https
-  namespace: code-server
-spec:
-  entryPoints:
-  - websecure
-  routes:
-  - kind: Rule
-    match: Host(`code.qikqiak.com`)
-    services:
-    - kind: Service
-      name: code-server
-      port: <span style="color:#bd93f9">80</span>
-  tls:
-    certResolver: ali
-    domains:
-    - main: <span style="color:#f1fa8c">&#39;*.qikqiak.com&#39;</span></code></pre></div>
-<p>上面我们定义了两个 IngressRoute 对象，一个是绑定 80 端口，一个是绑定 443 端口，为了让我们通过 https 访问，我们还特地创建了一个 <code>redirect-https</code> 中间件，用来强制跳转到 https 服务，当然如果你的 https 服务有自己的证书直接通过 Secret 创建后补充到 <code>tls</code> 区域即可，我们这里是使用的 Traefik2.1 提供的 ACME 机制自动生成的通配符的证书。同样直接创建上面资源对象即可：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl apply -f ingress-route.yaml
-$ kubectl get ingressroute -n code-server
-NAME                AGE
-code-server         5d
-code-server-https   5d</code></pre></div>
-<p>创建完成后，将我们的域名 <code>code.qikqiak.com</code> 解析（或者在本地做 hosts 映射）到 Traefik2.1 所在的节点即可。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: v1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: Namespace
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: code-server
+</span></span><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: v1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: Service
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span> <span style="color:#ff79c6">name</span>: code-server
+</span></span><span style="display:flex;"><span> <span style="color:#ff79c6">namespace</span>: code-server
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span> <span style="color:#ff79c6">ports</span>:
+</span></span><span style="display:flex;"><span> - <span style="color:#ff79c6">port</span>: <span style="color:#bd93f9">80</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#ff79c6">targetPort</span>: <span style="color:#bd93f9">8080</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ff79c6">selector</span>:
+</span></span><span style="display:flex;"><span>   <span style="color:#ff79c6">app</span>: code-server
+</span></span><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: apps/v1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: Deployment
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">labels</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">app</span>: code-server
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: code-server
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">namespace</span>: code-server
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">selector</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">matchLabels</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">app</span>: code-server
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">template</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">labels</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">app</span>: code-server
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">containers</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ff79c6">image</span>: codercom/code-server
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">imagePullPolicy</span>: IfNotPresent
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">name</span>: code-server
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">ports</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">containerPort</span>: <span style="color:#bd93f9">8080</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">env</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">name</span>: PASSWORD
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">value</span>: <span style="color:#f1fa8c">&#34;code321&#34;</span>
+</span></span></code></pre></div><p>直接创建上面的资源清单即可：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl apply -f code-server.yaml
+</span></span></code></pre></div><p>创建完成后我们可以通过查看 Pod 的状态来了解应用运行情况：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl get pods -n code-server
+</span></span><span style="display:flex;"><span>NAME                         READY   STATUS    RESTARTS   AGE
+</span></span><span style="display:flex;"><span>code-server-99dc7566-txk5b   1/1     Running   <span style="color:#bd93f9">0</span>          5d
+</span></span></code></pre></div><p>当 Pod 是 <code>Running</code> 状态后证明应用部署成功了，这个时候如果我们想要把应用暴露给外部用户，则可以创建一个 Ingress 对象来完成。由于我们这里使用的是 Traefik2.1 版本，所以我们创建 <code>IngressRoute</code> 资源对象即可，对于这部分知识点不清楚的，可以查看文章 <a href="https://www.qikqiak.com/post/traefik-2.1-101/">一文搞懂 Traefik2.1 的使用</a> 了解更多信息。对应的资源清单文件如下所示：（ingress-route.yaml）</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: traefik.containo.us/v1alpha1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: Middleware
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: redirect-https
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">namespace</span>: code-server
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">redirectScheme</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">scheme</span>: https
+</span></span><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: traefik.containo.us/v1alpha1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: IngressRoute
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: code-server
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">namespace</span>: code-server
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">entryPoints</span>:
+</span></span><span style="display:flex;"><span>  - web
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">routes</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ff79c6">kind</span>: Rule
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">match</span>: Host(`code.qikqiak.com`)
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">middlewares</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">name</span>: redirect-https
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">services</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">kind</span>: Service
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">name</span>: code-server
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">port</span>: <span style="color:#bd93f9">80</span>
+</span></span><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: traefik.containo.us/v1alpha1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: IngressRoute
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: code-server-https
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">namespace</span>: code-server
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">entryPoints</span>:
+</span></span><span style="display:flex;"><span>  - websecure
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">routes</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ff79c6">kind</span>: Rule
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">match</span>: Host(`code.qikqiak.com`)
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">services</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">kind</span>: Service
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">name</span>: code-server
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">port</span>: <span style="color:#bd93f9">80</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">tls</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">certResolver</span>: ali
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">domains</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">main</span>: <span style="color:#f1fa8c">&#39;*.qikqiak.com&#39;</span>
+</span></span></code></pre></div><p>上面我们定义了两个 IngressRoute 对象，一个是绑定 80 端口，一个是绑定 443 端口，为了让我们通过 https 访问，我们还特地创建了一个 <code>redirect-https</code> 中间件，用来强制跳转到 https 服务，当然如果你的 https 服务有自己的证书直接通过 Secret 创建后补充到 <code>tls</code> 区域即可，我们这里是使用的 Traefik2.1 提供的 ACME 机制自动生成的通配符的证书。同样直接创建上面资源对象即可：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl apply -f ingress-route.yaml
+</span></span><span style="display:flex;"><span>$ kubectl get ingressroute -n code-server
+</span></span><span style="display:flex;"><span>NAME                AGE
+</span></span><span style="display:flex;"><span>code-server         5d
+</span></span><span style="display:flex;"><span>code-server-https   5d
+</span></span></code></pre></div><p>创建完成后，将我们的域名 <code>code.qikqiak.com</code> 解析（或者在本地做 hosts 映射）到 Traefik2.1 所在的节点即可。</p>
 <h3 id="测试">测试</h3>
-
 <p>在浏览器中访问 <code>code.qikqiak.com</code>，第一次会弹出对话框要求输入密码，也就是上面我们在环境变量 <code>PASSWORD</code> 中配置的值：</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200204182200.png" alt="code-server login"><figcaption>code-server login</figcaption></figure>
-
+<p><img src="https://picdn.youdianzhishi.com/images/20200204182200.png" alt="code-server login"></p>
 <p>输入配置的密码后即可进入应用，就是我们熟悉的 VSCode 界面的样子，只是现在是在浏览器中运行：</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200204182525.png" alt="vscode web"><figcaption>vscode web</figcaption></figure>
-
+<p><img src="https://picdn.youdianzhishi.com/images/20200204182525.png" alt="vscode web"></p>
 <p>然后其他的就和我们在本地使用 VSCode 基本上差不多了，可以安装主题、插件、调试等等，大家可以自行探索：</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200204182833.png" alt="vscode usage"><figcaption>vscode usage</figcaption></figure>
-
-<p><a href="https://youdianzhishi.com/web/course/1030" title="从 Docker 到 Kubernetes 进阶课程"><img src="https://sdn.youdianzhishi.com/images/2019/10/24/65f2cfb229184268a18745fe202b281b.jpg?imageView2/2/format/webp" alt="Kubernetes进阶训练营"></a></p>
-
+<p><img src="https://picdn.youdianzhishi.com/images/20200204182833.png" alt="vscode usage"></p>
+<!-- raw HTML omitted -->
 
           <h2>微信公众号</h2>
-<p>扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的 kubernetes 讨论群里面共同学习。</p>
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/qrcode.png" alt="wechat-account-qrcode">
+<p>
+  扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的
+  kubernetes 讨论群里面共同学习。
+</p>
+<img
+  src="https://picdn.youdianzhishi.com/images/qrcode.png"
+  alt="wechat-account-qrcode"
+/>
 
   
           
@@ -661,7 +643,7 @@ code-server-https   5d</code></pre></div>
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -673,7 +655,7 @@ code-server-https   5d</code></pre></div>
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -690,7 +672,7 @@ code-server-https   5d</code></pre></div>
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -699,7 +681,7 @@ code-server-https   5d</code></pre></div>
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

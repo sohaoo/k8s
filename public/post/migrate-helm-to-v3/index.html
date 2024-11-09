@@ -14,16 +14,15 @@
   <meta property="og:description" content="Helm V3 版本已经发布了第三个 Beta 版本了，由于 V2 和 V3 版本之间的架构变化较大，所以如果我们现在正在使用 V2 版本的话，要迁移到 V3 版本了就有点小麻烦，其中最重要的当然就是数据迁移的问题，为了解决这个版本迁移问题，官方提供了一个名为 helm-2to3 的插件可以来简化我们的迁移工作。">
   <meta name="twitter:description" content="Helm V3 版本已经发布了第三个 Beta 版本了，由于 V2 和 V3 版本之间的架构变化较大，所以如果我们现在正在使用 V2 版本的话，要迁移到 V3 版本了就有点小麻烦，其中最重要的当然就是数据迁移的问题，为了解决这个版本迁移问题，官方提供了一个名为 helm-2to3 的插件可以来简化我们的迁移工作。">
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/post/migrate-helm-to-v3/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/post/migrate-helm-to-v3/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -32,7 +31,7 @@
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -83,7 +82,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -226,7 +225,7 @@ autocomplete('#aa-search-input',
 
 
   
-    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/photo-1568549422238-cc366fee8a26.jpeg" data-img-desc-1="https://unsplash.com/photos/m70IFiW6e8g"></div>
+    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://picdn.youdianzhishi.com/images/photo-1568549422238-cc366fee8a26.jpeg" data-img-desc-1="https://unsplash.com/photos/m70IFiW6e8g"></div>
   
 
   <header class="header-section has-img">
@@ -241,12 +240,8 @@ autocomplete('#aa-search-input',
                   
                   
                     <span class="post-meta">
-  
-    发表于 September 16, 2019
-  
-  
+  发表于 September 16, 2019  
 </span>
-
 
                   
               </div>
@@ -268,12 +263,8 @@ autocomplete('#aa-search-input',
                 
                 
                   <span class="post-meta">
-  
-    发表于 September 16, 2019
-  
-  
+  发表于 September 16, 2019  
 </span>
-
 
                 
             </div>
@@ -313,20 +304,18 @@ autocomplete('#aa-search-input',
             
 <aside class="toc">
   <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#安装-helm-v3">安装 Helm V3</a></li>
-<li><a href="#helm-2to3-插件">HELM-2TO3 插件</a>
-<ul>
-<li><a href="#安装">安装</a></li>
-<li><a href="#插件特性">插件特性</a></li>
-</ul></li>
-<li><a href="#迁移-helm-v2-配置">迁移 Helm V2 配置</a></li>
-<li><a href="#迁移-helm-v2-release">迁移 Helm V2 Release</a></li>
-<li><a href="#清理-helm-v2-数据">清理 Helm V2 数据</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#安装-helm-v3">安装 Helm V3</a></li>
+    <li><a href="#helm-2to3-插件">HELM-2TO3 插件</a>
+      <ul>
+        <li><a href="#安装">安装</a></li>
+        <li><a href="#插件特性">插件特性</a></li>
+      </ul>
+    </li>
+    <li><a href="#迁移-helm-v2-配置">迁移 Helm V2 配置</a></li>
+    <li><a href="#迁移-helm-v2-release">迁移 Helm V2 Release</a></li>
+    <li><a href="#清理-helm-v2-数据">清理 Helm V2 数据</a></li>
+  </ul>
 </nav>
 </aside>
 
@@ -345,208 +334,174 @@ autocomplete('#aa-search-input',
           
 
           <p><a href="https://v3.helm.sh/">Helm V3 版本</a>已经发布了第三个 Beta 版本了，由于 V2 和 V3 版本之间的架构变化较大，所以如果我们现在正在使用 V2 版本的话，要迁移到 V3 版本了就有点小麻烦，其中最重要的当然就是数据迁移的问题，为了解决这个版本迁移问题，官方提供了一个名为 <a href="https://github.com/helm/helm-2to3">helm-2to3</a> 的插件可以来简化我们的迁移工作。</p>
-
 <h2 id="安装-helm-v3">安装 Helm V3</h2>
-
 <p>为了能够让 Helm V2 CLI 包还可以继续使用，所以我们这里就不直接覆盖了，让两个版本的 CLI 包可以共存，比较迁移还是有风险的，等到我们准备好移除 V2 版本的时候再删除也不迟。</p>
-
 <p>在 Helm GitHub 仓库上下载最新的 V3 Beta 版本，地址：<a href="https://github.com/helm/helm/releases">https://github.com/helm/helm/releases</a>，要注意选择和你系统一致的二进制包，比如我们这里是 Mac 系统，就下载<code>MacOS amd64</code>这个包，下载完成后解压将对应的 Helm CLI 包重命名为<code>helm3</code>，并移动到 PATH 路径（比如<code>/usr/local/bin</code>）下面去，然后我们就可以准备使用 <code>helm3</code> 命令了：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ helm3 version
-version.BuildInfo<span style="color:#ff79c6">{</span>Version:<span style="color:#f1fa8c">&#34;v3.0.0-beta.3&#34;</span>, GitCommit:<span style="color:#f1fa8c">&#34;5cb923eecbe80d1ad76399aee234717c11931d9a&#34;</span>, GitTreeState:<span style="color:#f1fa8c">&#34;clean&#34;</span>, GoVersion:<span style="color:#f1fa8c">&#34;go1.12.9&#34;</span><span style="color:#ff79c6">}</span>
-$ helm repo list
-NAME        	URL
-stable      	http://mirror.azure.cn/kubernetes/charts/
-<span style="color:#8be9fd;font-style:italic">local</span>       	http://127.0.0.1:8879/charts
-$ helm3 repo list
-Error: no repositories to show</code></pre></div>
-<p>我们可以看到使用 <code>helm3</code> 命令查看不到我们之前配置的 chart 仓库信息。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ helm3 version
+</span></span><span style="display:flex;"><span>version.BuildInfo<span style="color:#ff79c6">{</span>Version:<span style="color:#f1fa8c">&#34;v3.0.0-beta.3&#34;</span>, GitCommit:<span style="color:#f1fa8c">&#34;5cb923eecbe80d1ad76399aee234717c11931d9a&#34;</span>, GitTreeState:<span style="color:#f1fa8c">&#34;clean&#34;</span>, GoVersion:<span style="color:#f1fa8c">&#34;go1.12.9&#34;</span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>$ helm repo list
+</span></span><span style="display:flex;"><span>NAME        	URL
+</span></span><span style="display:flex;"><span>stable      	http://mirror.azure.cn/kubernetes/charts/
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">local</span>       	http://127.0.0.1:8879/charts
+</span></span><span style="display:flex;"><span>$ helm3 repo list
+</span></span><span style="display:flex;"><span>Error: no repositories to show
+</span></span></code></pre></div><p>我们可以看到使用 <code>helm3</code> 命令查看不到我们之前配置的 chart 仓库信息。</p>
 <h2 id="helm-2to3-插件">HELM-2TO3 插件</h2>
-
 <p><code>helm-2to3</code> 插件就可以让我们将 Helm V2 版本的配置和 release 迁移到 Helm V3 版本去。</p>
-
 <p>安装的 Kubernetes 对象不会被修改或者删除，所以不用担心。接下来我们就来安装这个插件。</p>
-
 <h3 id="安装">安装</h3>
-
 <p>直接使用下面的命令安装即可：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ helm3 plugin install https://github.com/helm/helm-2to3
-Downloading and installing helm-2to3 v0.1.1 ...
-https://github.com/helm/helm-2to3/releases/download/v0.1.1/helm-2to3_0.1.1_darwin_amd64.tar.gz
-
-Installed plugin: 2to3</code></pre></div>
-<p>然后可以使用 <code>helm3</code> 命令查看插件是否安装成功：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ helm3 plugin list
-NAME	VERSION	DESCRIPTION
-2to3	<span style="color:#bd93f9">0</span>.1.1  	migrate Helm v2 configuration and releases in-place to Helm v3
-$ helm3 2to3
-Migrate Helm v2 configuration and releases in-place to Helm v3
-
-Usage:
-  2to3 <span style="color:#ff79c6">[</span>command<span style="color:#ff79c6">]</span>
-
-Available Commands:
-  convert     migrate Helm v2 release in-place to Helm v3
-  <span style="color:#8be9fd;font-style:italic">help</span>        Help about any <span style="color:#8be9fd;font-style:italic">command</span>
-  move        migrate Helm v2 configuration in-place to Helm v3
-
-Flags:
-  -h, --help   <span style="color:#8be9fd;font-style:italic">help</span> <span style="color:#ff79c6">for</span> 2to3
-
-Use <span style="color:#f1fa8c">&#34;2to3 [command] --help&#34;</span> <span style="color:#ff79c6">for</span> more information about a command.</code></pre></div>
-<p>到这里就证明我们的 <code>helm-2to3</code> 插件已经安装成功了。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ helm3 plugin install https://github.com/helm/helm-2to3
+</span></span><span style="display:flex;"><span>Downloading and installing helm-2to3 v0.1.1 ...
+</span></span><span style="display:flex;"><span>https://github.com/helm/helm-2to3/releases/download/v0.1.1/helm-2to3_0.1.1_darwin_amd64.tar.gz
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Installed plugin: 2to3
+</span></span></code></pre></div><p>然后可以使用 <code>helm3</code> 命令查看插件是否安装成功：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ helm3 plugin list
+</span></span><span style="display:flex;"><span>NAME	VERSION	DESCRIPTION
+</span></span><span style="display:flex;"><span>2to3	0.1.1  	migrate Helm v2 configuration and releases in-place to Helm v3
+</span></span><span style="display:flex;"><span>$ helm3 2to3
+</span></span><span style="display:flex;"><span>Migrate Helm v2 configuration and releases in-place to Helm v3
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Usage:
+</span></span><span style="display:flex;"><span>  2to3 <span style="color:#ff79c6">[</span>command<span style="color:#ff79c6">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Available Commands:
+</span></span><span style="display:flex;"><span>  convert     migrate Helm v2 release in-place to Helm v3
+</span></span><span style="display:flex;"><span>  <span style="color:#8be9fd;font-style:italic">help</span>        Help about any <span style="color:#8be9fd;font-style:italic">command</span>
+</span></span><span style="display:flex;"><span>  move        migrate Helm v2 configuration in-place to Helm v3
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Flags:
+</span></span><span style="display:flex;"><span>  -h, --help   <span style="color:#8be9fd;font-style:italic">help</span> <span style="color:#ff79c6">for</span> 2to3
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Use <span style="color:#f1fa8c">&#34;2to3 [command] --help&#34;</span> <span style="color:#ff79c6">for</span> more information about a command.
+</span></span></code></pre></div><p>到这里就证明我们的 <code>helm-2to3</code> 插件已经安装成功了。</p>
 <h3 id="插件特性">插件特性</h3>
-
 <p>现在插件支持的功能主要有两个部分：</p>
-
 <ul>
 <li>迁移 Helm V2 配置</li>
 <li>迁移 Helm V2 release</li>
 </ul>
-
-<p>接下来我们就来分别操作下。
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-5376999672787220"
-     data-ad-slot="9165834656"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</p>
-
+<p>接下来我们就来分别操作下。</p>
+<!-- raw HTML omitted -->
 <h2 id="迁移-helm-v2-配置">迁移 Helm V2 配置</h2>
-
 <p>首先我们需要迁移 Helm V2 版本的相关配置和数据目录：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ helm3 2to3 move config
-<span style="color:#ff79c6">[</span>Helm <span style="color:#bd93f9">2</span><span style="color:#ff79c6">]</span> Home directory: /Users/ych/.helm
-<span style="color:#ff79c6">[</span>Helm <span style="color:#bd93f9">3</span><span style="color:#ff79c6">]</span> Config directory: /Users/ych/Library/Preferences/helm
-<span style="color:#ff79c6">[</span>Helm <span style="color:#bd93f9">3</span><span style="color:#ff79c6">]</span> Data directory: /Users/ych/Library/helm
-<span style="color:#ff79c6">[</span>Helm <span style="color:#bd93f9">3</span><span style="color:#ff79c6">]</span> Create config folder <span style="color:#f1fa8c">&#34;/Users/ych/Library/Preferences/helm&#34;</span> .
-<span style="color:#ff79c6">[</span>Helm <span style="color:#bd93f9">3</span><span style="color:#ff79c6">]</span> Config folder <span style="color:#f1fa8c">&#34;/Users/ych/Library/Preferences/helm&#34;</span> created.
-<span style="color:#ff79c6">[</span>Helm <span style="color:#bd93f9">2</span><span style="color:#ff79c6">]</span> repositories file <span style="color:#f1fa8c">&#34;/Users/ych/.helm/repository/repositories.yaml&#34;</span> will copy to <span style="color:#ff79c6">[</span>Helm <span style="color:#bd93f9">3</span><span style="color:#ff79c6">]</span> config folder <span style="color:#f1fa8c">&#34;/Users/ych/Library/Preferences/helm/repositories.yaml&#34;</span> .
-<span style="color:#ff79c6">[</span>Helm <span style="color:#bd93f9">2</span><span style="color:#ff79c6">]</span> repositories file <span style="color:#f1fa8c">&#34;/Users/ych/.helm/repository/repositories.yaml&#34;</span> copied successfully to <span style="color:#ff79c6">[</span>Helm <span style="color:#bd93f9">3</span><span style="color:#ff79c6">]</span> config folder <span style="color:#f1fa8c">&#34;/Users/ych/Library/Preferences/helm/repositories.yaml&#34;</span> .
-<span style="color:#ff79c6">[</span>Helm <span style="color:#bd93f9">3</span><span style="color:#ff79c6">]</span> Create data folder <span style="color:#f1fa8c">&#34;/Users/ych/Library/helm&#34;</span> .
-<span style="color:#ff79c6">[</span>Helm <span style="color:#bd93f9">3</span><span style="color:#ff79c6">]</span> data folder <span style="color:#f1fa8c">&#34;/Users/ych/Library/helm&#34;</span> created.
-<span style="color:#ff79c6">[</span>Helm <span style="color:#bd93f9">2</span><span style="color:#ff79c6">]</span> plugins <span style="color:#f1fa8c">&#34;/Users/ych/.helm/plugins&#34;</span> will copy to <span style="color:#ff79c6">[</span>Helm <span style="color:#bd93f9">3</span><span style="color:#ff79c6">]</span> data folder <span style="color:#f1fa8c">&#34;/Users/ych/Library/helm/plugins&#34;</span> .
-<span style="color:#ff79c6">[</span>Helm <span style="color:#bd93f9">2</span><span style="color:#ff79c6">]</span> plugins <span style="color:#f1fa8c">&#34;/Users/ych/.helm/plugins&#34;</span> copied successfully to <span style="color:#ff79c6">[</span>Helm <span style="color:#bd93f9">3</span><span style="color:#ff79c6">]</span> data folder <span style="color:#f1fa8c">&#34;/Users/ych/Library/helm/plugins&#34;</span> .
-<span style="color:#ff79c6">[</span>Helm <span style="color:#bd93f9">2</span><span style="color:#ff79c6">]</span> starters <span style="color:#f1fa8c">&#34;/Users/ych/.helm/starters&#34;</span> will copy to <span style="color:#ff79c6">[</span>Helm <span style="color:#bd93f9">3</span><span style="color:#ff79c6">]</span> data folder <span style="color:#f1fa8c">&#34;/Users/ych/Library/helm/starters&#34;</span> .
-<span style="color:#ff79c6">[</span>Helm <span style="color:#bd93f9">2</span><span style="color:#ff79c6">]</span> starters <span style="color:#f1fa8c">&#34;/Users/ych/.helm/starters&#34;</span> copied successfully to <span style="color:#ff79c6">[</span>Helm <span style="color:#bd93f9">3</span><span style="color:#ff79c6">]</span> data folder <span style="color:#f1fa8c">&#34;/Users/ych/Library/helm/starters&#34;</span> .</code></pre></div>
-<p>上面的操作会迁移：</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ helm3 2to3 move config
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>Helm 2<span style="color:#ff79c6">]</span> Home directory: /Users/ych/.helm
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>Helm 3<span style="color:#ff79c6">]</span> Config directory: /Users/ych/Library/Preferences/helm
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>Helm 3<span style="color:#ff79c6">]</span> Data directory: /Users/ych/Library/helm
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>Helm 3<span style="color:#ff79c6">]</span> Create config folder <span style="color:#f1fa8c">&#34;/Users/ych/Library/Preferences/helm&#34;</span> .
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>Helm 3<span style="color:#ff79c6">]</span> Config folder <span style="color:#f1fa8c">&#34;/Users/ych/Library/Preferences/helm&#34;</span> created.
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>Helm 2<span style="color:#ff79c6">]</span> repositories file <span style="color:#f1fa8c">&#34;/Users/ych/.helm/repository/repositories.yaml&#34;</span> will copy to <span style="color:#ff79c6">[</span>Helm 3<span style="color:#ff79c6">]</span> config folder <span style="color:#f1fa8c">&#34;/Users/ych/Library/Preferences/helm/repositories.yaml&#34;</span> .
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>Helm 2<span style="color:#ff79c6">]</span> repositories file <span style="color:#f1fa8c">&#34;/Users/ych/.helm/repository/repositories.yaml&#34;</span> copied successfully to <span style="color:#ff79c6">[</span>Helm 3<span style="color:#ff79c6">]</span> config folder <span style="color:#f1fa8c">&#34;/Users/ych/Library/Preferences/helm/repositories.yaml&#34;</span> .
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>Helm 3<span style="color:#ff79c6">]</span> Create data folder <span style="color:#f1fa8c">&#34;/Users/ych/Library/helm&#34;</span> .
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>Helm 3<span style="color:#ff79c6">]</span> data folder <span style="color:#f1fa8c">&#34;/Users/ych/Library/helm&#34;</span> created.
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>Helm 2<span style="color:#ff79c6">]</span> plugins <span style="color:#f1fa8c">&#34;/Users/ych/.helm/plugins&#34;</span> will copy to <span style="color:#ff79c6">[</span>Helm 3<span style="color:#ff79c6">]</span> data folder <span style="color:#f1fa8c">&#34;/Users/ych/Library/helm/plugins&#34;</span> .
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>Helm 2<span style="color:#ff79c6">]</span> plugins <span style="color:#f1fa8c">&#34;/Users/ych/.helm/plugins&#34;</span> copied successfully to <span style="color:#ff79c6">[</span>Helm 3<span style="color:#ff79c6">]</span> data folder <span style="color:#f1fa8c">&#34;/Users/ych/Library/helm/plugins&#34;</span> .
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>Helm 2<span style="color:#ff79c6">]</span> starters <span style="color:#f1fa8c">&#34;/Users/ych/.helm/starters&#34;</span> will copy to <span style="color:#ff79c6">[</span>Helm 3<span style="color:#ff79c6">]</span> data folder <span style="color:#f1fa8c">&#34;/Users/ych/Library/helm/starters&#34;</span> .
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>Helm 2<span style="color:#ff79c6">]</span> starters <span style="color:#f1fa8c">&#34;/Users/ych/.helm/starters&#34;</span> copied successfully to <span style="color:#ff79c6">[</span>Helm 3<span style="color:#ff79c6">]</span> data folder <span style="color:#f1fa8c">&#34;/Users/ych/Library/helm/starters&#34;</span> .
+</span></span></code></pre></div><p>上面的操作会迁移：</p>
 <ul>
 <li>Chart starters</li>
 <li>Chart 仓库</li>
 <li>插件</li>
 </ul>
-
 <blockquote>
 <p>不过需要注意的是，请检查下所有的 Helm V2 下面的插件是否能够在 Helm V3 下面正常工作，把不起作用的插件删除即可。</p>
 </blockquote>
-
 <p>现在我们再查看下 Chart 仓库信息：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ helm3 repo list
-NAME        	URL
-stable      	http://mirror.azure.cn/kubernetes/charts/
-<span style="color:#8be9fd;font-style:italic">local</span>       	http://127.0.0.1:8879/charts
-$ helm3 plugin list
-NAME	VERSION	DESCRIPTION
-2to3	<span style="color:#bd93f9">0</span>.1.1  	migrate Helm v2 configuration and releases in-place to Helm v3
-push	<span style="color:#bd93f9">0</span>.7.1  	Push chart package to ChartMuseum</code></pre></div>
-<p>我们可以看到已经可以看到 Chart 仓库信息了，在 Helm V3 下面也可以使用之前 V2 版本提供的 Chart 仓库和插件了。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ helm3 repo list
+</span></span><span style="display:flex;"><span>NAME        	URL
+</span></span><span style="display:flex;"><span>stable      	http://mirror.azure.cn/kubernetes/charts/
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">local</span>       	http://127.0.0.1:8879/charts
+</span></span><span style="display:flex;"><span>$ helm3 plugin list
+</span></span><span style="display:flex;"><span>NAME	VERSION	DESCRIPTION
+</span></span><span style="display:flex;"><span>2to3	0.1.1  	migrate Helm v2 configuration and releases in-place to Helm v3
+</span></span><span style="display:flex;"><span>push	0.7.1  	Push chart package to ChartMuseum
+</span></span></code></pre></div><p>我们可以看到已经可以看到 Chart 仓库信息了，在 Helm V3 下面也可以使用之前 V2 版本提供的 Chart 仓库和插件了。</p>
 <p>上面的 <code>move config</code> 命令会创建 Helm V3 配置和数据目录（如果它们不存在），并将覆盖<code>repositories.yaml</code>文件（如果存在）。</p>
-
 <p>此外，该插件还支持将非默认的 Helm V2 主目录以及 Helm V3 配置和数据目录，使用如下配置使用即可：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ <span style="color:#8be9fd;font-style:italic">export</span> <span style="color:#8be9fd;font-style:italic">HELM_V2_HOME</span><span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">$HOME</span>/.helm2
-$ <span style="color:#8be9fd;font-style:italic">export</span> <span style="color:#8be9fd;font-style:italic">HELM_V3_CONFIG</span><span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">$HOME</span>/.helm3
-$ <span style="color:#8be9fd;font-style:italic">export</span> <span style="color:#8be9fd;font-style:italic">HELM_V3_DATA</span><span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">$PWD</span>/.helm3
-$ helm3 2to3 move config</code></pre></div>
-<h2 id="迁移-helm-v2-release">迁移 Helm V2 Release</h2>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ <span style="color:#8be9fd;font-style:italic">export</span> <span style="color:#8be9fd;font-style:italic">HELM_V2_HOME</span><span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">$HOME</span>/.helm2
+</span></span><span style="display:flex;"><span>$ <span style="color:#8be9fd;font-style:italic">export</span> <span style="color:#8be9fd;font-style:italic">HELM_V3_CONFIG</span><span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">$HOME</span>/.helm3
+</span></span><span style="display:flex;"><span>$ <span style="color:#8be9fd;font-style:italic">export</span> <span style="color:#8be9fd;font-style:italic">HELM_V3_DATA</span><span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">$PWD</span>/.helm3
+</span></span><span style="display:flex;"><span>$ helm3 2to3 move config
+</span></span></code></pre></div><h2 id="迁移-helm-v2-release">迁移 Helm V2 Release</h2>
 <p>现在我们可以开始迁移 releases 了。可以使用如下命令查看下命令的可用选项：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ helm3 2to3 convert -h
-migrate Helm v2 release in-place to Helm v3
-
-Usage:
-  2to3 convert <span style="color:#ff79c6">[</span>flags<span style="color:#ff79c6">]</span> RELEASE
-
-Flags:
-      --delete-v2-releases       v2 releases are deleted after migration. By default, the v2 releases are retained
-      --dry-run                  simulate a convert
-  -h, --help                     <span style="color:#8be9fd;font-style:italic">help</span> <span style="color:#ff79c6">for</span> convert
-  -l, --label string             label to <span style="color:#ff79c6">select</span> tiller resources by <span style="color:#ff79c6">(</span>default <span style="color:#f1fa8c">&#34;OWNER=TILLER&#34;</span><span style="color:#ff79c6">)</span>
-  -s, --release-storage string   v2 release storage type/object. It can be <span style="color:#f1fa8c">&#39;secrets&#39;</span> or <span style="color:#f1fa8c">&#39;configmaps&#39;</span>. This is only used with the <span style="color:#f1fa8c">&#39;tiller-out-cluster&#39;</span> flag <span style="color:#ff79c6">(</span>default <span style="color:#f1fa8c">&#34;secrets&#34;</span><span style="color:#ff79c6">)</span>
-  -t, --tiller-ns string         namespace of Tiller <span style="color:#ff79c6">(</span>default <span style="color:#f1fa8c">&#34;kube-system&#34;</span><span style="color:#ff79c6">)</span>
-      --tiller-out-cluster       when  Tiller is not running in the cluster e.g. Tillerless</code></pre></div>
-<p>可以看到最后的 <code>--tiller-out-cluster</code> 参数，甚至支持 <a href="https://github.com/rimusz/helm-tiller">Tillerless Helm v2</a>。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ helm3 2to3 convert -h
+</span></span><span style="display:flex;"><span>migrate Helm v2 release in-place to Helm v3
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Usage:
+</span></span><span style="display:flex;"><span>  2to3 convert <span style="color:#ff79c6">[</span>flags<span style="color:#ff79c6">]</span> RELEASE
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Flags:
+</span></span><span style="display:flex;"><span>      --delete-v2-releases       v2 releases are deleted after migration. By default, the v2 releases are retained
+</span></span><span style="display:flex;"><span>      --dry-run                  simulate a convert
+</span></span><span style="display:flex;"><span>  -h, --help                     <span style="color:#8be9fd;font-style:italic">help</span> <span style="color:#ff79c6">for</span> convert
+</span></span><span style="display:flex;"><span>  -l, --label string             label to <span style="color:#ff79c6">select</span> tiller resources by <span style="color:#ff79c6">(</span>default <span style="color:#f1fa8c">&#34;OWNER=TILLER&#34;</span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>  -s, --release-storage string   v2 release storage type/object. It can be <span style="color:#f1fa8c">&#39;secrets&#39;</span> or <span style="color:#f1fa8c">&#39;configmaps&#39;</span>. This is only used with the <span style="color:#f1fa8c">&#39;tiller-out-cluster&#39;</span> flag <span style="color:#ff79c6">(</span>default <span style="color:#f1fa8c">&#34;secrets&#34;</span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>  -t, --tiller-ns string         namespace of Tiller <span style="color:#ff79c6">(</span>default <span style="color:#f1fa8c">&#34;kube-system&#34;</span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>      --tiller-out-cluster       when  Tiller is not running in the cluster e.g. Tillerless
+</span></span></code></pre></div><p>可以看到最后的 <code>--tiller-out-cluster</code> 参数，甚至支持 <a href="https://github.com/rimusz/helm-tiller">Tillerless Helm v2</a>。</p>
 <p>现在我们来查看下 Helm V2 下面的 release，然后选择一个来测试下迁移：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ helm list
-
-NAME    	REVISION	UPDATED                 	STATUS  	CHART           	APP VERSION	NAMESPACE
-minio	    <span style="color:#bd93f9">1</span>       	Wed Sep <span style="color:#bd93f9">11</span> <span style="color:#bd93f9">11</span>:47:51 <span style="color:#bd93f9">2019</span>	DEPLOYED	minio-2.5.13	RELEASE.2019-08-07T01-59-21Z	argo
-redis   	<span style="color:#bd93f9">1</span>       	Wed Sep <span style="color:#bd93f9">11</span> <span style="color:#bd93f9">14</span>:52:57 <span style="color:#bd93f9">2019</span>	DEPLOYED	redis-9.1.7     	<span style="color:#bd93f9">5</span>.0.5      	redis</code></pre></div>
-<p>上面我们也看到该迁移命令支持<code>--dry-run</code>选项，当然最安全的方式是先使用下该参数测试下效果：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ helm3 2to3 convert --dry-run minio
-NOTE: This is in dry-run mode, the following actions will not be executed.
-Run without --dry-run to take the actions described below:
-
-Release <span style="color:#f1fa8c">&#34;minio&#34;</span> will be converted from Helm <span style="color:#bd93f9">2</span> to Helm <span style="color:#bd93f9">3</span>.
-<span style="color:#ff79c6">[</span>Helm <span style="color:#bd93f9">3</span><span style="color:#ff79c6">]</span> Release <span style="color:#f1fa8c">&#34;minio&#34;</span> will be created.
-<span style="color:#ff79c6">[</span>Helm <span style="color:#bd93f9">3</span><span style="color:#ff79c6">]</span> ReleaseVersion <span style="color:#f1fa8c">&#34;minio.v1&#34;</span> will be created.</code></pre></div>
-<p>我们可以查看上面的<code>dry-run</code>模式下面的一些描述信息，没有什么问题的话就可以真正的来执行迁移操作了：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ helm3 2to3 convert minio
-Release <span style="color:#f1fa8c">&#34;minio&#34;</span> will be converted from Helm <span style="color:#bd93f9">2</span> to Helm <span style="color:#bd93f9">3</span>.
-<span style="color:#ff79c6">[</span>Helm <span style="color:#bd93f9">3</span><span style="color:#ff79c6">]</span> Release <span style="color:#f1fa8c">&#34;minio&#34;</span> will be created.
-<span style="color:#ff79c6">[</span>Helm <span style="color:#bd93f9">3</span><span style="color:#ff79c6">]</span> ReleaseVersion <span style="color:#f1fa8c">&#34;minio.v1&#34;</span> will be created.
-<span style="color:#ff79c6">[</span>Helm <span style="color:#bd93f9">3</span><span style="color:#ff79c6">]</span> ReleaseVersion <span style="color:#f1fa8c">&#34;minio.v1&#34;</span> created.
-<span style="color:#ff79c6">[</span>Helm <span style="color:#bd93f9">3</span><span style="color:#ff79c6">]</span> Release <span style="color:#f1fa8c">&#34;minio&#34;</span> created.
-Release <span style="color:#f1fa8c">&#34;minio&#34;</span> was converted successfully from Helm <span style="color:#bd93f9">2</span> to Helm <span style="color:#bd93f9">3</span>. Note: the v2 releases still remain and should be removed to avoid conflicts with the migrated v3 releases.</code></pre></div>
-<p>迁移完成后，然后检查下是否成功了：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ helm list
-
-NAME    	REVISION	UPDATED                 	STATUS  	CHART           	APP VERSION	NAMESPACE
-minio	    <span style="color:#bd93f9">1</span>       	Wed Sep <span style="color:#bd93f9">11</span> <span style="color:#bd93f9">11</span>:47:51 <span style="color:#bd93f9">2019</span>	DEPLOYED	minio-2.5.13	RELEASE.2019-08-07T01-59-21Z	argo
-redis   	<span style="color:#bd93f9">1</span>       	Wed Sep <span style="color:#bd93f9">11</span> <span style="color:#bd93f9">14</span>:52:57 <span style="color:#bd93f9">2019</span>	DEPLOYED	redis-9.1.7     	<span style="color:#bd93f9">5</span>.0.5      	redis
-$ helm3 list
-NAME 	NAMESPACE	REVISION	UPDATED                                	STATUS  	CHART</code></pre></div>
-<p>我们可以看到执行<code>helm3 list</code>命令并没有任何 release 信息，这是因为我们迁移的 minio 这个 release 是被安装在<code>argo</code>这个命名空间下面的，所以需要指定命名空间才可以看到：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ helm3 list -n argo
-NAME 	NAMESPACE	REVISION	UPDATED                                	STATUS  	CHART
-minio	argo     	<span style="color:#bd93f9">1</span>       	<span style="color:#bd93f9">2019</span>-09-11 <span style="color:#bd93f9">03</span>:47:51.239461137 +0000 UTC	deployed	minio-2.5.13</code></pre></div>
-<blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ helm list
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>NAME    	REVISION	UPDATED                 	STATUS  	CHART           	APP VERSION	NAMESPACE
+</span></span><span style="display:flex;"><span>minio	    <span style="color:#bd93f9">1</span>       	Wed Sep <span style="color:#bd93f9">11</span> 11:47:51 2019	DEPLOYED	minio-2.5.13	RELEASE.2019-08-07T01-59-21Z	argo
+</span></span><span style="display:flex;"><span>redis   	<span style="color:#bd93f9">1</span>       	Wed Sep <span style="color:#bd93f9">11</span> 14:52:57 2019	DEPLOYED	redis-9.1.7     	5.0.5      	redis
+</span></span></code></pre></div><p>上面我们也看到该迁移命令支持<code>--dry-run</code>选项，当然最安全的方式是先使用下该参数测试下效果：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ helm3 2to3 convert --dry-run minio
+</span></span><span style="display:flex;"><span>NOTE: This is in dry-run mode, the following actions will not be executed.
+</span></span><span style="display:flex;"><span>Run without --dry-run to take the actions described below:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Release <span style="color:#f1fa8c">&#34;minio&#34;</span> will be converted from Helm <span style="color:#bd93f9">2</span> to Helm 3.
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>Helm 3<span style="color:#ff79c6">]</span> Release <span style="color:#f1fa8c">&#34;minio&#34;</span> will be created.
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>Helm 3<span style="color:#ff79c6">]</span> ReleaseVersion <span style="color:#f1fa8c">&#34;minio.v1&#34;</span> will be created.
+</span></span></code></pre></div><p>我们可以查看上面的<code>dry-run</code>模式下面的一些描述信息，没有什么问题的话就可以真正的来执行迁移操作了：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ helm3 2to3 convert minio
+</span></span><span style="display:flex;"><span>Release <span style="color:#f1fa8c">&#34;minio&#34;</span> will be converted from Helm <span style="color:#bd93f9">2</span> to Helm 3.
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>Helm 3<span style="color:#ff79c6">]</span> Release <span style="color:#f1fa8c">&#34;minio&#34;</span> will be created.
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>Helm 3<span style="color:#ff79c6">]</span> ReleaseVersion <span style="color:#f1fa8c">&#34;minio.v1&#34;</span> will be created.
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>Helm 3<span style="color:#ff79c6">]</span> ReleaseVersion <span style="color:#f1fa8c">&#34;minio.v1&#34;</span> created.
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>Helm 3<span style="color:#ff79c6">]</span> Release <span style="color:#f1fa8c">&#34;minio&#34;</span> created.
+</span></span><span style="display:flex;"><span>Release <span style="color:#f1fa8c">&#34;minio&#34;</span> was converted successfully from Helm <span style="color:#bd93f9">2</span> to Helm 3. Note: the v2 releases still remain and should be removed to avoid conflicts with the migrated v3 releases.
+</span></span></code></pre></div><p>迁移完成后，然后检查下是否成功了：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ helm list
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>NAME    	REVISION	UPDATED                 	STATUS  	CHART           	APP VERSION	NAMESPACE
+</span></span><span style="display:flex;"><span>minio	    <span style="color:#bd93f9">1</span>       	Wed Sep <span style="color:#bd93f9">11</span> 11:47:51 2019	DEPLOYED	minio-2.5.13	RELEASE.2019-08-07T01-59-21Z	argo
+</span></span><span style="display:flex;"><span>redis   	<span style="color:#bd93f9">1</span>       	Wed Sep <span style="color:#bd93f9">11</span> 14:52:57 2019	DEPLOYED	redis-9.1.7     	5.0.5      	redis
+</span></span><span style="display:flex;"><span>$ helm3 list
+</span></span><span style="display:flex;"><span>NAME 	NAMESPACE	REVISION	UPDATED                                	STATUS  	CHART
+</span></span></code></pre></div><p>我们可以看到执行<code>helm3 list</code>命令并没有任何 release 信息，这是因为我们迁移的 minio 这个 release 是被安装在<code>argo</code>这个命名空间下面的，所以需要指定命名空间才可以看到：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ helm3 list -n argo
+</span></span><span style="display:flex;"><span>NAME 	NAMESPACE	REVISION	UPDATED                                	STATUS  	CHART
+</span></span><span style="display:flex;"><span>minio	argo     	<span style="color:#bd93f9">1</span>       	2019-09-11 03:47:51.239461137 +0000 UTC	deployed	minio-2.5.13
+</span></span></code></pre></div><blockquote>
 <p>注意：由于我们没有指定<code>--delete-v2-releases</code>选项，所以 Helm V2 minio 这个 release 信息还是存在的，我们可以在以后使用 kubectl 进行删除。</p>
 </blockquote>
-
 <p>当你准备好迁移你所有的 releases 的时候，你可以循环<code>helm list</code>里面的所有 release 来自动的将每个 Helm V2 release 迁移到 Helm V3 版本去。</p>
-
 <p>如果你正在使用 Tillerless Helm V2，只需要指定<code>--tiller-out-cluster</code>选项来迁移 release 即可：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ helm3 2to3 convert minio --tiller-out-cluster</code></pre></div>
-<h2 id="清理-helm-v2-数据">清理 Helm V2 数据</h2>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ helm3 2to3 convert minio --tiller-out-cluster
+</span></span></code></pre></div><h2 id="清理-helm-v2-数据">清理 Helm V2 数据</h2>
 <p>最后当然就是清理之前版本的旧数据了，虽然这并不是必须的，但是还是建议你清理下，可以避免一些冲突。清理 Helm V2 的数据比较简单：</p>
-
 <ul>
 <li>删除主文件夹<code>~/.helm</code></li>
 <li>如果你没有使用<code>--delete-v2-releases</code>选项，那么旧使用 kubectl 工具来删除 Tiller releases 数据</li>
-<li>卸载掉烦人😱的 Tiller</li>
+<li>卸载掉烦人 😱 的 Tiller</li>
 </ul>
-
 <p><strong>Happy Helm v3 sailing~</strong></p>
-
 <p>原文链接：<a href="https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/">https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/</a></p>
-
-<p><a href="https://youdianzhishi.com/web/course/1030" title="从 Docker 到 Kubernetes 进阶课程"><img src="https://sdn.youdianzhishi.com/images/2019/10/24/65f2cfb229184268a18745fe202b281b.jpg?imageView2/2/format/webp" alt="Kubernetes进阶训练营"></a></p>
-
+<!-- raw HTML omitted -->
 
           <h2>微信公众号</h2>
-<p>扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的 kubernetes 讨论群里面共同学习。</p>
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/qrcode.png" alt="wechat-account-qrcode">
+<p>
+  扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的
+  kubernetes 讨论群里面共同学习。
+</p>
+<img
+  src="https://picdn.youdianzhishi.com/images/qrcode.png"
+  alt="wechat-account-qrcode"
+/>
 
   
           
@@ -747,7 +702,7 @@ minio	argo     	<span style="color:#bd93f9">1</span>       	<span style="color:#
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -759,7 +714,7 @@ minio	argo     	<span style="color:#bd93f9">1</span>       	<span style="color:#
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -776,7 +731,7 @@ minio	argo     	<span style="color:#bd93f9">1</span>       	<span style="color:#
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -785,7 +740,7 @@ minio	argo     	<span style="color:#bd93f9">1</span>       	<span style="color:#
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

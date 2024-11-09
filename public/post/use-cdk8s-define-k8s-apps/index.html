@@ -14,16 +14,15 @@
   <meta property="og:description" content="cdk8s 是 AWS Labs 发布的一个使用 TypeScript 编写的新框架，它允许我们使用一些面向对象的编程语言来定义 Kubernetes 的资源清单，cdk8s 最终也是生成原生的 Kubernetes YAML 文件，所以我们可以在任何地方使用 cdk8s 来定义运行的 Kubernetes 应用资源。">
   <meta name="twitter:description" content="cdk8s 是 AWS Labs 发布的一个使用 TypeScript 编写的新框架，它允许我们使用一些面向对象的编程语言来定义 Kubernetes 的资源清单，cdk8s 最终也是生成原生的 Kubernetes YAML 文件，所以我们可以在任何地方使用 cdk8s 来定义运行的 Kubernetes 应用资源。">
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/post/use-cdk8s-define-k8s-apps/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/post/use-cdk8s-define-k8s-apps/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -32,7 +31,7 @@
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -83,7 +82,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -226,7 +225,7 @@ autocomplete('#aa-search-input',
 
 
   
-    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200424115708.png" data-img-desc-1="https://unsplash.com/photos/SGeLqzloJaw"></div>
+    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://picdn.youdianzhishi.com/images/20200424115708.png" data-img-desc-1="https://unsplash.com/photos/SGeLqzloJaw"></div>
   
 
   <header class="header-section has-img">
@@ -241,12 +240,8 @@ autocomplete('#aa-search-input',
                   
                   
                     <span class="post-meta">
-  
-    发表于 April 24, 2020
-  
-  
+  发表于 April 24, 2020  
 </span>
-
 
                   
               </div>
@@ -268,12 +263,8 @@ autocomplete('#aa-search-input',
                 
                 
                   <span class="post-meta">
-  
-    发表于 April 24, 2020
-  
-  
+  发表于 April 24, 2020  
 </span>
-
 
                 
             </div>
@@ -317,15 +308,12 @@ autocomplete('#aa-search-input',
             
 <aside class="toc">
   <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#介绍">介绍</a></li>
-<li><a href="#使用">使用</a></li>
-<li><a href="#对比">对比</a></li>
-<li><a href="#参考资料">参考资料</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#介绍">介绍</a></li>
+    <li><a href="#使用">使用</a></li>
+    <li><a href="#对比">对比</a></li>
+    <li><a href="#参考资料">参考资料</a></li>
+  </ul>
 </nav>
 </aside>
 
@@ -344,239 +332,218 @@ autocomplete('#aa-search-input',
           
 
           <p><a href="https://github.com/awslabs/cdk8s">cdk8s</a> 是 AWS Labs 发布的一个使用 TypeScript 编写的新框架，它允许我们使用一些面向对象的编程语言来定义 Kubernetes 的资源清单，cdk8s 最终也是生成原生的 Kubernetes YAML 文件，所以我们可以在任何地方使用 cdk8s 来定义运行的 Kubernetes 应用资源。</p>
-
 <h2 id="介绍">介绍</h2>
-
 <p>在 cdk8s 中提供了一个结构（construct）的概念，它们是 Kubernetes 资源对象（Deployment、Service、Ingress 等）的抽象。定义的 Kubernetes 应用就是一颗结构树，树的根是一个 App 结构，在应用程序中，我们可以定义任意数量的图表（charts，类似于 Helm Chart 模板），每个图表都会被合并到一个单独的 Kubernetes 资源清单文件中，图表依次由任意数量的构造组成，最终由 Kubernetes 的资源对象组成。</p>
-
 <p>不过需要注意的是 cdk8s 仅仅只是定义 Kubernetes 应用，并不会将应用安装到集群中，当使用 cdk8s 执行某个应用程序时，它会将应用程序中定义的所有图表合并到 dist 目录中，然后我们可以使用 <code>kubectl apply -f dist/chart.k8syaml</code> 或者其他 GitOps 工具将这些图表安装到 Kubernetes 集群中去。</p>
-
 <h2 id="使用">使用</h2>
-
-<p>目前 cdk8s 支持使用 TypeScript 和 Python 两种编程语言来定义 Kubernetes 应用。这里我们以更熟悉的 Python 为例来说明 cdk8s 的基本使用。
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-5376999672787220"
-     data-ad-slot="9165834656"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-
-cdk8s 有一个比较轻量级的 CLI 工具，其中包含一些有用的命令。我们可以先在全局中安装 cdk8s CLI，可以使用如下两种方式进行安装：</p>
-
+<p>目前 cdk8s 支持使用 TypeScript 和 Python 两种编程语言来定义 Kubernetes 应用。这里我们以更熟悉的 Python 为例来说明 cdk8s 的基本使用。</p>
+<!-- raw HTML omitted -->
+<p>cdk8s 有一个比较轻量级的 CLI 工具，其中包含一些有用的命令。我们可以先在全局中安装 cdk8s CLI，可以使用如下两种方式进行安装：</p>
 <ul>
 <li>如果是 Mac 系统，可以直接使用 Homebrew 工具进行安装：</li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ brew install cdk8s</code></pre></div>
-<ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ brew install cdk8s
+</span></span></code></pre></div><ul>
 <li>除此之外也可以使用 npm 工具进行安装（依赖 Node.js）：</li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ npm install -g cdk8s-cli</code></pre></div>
-<p>安装完成后我们就可以使用 <code>cdk8s</code> 命令来创建一个 cdk8s 应用了：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ mkdir hello <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#8be9fd;font-style:italic">cd</span> hello
-<span style="color:#6272a4"># cdk8s init TYPE - TYPE 表示项目类型：python-app 或者 typescript-app</span>
-$ cdk8s init python-app   
-Initializing a project from the python-app template
-Pipfile.lock not found, creating…
-Locking <span style="color:#ff79c6">[</span>dev-packages<span style="color:#ff79c6">]</span> dependencies…
-Locking <span style="color:#ff79c6">[</span>packages<span style="color:#ff79c6">]</span> dependencies…
-Updated Pipfile.lock <span style="color:#ff79c6">(</span>a65489<span style="color:#ff79c6">)</span>!
-Installing dependencies from Pipfile.lock <span style="color:#ff79c6">(</span>a65489<span style="color:#ff79c6">)</span>…
-  🐍   ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ <span style="color:#bd93f9">0</span>/0 — <span style="color:#bd93f9">00</span>:00:00
-To activate this project<span style="color:#f1fa8c">&#39;s virtualenv, run the following:
-</span><span style="color:#f1fa8c"> $ pipenv shell
-</span><span style="color:#f1fa8c">Installing cdk8s~=0.19.0…
-</span><span style="color:#f1fa8c">Requirement already satisfied: cdk8s~=0.19.0 in /Users/ych/.virtualenvs/hello-ndJXVB8W/lib/python3.7/site-packages (0.19.0)
-</span><span style="color:#f1fa8c">Requirement already satisfied: constructs&lt;3.0.0,&gt;=2.0.1 in /Users/ych/.virtualenvs/hello-ndJXVB8W/lib/python3.7/site-packages (from cdk8s~=0.19.0) (2.0.1)
-</span><span style="color:#f1fa8c">Requirement already satisfied: publication&gt;=0.0.3 in /Users/ych/.virtualenvs/hello-ndJXVB8W/lib/python3.7/site-packages (from cdk8s~=0.19.0) (0.0.3)
-</span><span style="color:#f1fa8c">Requirement already satisfied: jsii~=1.1.0 in /Users/ych/.virtualenvs/hello-ndJXVB8W/lib/python3.7/site-packages (from cdk8s~=0.19.0) (1.1.1)
-</span><span style="color:#f1fa8c">Requirement already satisfied: cattrs&gt;=1.0.0 in /Users/ych/.virtualenvs/hello-ndJXVB8W/lib/python3.7/site-packages (from jsii~=1.1.0-&gt;cdk8s~=0.19.0) (1.0.0)
-</span><span style="color:#f1fa8c">Requirement already satisfied: typing-extensions&gt;=3.6.4 in /Users/ych/.virtualenvs/hello-ndJXVB8W/lib/python3.7/site-packages (from jsii~=1.1.0-&gt;cdk8s~=0.19.0) (3.7.4.2)
-</span><span style="color:#f1fa8c">Requirement already satisfied: python-dateutil in /Users/ych/.virtualenvs/hello-ndJXVB8W/lib/python3.7/site-packages (from jsii~=1.1.0-&gt;cdk8s~=0.19.0) (2.8.1)
-</span><span style="color:#f1fa8c">Requirement already satisfied: attrs&gt;=18.2 in /Users/ych/.virtualenvs/hello-ndJXVB8W/lib/python3.7/site-packages (from jsii~=1.1.0-&gt;cdk8s~=0.19.0) (19.3.0)
-</span><span style="color:#f1fa8c">Requirement already satisfied: six&gt;=1.5 in /Users/ych/.virtualenvs/hello-ndJXVB8W/lib/python3.7/site-packages (from python-dateutil-&gt;jsii~=1.1.0-&gt;cdk8s~=0.19.0) (1.14.0)
-</span><span style="color:#f1fa8c">
-</span><span style="color:#f1fa8c">Adding cdk8s~=0.19.0 to Pipfile&#39;</span>s <span style="color:#ff79c6">[</span>packages<span style="color:#ff79c6">]</span>…
-Pipfile.lock <span style="color:#ff79c6">(</span>a65489<span style="color:#ff79c6">)</span> out of date, updating to <span style="color:#ff79c6">(</span>eea701<span style="color:#ff79c6">)</span>…
-Locking <span style="color:#ff79c6">[</span>dev-packages<span style="color:#ff79c6">]</span> dependencies…
-Locking <span style="color:#ff79c6">[</span>packages<span style="color:#ff79c6">]</span> dependencies…
-Updated Pipfile.lock <span style="color:#ff79c6">(</span>eea701<span style="color:#ff79c6">)</span>!
-Installing dependencies from Pipfile.lock <span style="color:#ff79c6">(</span>eea701<span style="color:#ff79c6">)</span>…
-  🐍   ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ <span style="color:#bd93f9">9</span>/9 — <span style="color:#bd93f9">00</span>:00:02
-To activate this project&#39;s virtualenv, run the following:
- $ pipenv <span style="color:#8be9fd;font-style:italic">shell</span>
-<span style="color:#ff79c6">========================================================================================================</span>
-
- Your cdk8s Python project is ready!
-
-   cat <span style="color:#8be9fd;font-style:italic">help</span>      Prints this message
-   cdk8s synth   Synthesize k8s manifests to dist/
-   cdk8s import  Imports k8s API objects to <span style="color:#f1fa8c">&#34;imports/k8s&#34;</span>
-
-  Deploy:
-   kubectl apply -f dist/*.k8s.yaml
-
-<span style="color:#ff79c6">========================================================================================================</span></code></pre></div>
-<blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ npm install -g cdk8s-cli
+</span></span></code></pre></div><p>安装完成后我们就可以使用 <code>cdk8s</code> 命令来创建一个 cdk8s 应用了：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ mkdir hello <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#8be9fd;font-style:italic">cd</span> hello
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># cdk8s init TYPE - TYPE 表示项目类型：python-app 或者 typescript-app</span>
+</span></span><span style="display:flex;"><span>$ cdk8s init python-app
+</span></span><span style="display:flex;"><span>Initializing a project from the python-app template
+</span></span><span style="display:flex;"><span>Pipfile.lock not found, creating…
+</span></span><span style="display:flex;"><span>Locking <span style="color:#ff79c6">[</span>dev-packages<span style="color:#ff79c6">]</span> dependencies…
+</span></span><span style="display:flex;"><span>Locking <span style="color:#ff79c6">[</span>packages<span style="color:#ff79c6">]</span> dependencies…
+</span></span><span style="display:flex;"><span>Updated Pipfile.lock <span style="color:#ff79c6">(</span>a65489<span style="color:#ff79c6">)</span>!
+</span></span><span style="display:flex;"><span>Installing dependencies from Pipfile.lock <span style="color:#ff79c6">(</span>a65489<span style="color:#ff79c6">)</span>…
+</span></span><span style="display:flex;"><span>  🐍   ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0/0 — 00:00:00
+</span></span><span style="display:flex;"><span>To activate this project<span style="color:#f1fa8c">&#39;s virtualenv, run the following:
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"> $ pipenv shell
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">Installing cdk8s~=0.19.0…
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">Requirement already satisfied: cdk8s~=0.19.0 in /Users/ych/.virtualenvs/hello-ndJXVB8W/lib/python3.7/site-packages (0.19.0)
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">Requirement already satisfied: constructs&lt;3.0.0,&gt;=2.0.1 in /Users/ych/.virtualenvs/hello-ndJXVB8W/lib/python3.7/site-packages (from cdk8s~=0.19.0) (2.0.1)
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">Requirement already satisfied: publication&gt;=0.0.3 in /Users/ych/.virtualenvs/hello-ndJXVB8W/lib/python3.7/site-packages (from cdk8s~=0.19.0) (0.0.3)
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">Requirement already satisfied: jsii~=1.1.0 in /Users/ych/.virtualenvs/hello-ndJXVB8W/lib/python3.7/site-packages (from cdk8s~=0.19.0) (1.1.1)
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">Requirement already satisfied: cattrs&gt;=1.0.0 in /Users/ych/.virtualenvs/hello-ndJXVB8W/lib/python3.7/site-packages (from jsii~=1.1.0-&gt;cdk8s~=0.19.0) (1.0.0)
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">Requirement already satisfied: typing-extensions&gt;=3.6.4 in /Users/ych/.virtualenvs/hello-ndJXVB8W/lib/python3.7/site-packages (from jsii~=1.1.0-&gt;cdk8s~=0.19.0) (3.7.4.2)
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">Requirement already satisfied: python-dateutil in /Users/ych/.virtualenvs/hello-ndJXVB8W/lib/python3.7/site-packages (from jsii~=1.1.0-&gt;cdk8s~=0.19.0) (2.8.1)
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">Requirement already satisfied: attrs&gt;=18.2 in /Users/ych/.virtualenvs/hello-ndJXVB8W/lib/python3.7/site-packages (from jsii~=1.1.0-&gt;cdk8s~=0.19.0) (19.3.0)
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">Requirement already satisfied: six&gt;=1.5 in /Users/ych/.virtualenvs/hello-ndJXVB8W/lib/python3.7/site-packages (from python-dateutil-&gt;jsii~=1.1.0-&gt;cdk8s~=0.19.0) (1.14.0)
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">Adding cdk8s~=0.19.0 to Pipfile&#39;</span>s <span style="color:#ff79c6">[</span>packages<span style="color:#ff79c6">]</span>…
+</span></span><span style="display:flex;"><span>Pipfile.lock <span style="color:#ff79c6">(</span>a65489<span style="color:#ff79c6">)</span> out of date, updating to <span style="color:#ff79c6">(</span>eea701<span style="color:#ff79c6">)</span>…
+</span></span><span style="display:flex;"><span>Locking <span style="color:#ff79c6">[</span>dev-packages<span style="color:#ff79c6">]</span> dependencies…
+</span></span><span style="display:flex;"><span>Locking <span style="color:#ff79c6">[</span>packages<span style="color:#ff79c6">]</span> dependencies…
+</span></span><span style="display:flex;"><span>Updated Pipfile.lock <span style="color:#ff79c6">(</span>eea701<span style="color:#ff79c6">)</span>!
+</span></span><span style="display:flex;"><span>Installing dependencies from Pipfile.lock <span style="color:#ff79c6">(</span>eea701<span style="color:#ff79c6">)</span>…
+</span></span><span style="display:flex;"><span>  🐍   ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 9/9 — 00:00:02
+</span></span><span style="display:flex;"><span>To activate this project&#39;s virtualenv, run the following:
+</span></span><span style="display:flex;"><span> $ pipenv <span style="color:#8be9fd;font-style:italic">shell</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">========================================================================================================</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span> Your cdk8s Python project is ready!
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   cat <span style="color:#8be9fd;font-style:italic">help</span>      Prints this message
+</span></span><span style="display:flex;"><span>   cdk8s synth   Synthesize k8s manifests to dist/
+</span></span><span style="display:flex;"><span>   cdk8s import  Imports k8s API objects to <span style="color:#f1fa8c">&#34;imports/k8s&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  Deploy:
+</span></span><span style="display:flex;"><span>   kubectl apply -f dist/*.k8s.yaml
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">========================================================================================================</span>
+</span></span></code></pre></div><blockquote>
 <p>在初始化过程中发现需要较高的 Node 版本，我这里使用的是 v13.5.0，另外还需要全局代理，因为初始化过程中需要获取一些 K8S 的 API 对象。</p>
 </blockquote>
-
 <p>初始化完成后我们可以查看下项目的基本结构：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ tree .
-.
-├── Pipfile
-├── Pipfile.lock
-├── cdk8s.yaml
-├── dist
-│   └── hello.k8s.yaml
-├── <span style="color:#8be9fd;font-style:italic">help</span>
-├── imports
-│   └── k8s
-│       ├── __init__.py
-│       ├── _jsii
-│       │   ├── __init__.py
-│       │   └── k8s@0.0.0.jsii.tgz
-│       └── py.typed
-└── main.py
-
-<span style="color:#bd93f9">4</span> directories, <span style="color:#bd93f9">10</span> files</code></pre></div>
-<p>现在我们可以打开 <code>main.py</code> 文件，内容如下所示：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#6272a4">#!/usr/bin/env python</span>
-<span style="color:#ff79c6">from</span> constructs <span style="color:#ff79c6">import</span> Construct
-<span style="color:#ff79c6">from</span> cdk8s <span style="color:#ff79c6">import</span> App, Chart
-
-
-<span style="color:#ff79c6">class</span> <span style="color:#50fa7b">MyChart</span>(Chart):
-    <span style="color:#ff79c6">def</span> __init__(self, scope: Construct, ns: <span style="color:#8be9fd;font-style:italic">str</span>):
-        <span style="color:#8be9fd;font-style:italic">super</span>()<span style="color:#ff79c6">.</span>__init__(scope, ns)
-
-        <span style="color:#6272a4"># define resources here</span>
-
-
-app <span style="color:#ff79c6">=</span> App()
-MyChart(app, <span style="color:#f1fa8c">&#34;hello&#34;</span>)
-
-app<span style="color:#ff79c6">.</span>synth()</code></pre></div>
-<p>从上面代码可以看出应用以结构树的形式构成，结构是一种抽象的可组合的单元。上面我们使用 <code>cdk8s init</code> 命令初始化的项目定义了单个空的图表。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ tree .
+</span></span><span style="display:flex;"><span>.
+</span></span><span style="display:flex;"><span>├── Pipfile
+</span></span><span style="display:flex;"><span>├── Pipfile.lock
+</span></span><span style="display:flex;"><span>├── cdk8s.yaml
+</span></span><span style="display:flex;"><span>├── dist
+</span></span><span style="display:flex;"><span>│   └── hello.k8s.yaml
+</span></span><span style="display:flex;"><span>├── <span style="color:#8be9fd;font-style:italic">help</span>
+</span></span><span style="display:flex;"><span>├── imports
+</span></span><span style="display:flex;"><span>│   └── k8s
+</span></span><span style="display:flex;"><span>│       ├── __init__.py
+</span></span><span style="display:flex;"><span>│       ├── _jsii
+</span></span><span style="display:flex;"><span>│       │   ├── __init__.py
+</span></span><span style="display:flex;"><span>│       │   └── k8s@0.0.0.jsii.tgz
+</span></span><span style="display:flex;"><span>│       └── py.typed
+</span></span><span style="display:flex;"><span>└── main.py
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">4</span> directories, <span style="color:#bd93f9">10</span> files
+</span></span></code></pre></div><p>现在我们可以打开 <code>main.py</code> 文件，内容如下所示：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-py" data-lang="py"><span style="display:flex;"><span><span style="color:#6272a4">#!/usr/bin/env python</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">from</span> constructs <span style="color:#ff79c6">import</span> Construct
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">from</span> cdk8s <span style="color:#ff79c6">import</span> App, Chart
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">class</span> <span style="color:#50fa7b">MyChart</span>(Chart):
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">def</span> __init__(self, scope: Construct, ns: <span style="color:#8be9fd;font-style:italic">str</span>):
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">super</span>()<span style="color:#ff79c6">.</span>__init__(scope, ns)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># define resources here</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>app <span style="color:#ff79c6">=</span> App()
+</span></span><span style="display:flex;"><span>MyChart(app, <span style="color:#f1fa8c">&#34;hello&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>app<span style="color:#ff79c6">.</span>synth()
+</span></span></code></pre></div><p>从上面代码可以看出应用以结构树的形式构成，结构是一种抽象的可组合的单元。上面我们使用 <code>cdk8s init</code> 命令初始化的项目定义了单个空的图表。</p>
 <p>当我们运行 <code>cdk8s synth</code> 的时候，将会为应用程序中的每个 Chart 合成 Kubernetes 资源清单，并将其写入到 dist 目录。我们可以使用如下所示命令测试下：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ cdk8s synth
-dist/hello.k8s.yaml
-$ cat dist/hello.k8s.yaml
-$ <span style="color:#6272a4"># 空内容</span></code></pre></div>
-<p>接下来我们在图表中定义一些 Kubernetes API 对象。与 charts 和 apps 类似，Kubernetes API 对象在 cdk8s 中也表示为结构。使用 <code>cdk8s import</code> 命令可以将这些结构导入到项目中，然后我们就可以在项目目录的 <code>imports/k8s</code> 模块下面找到它们。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ cdk8s synth
+</span></span><span style="display:flex;"><span>dist/hello.k8s.yaml
+</span></span><span style="display:flex;"><span>$ cat dist/hello.k8s.yaml
+</span></span><span style="display:flex;"><span>$ <span style="color:#6272a4"># 空内容</span>
+</span></span></code></pre></div><p>接下来我们在图表中定义一些 Kubernetes API 对象。与 charts 和 apps 类似，Kubernetes API 对象在 cdk8s 中也表示为结构。使用 <code>cdk8s import</code> 命令可以将这些结构导入到项目中，然后我们就可以在项目目录的 <code>imports/k8s</code> 模块下面找到它们。</p>
 <p>当我们使用 cdk8s 初始化创建项目的时候，其实已经执行了 <code>cdk8s import</code> 操作，所以我们可以在 <code>imports</code> 目录下面看到一些信息，我们可以将该目录提交到源码中进行管理，也可以在构建过程中去生成。</p>
-
 <p>下面我们来定义一个简单的 Kubernetes 应用程序，包含 Deployment 和 Service 资源对象，修改 <code>main.py</code> 代码，内容如下所示：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#6272a4">#!/usr/bin/env python</span>
-<span style="color:#ff79c6">from</span> constructs <span style="color:#ff79c6">import</span> Construct
-<span style="color:#ff79c6">from</span> cdk8s <span style="color:#ff79c6">import</span> App, Chart
-
-<span style="color:#ff79c6">from</span> imports <span style="color:#ff79c6">import</span> k8s  <span style="color:#6272a4"># 导入由 cdk8s import 命令生成的特定 k8s 版本的资源对象</span>
-
-
-<span style="color:#ff79c6">class</span> <span style="color:#50fa7b">MyChart</span>(Chart):
-    <span style="color:#ff79c6">def</span> __init__(self, 
-            scope: Construct,  <span style="color:#6272a4"># 我们的app实例</span>
-            ns: <span style="color:#8be9fd;font-style:italic">str</span>):  <span style="color:#6272a4"># 需要注意的是这里并不是 k8s 的 namespace，只是我们资源的一个前缀而已</span>
-        <span style="color:#8be9fd;font-style:italic">super</span>()<span style="color:#ff79c6">.</span>__init__(scope, ns)
-
-        <span style="color:#6272a4"># 定义一些变量</span>
-        label <span style="color:#ff79c6">=</span> {<span style="color:#f1fa8c">&#34;app&#34;</span>: <span style="color:#f1fa8c">&#34;hello-k8s&#34;</span>}
-        
-        <span style="color:#6272a4"># 定义带有一个容器两个副本的Deployment资源对象</span>
-        k8s<span style="color:#ff79c6">.</span>Deployment(self, <span style="color:#f1fa8c">&#39;deployment&#39;</span>,
-                        spec<span style="color:#ff79c6">=</span>k8s<span style="color:#ff79c6">.</span>DeploymentSpec(
-                            replicas<span style="color:#ff79c6">=</span><span style="color:#bd93f9">2</span>,
-                            selector<span style="color:#ff79c6">=</span>k8s<span style="color:#ff79c6">.</span>LabelSelector(match_labels<span style="color:#ff79c6">=</span>label),
-                            template<span style="color:#ff79c6">=</span>k8s<span style="color:#ff79c6">.</span>PodTemplateSpec(
-                                metadata<span style="color:#ff79c6">=</span>k8s<span style="color:#ff79c6">.</span>ObjectMeta(labels<span style="color:#ff79c6">=</span>label),
-                                spec<span style="color:#ff79c6">=</span>k8s<span style="color:#ff79c6">.</span>PodSpec(containers<span style="color:#ff79c6">=</span>[
-                                    k8s<span style="color:#ff79c6">.</span>Container(
-                                        name<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;hello-k8s&#39;</span>,
-                                        image<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;paulbouwer/hello-kubernetes:1.7&#39;</span>,
-                                        ports<span style="color:#ff79c6">=</span>[k8s<span style="color:#ff79c6">.</span>ContainerPort(container_port<span style="color:#ff79c6">=</span><span style="color:#bd93f9">8080</span>)]
-                                    )
-                                ])
-                            )
-                        ))
-        <span style="color:#6272a4"># 定义一个关联上述 Pod 的 Service 对象</span>
-        k8s<span style="color:#ff79c6">.</span>Service(self, <span style="color:#f1fa8c">&#39;service&#39;</span>, 
-                    spec<span style="color:#ff79c6">=</span>k8s<span style="color:#ff79c6">.</span>ServiceSpec(
-                        <span style="color:#8be9fd;font-style:italic">type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;NodePort&#39;</span>,
-                        ports<span style="color:#ff79c6">=</span>[k8s<span style="color:#ff79c6">.</span>ServicePort(port<span style="color:#ff79c6">=</span><span style="color:#bd93f9">80</span>, target_port<span style="color:#ff79c6">=</span>k8s<span style="color:#ff79c6">.</span>IntOrString<span style="color:#ff79c6">.</span>from_number(<span style="color:#bd93f9">8080</span>))],
-                        selector<span style="color:#ff79c6">=</span>label
-                        )
-                    )
-
-
-app <span style="color:#ff79c6">=</span> App()  <span style="color:#6272a4"># 创建一个 App 实例</span>
-MyChart(app, <span style="color:#f1fa8c">&#34;hello&#34;</span>) 
-
-app<span style="color:#ff79c6">.</span>synth()  <span style="color:#6272a4"># 该方法负责生成生成k8s资源清单文件</span></code></pre></div>
-<p>现在我们执行 <code>cdk8s synth</code> 命令，会在 dist 目录下生成如下所示的资源清单：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ cdk8s synth
-dist/hello.k8s.yaml
-$ cat dist/hello.k8s.yaml
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: hello-deployment-c51e9e6b
-spec:
-  replicas: <span style="color:#bd93f9">2</span>
-  selector:
-    matchLabels:
-      app: hello-k8s
-  template:
-    metadata:
-      labels:
-        app: hello-k8s
-    spec:
-      containers:
-        - image: paulbouwer/hello-kubernetes:1.7
-          name: hello-k8s
-          ports:
-            - containerPort: <span style="color:#bd93f9">8080</span>
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: hello-service-9878228b
-spec:
-  ports:
-    - port: <span style="color:#bd93f9">80</span>
-      targetPort: <span style="color:#bd93f9">8080</span>
-  selector:
-    app: hello-k8s
-  type: NodePort</code></pre></div>
-<p>资源清单生成后，我们就可以使用 kubectl 命令来直接安装应用：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl apply -f dist/hello.k8s.yaml
-deployment.apps/hello-deployment-c51e9e6b created
-service/hello-service-9878228b created</code></pre></div>
-<p>到这里我们就完成了使用 cdk8s 来定义一个简单的 Kubernetes 应用。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-py" data-lang="py"><span style="display:flex;"><span><span style="color:#6272a4">#!/usr/bin/env python</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">from</span> constructs <span style="color:#ff79c6">import</span> Construct
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">from</span> cdk8s <span style="color:#ff79c6">import</span> App, Chart
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">from</span> imports <span style="color:#ff79c6">import</span> k8s  <span style="color:#6272a4"># 导入由 cdk8s import 命令生成的特定 k8s 版本的资源对象</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">class</span> <span style="color:#50fa7b">MyChart</span>(Chart):
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">def</span> __init__(self,
+</span></span><span style="display:flex;"><span>            scope: Construct,  <span style="color:#6272a4"># 我们的app实例</span>
+</span></span><span style="display:flex;"><span>            ns: <span style="color:#8be9fd;font-style:italic">str</span>):  <span style="color:#6272a4"># 需要注意的是这里并不是 k8s 的 namespace，只是我们资源的一个前缀而已</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">super</span>()<span style="color:#ff79c6">.</span>__init__(scope, ns)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># 定义一些变量</span>
+</span></span><span style="display:flex;"><span>        label <span style="color:#ff79c6">=</span> {<span style="color:#f1fa8c">&#34;app&#34;</span>: <span style="color:#f1fa8c">&#34;hello-k8s&#34;</span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># 定义带有一个容器两个副本的Deployment资源对象</span>
+</span></span><span style="display:flex;"><span>        k8s<span style="color:#ff79c6">.</span>Deployment(self, <span style="color:#f1fa8c">&#39;deployment&#39;</span>,
+</span></span><span style="display:flex;"><span>                        spec<span style="color:#ff79c6">=</span>k8s<span style="color:#ff79c6">.</span>DeploymentSpec(
+</span></span><span style="display:flex;"><span>                            replicas<span style="color:#ff79c6">=</span><span style="color:#bd93f9">2</span>,
+</span></span><span style="display:flex;"><span>                            selector<span style="color:#ff79c6">=</span>k8s<span style="color:#ff79c6">.</span>LabelSelector(match_labels<span style="color:#ff79c6">=</span>label),
+</span></span><span style="display:flex;"><span>                            template<span style="color:#ff79c6">=</span>k8s<span style="color:#ff79c6">.</span>PodTemplateSpec(
+</span></span><span style="display:flex;"><span>                                metadata<span style="color:#ff79c6">=</span>k8s<span style="color:#ff79c6">.</span>ObjectMeta(labels<span style="color:#ff79c6">=</span>label),
+</span></span><span style="display:flex;"><span>                                spec<span style="color:#ff79c6">=</span>k8s<span style="color:#ff79c6">.</span>PodSpec(containers<span style="color:#ff79c6">=</span>[
+</span></span><span style="display:flex;"><span>                                    k8s<span style="color:#ff79c6">.</span>Container(
+</span></span><span style="display:flex;"><span>                                        name<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;hello-k8s&#39;</span>,
+</span></span><span style="display:flex;"><span>                                        image<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;paulbouwer/hello-kubernetes:1.7&#39;</span>,
+</span></span><span style="display:flex;"><span>                                        ports<span style="color:#ff79c6">=</span>[k8s<span style="color:#ff79c6">.</span>ContainerPort(container_port<span style="color:#ff79c6">=</span><span style="color:#bd93f9">8080</span>)]
+</span></span><span style="display:flex;"><span>                                    )
+</span></span><span style="display:flex;"><span>                                ])
+</span></span><span style="display:flex;"><span>                            )
+</span></span><span style="display:flex;"><span>                        ))
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># 定义一个关联上述 Pod 的 Service 对象</span>
+</span></span><span style="display:flex;"><span>        k8s<span style="color:#ff79c6">.</span>Service(self, <span style="color:#f1fa8c">&#39;service&#39;</span>,
+</span></span><span style="display:flex;"><span>                    spec<span style="color:#ff79c6">=</span>k8s<span style="color:#ff79c6">.</span>ServiceSpec(
+</span></span><span style="display:flex;"><span>                        <span style="color:#8be9fd;font-style:italic">type</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;NodePort&#39;</span>,
+</span></span><span style="display:flex;"><span>                        ports<span style="color:#ff79c6">=</span>[k8s<span style="color:#ff79c6">.</span>ServicePort(port<span style="color:#ff79c6">=</span><span style="color:#bd93f9">80</span>, target_port<span style="color:#ff79c6">=</span>k8s<span style="color:#ff79c6">.</span>IntOrString<span style="color:#ff79c6">.</span>from_number(<span style="color:#bd93f9">8080</span>))],
+</span></span><span style="display:flex;"><span>                        selector<span style="color:#ff79c6">=</span>label
+</span></span><span style="display:flex;"><span>                        )
+</span></span><span style="display:flex;"><span>                    )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>app <span style="color:#ff79c6">=</span> App()  <span style="color:#6272a4"># 创建一个 App 实例</span>
+</span></span><span style="display:flex;"><span>MyChart(app, <span style="color:#f1fa8c">&#34;hello&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>app<span style="color:#ff79c6">.</span>synth()  <span style="color:#6272a4"># 该方法负责生成生成k8s资源清单文件</span>
+</span></span></code></pre></div><p>现在我们执行 <code>cdk8s synth</code> 命令，会在 dist 目录下生成如下所示的资源清单：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ cdk8s synth
+</span></span><span style="display:flex;"><span>dist/hello.k8s.yaml
+</span></span><span style="display:flex;"><span>$ cat dist/hello.k8s.yaml
+</span></span><span style="display:flex;"><span>apiVersion: apps/v1
+</span></span><span style="display:flex;"><span>kind: Deployment
+</span></span><span style="display:flex;"><span>metadata:
+</span></span><span style="display:flex;"><span>  name: hello-deployment-c51e9e6b
+</span></span><span style="display:flex;"><span>spec:
+</span></span><span style="display:flex;"><span>  replicas: <span style="color:#bd93f9">2</span>
+</span></span><span style="display:flex;"><span>  selector:
+</span></span><span style="display:flex;"><span>    matchLabels:
+</span></span><span style="display:flex;"><span>      app: hello-k8s
+</span></span><span style="display:flex;"><span>  template:
+</span></span><span style="display:flex;"><span>    metadata:
+</span></span><span style="display:flex;"><span>      labels:
+</span></span><span style="display:flex;"><span>        app: hello-k8s
+</span></span><span style="display:flex;"><span>    spec:
+</span></span><span style="display:flex;"><span>      containers:
+</span></span><span style="display:flex;"><span>        - image: paulbouwer/hello-kubernetes:1.7
+</span></span><span style="display:flex;"><span>          name: hello-k8s
+</span></span><span style="display:flex;"><span>          ports:
+</span></span><span style="display:flex;"><span>            - containerPort: <span style="color:#bd93f9">8080</span>
+</span></span><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span>apiVersion: v1
+</span></span><span style="display:flex;"><span>kind: Service
+</span></span><span style="display:flex;"><span>metadata:
+</span></span><span style="display:flex;"><span>  name: hello-service-9878228b
+</span></span><span style="display:flex;"><span>spec:
+</span></span><span style="display:flex;"><span>  ports:
+</span></span><span style="display:flex;"><span>    - port: <span style="color:#bd93f9">80</span>
+</span></span><span style="display:flex;"><span>      targetPort: <span style="color:#bd93f9">8080</span>
+</span></span><span style="display:flex;"><span>  selector:
+</span></span><span style="display:flex;"><span>    app: hello-k8s
+</span></span><span style="display:flex;"><span>  type: NodePort
+</span></span></code></pre></div><p>资源清单生成后，我们就可以使用 kubectl 命令来直接安装应用：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl apply -f dist/hello.k8s.yaml
+</span></span><span style="display:flex;"><span>deployment.apps/hello-deployment-c51e9e6b created
+</span></span><span style="display:flex;"><span>service/hello-service-9878228b created
+</span></span></code></pre></div><p>到这里我们就完成了使用 cdk8s 来定义一个简单的 Kubernetes 应用。</p>
 <h2 id="对比">对比</h2>
-
 <p>可能有的读者觉得 cdk8s 和 Helm 或者 kustomize 之类的工具比较起来也没有多大优势，而且这些工具不需要我们编写实际的代码，直接使用模板语言就可以了，就目前的使用来说的确是这样的，但是一旦应用特别复杂的时候，我们也会感受到 Helm 之类的工具的局限性，毕竟用编程语言去描述应用更加工程化，可以有更多的逻辑实现。而且我认为 cdk8s 和 DevOps 结合更具有优势，它可以让开发人员接管 Ops 任务，当基础架构越来越多变和复杂的情况下，应用程序的部署流程更加工程化的需求也明显也在不断增加。不过目前 cdk8s 项目还处于早期，不建议用于生产环境，但是这种用编程语言来描述应用的思路还是非常值得关注的。</p>
-
 <h2 id="参考资料">参考资料</h2>
-
 <ul>
 <li><a href="https://cdk8s.io/">https://cdk8s.io/</a></li>
 <li><a href="https://cdk8s.io/getting-started/python">https://cdk8s.io/getting-started/python</a></li>
 </ul>
-
-<p><a href="https://youdianzhishi.com/web/course/1030" title="从 Docker 到 Kubernetes 进阶课程"><img src="https://sdn.youdianzhishi.com/images/2019/10/24/65f2cfb229184268a18745fe202b281b.jpg?imageView2/2/format/webp" alt="Kubernetes进阶训练营"></a></p>
-
+<!-- raw HTML omitted -->
 
           <h2>微信公众号</h2>
-<p>扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的 kubernetes 讨论群里面共同学习。</p>
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/qrcode.png" alt="wechat-account-qrcode">
+<p>
+  扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的
+  kubernetes 讨论群里面共同学习。
+</p>
+<img
+  src="https://picdn.youdianzhishi.com/images/qrcode.png"
+  alt="wechat-account-qrcode"
+/>
 
   
           
@@ -777,7 +744,7 @@ service/hello-service-9878228b created</code></pre></div>
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -789,7 +756,7 @@ service/hello-service-9878228b created</code></pre></div>
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -806,7 +773,7 @@ service/hello-service-9878228b created</code></pre></div>
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -815,7 +782,7 @@ service/hello-service-9878228b created</code></pre></div>
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

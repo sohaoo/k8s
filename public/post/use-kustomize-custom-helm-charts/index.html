@@ -11,25 +11,21 @@
   <meta name="twitter:title" content="使用 Kustomize 定制 Helm Charts" />
 
   <meta name="description" content="如果你经常使用 Kubernetes，那么应该对 Helm 和 Kustomize 不陌生，这两个工具都是用来管理 Kubernetes 的资源清单的，但是二者有着不同的工作方式。
-
 Helm 使用的是模板，一个 Helm Chart 包中包含了很多模板和值文件，当被渲染时模板中的变量会使用值文件中对应的值替换。而 Kustomize 使用的是一种无模板的方式，它对 YAML 文件进行修补和合并操作，此外 Kustomize 也已经被原生内置到 kubectl 中了。这两个工具在 Kubernetes 的生态系统中都被广泛使用，而且这两个工具也可以一起结合使用。">
   <meta property="og:description" content="如果你经常使用 Kubernetes，那么应该对 Helm 和 Kustomize 不陌生，这两个工具都是用来管理 Kubernetes 的资源清单的，但是二者有着不同的工作方式。
-
 Helm 使用的是模板，一个 Helm Chart 包中包含了很多模板和值文件，当被渲染时模板中的变量会使用值文件中对应的值替换。而 Kustomize 使用的是一种无模板的方式，它对 YAML 文件进行修补和合并操作，此外 Kustomize 也已经被原生内置到 kubectl 中了。这两个工具在 Kubernetes 的生态系统中都被广泛使用，而且这两个工具也可以一起结合使用。">
   <meta name="twitter:description" content="如果你经常使用 Kubernetes，那么应该对 Helm 和 Kustomize 不陌生，这两个工具都是用来管理 Kubernetes 的资源清单的，但是二者有着不同的工作方式。
-
 Helm 使用的是模板，一个 Helm Chart 包中包含了很多模板和值文件，当被渲染时模板中的变量会使用值文件中对应的值替换。而 Kustomize 使用的是一种无模板的方式，它对 YAML 文件进行修补和合并操 …">
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/post/use-kustomize-custom-helm-charts/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/post/use-kustomize-custom-helm-charts/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -38,7 +34,7 @@ Helm 使用的是模板，一个 Helm Chart 包中包含了很多模板和值文
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -89,7 +85,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -232,7 +228,7 @@ autocomplete('#aa-search-input',
 
 
   
-    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200923163428.png" data-img-desc-1="https://unsplash.com/photos/nk4OAb64-Rk"></div>
+    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://picdn.youdianzhishi.com/images/20200923163428.png" data-img-desc-1="https://unsplash.com/photos/nk4OAb64-Rk"></div>
   
 
   <header class="header-section has-img">
@@ -247,12 +243,8 @@ autocomplete('#aa-search-input',
                   
                   
                     <span class="post-meta">
-  
-    发表于 September 23, 2020
-  
-  
+  发表于 September 23, 2020  
 </span>
-
 
                   
               </div>
@@ -274,12 +266,8 @@ autocomplete('#aa-search-input',
                 
                 
                   <span class="post-meta">
-  
-    发表于 September 23, 2020
-  
-  
+  发表于 September 23, 2020  
 </span>
-
 
                 
             </div>
@@ -321,16 +309,13 @@ autocomplete('#aa-search-input',
             
 <aside class="toc">
   <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#是否要-fork">是否要 fork</a></li>
-<li><a href="#使用-chart-插件自定义">使用 Chart 插件自定义</a></li>
-<li><a href="#用单一的-chart-文件定制">用单一的 Chart 文件定制</a></li>
-<li><a href="#使用-helm-post-rendering-定制">使用 Helm post rendering 定制</a></li>
-<li><a href="#总结">总结</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#是否要-fork">是否要 fork</a></li>
+    <li><a href="#使用-chart-插件自定义">使用 Chart 插件自定义</a></li>
+    <li><a href="#用单一的-chart-文件定制">用单一的 Chart 文件定制</a></li>
+    <li><a href="#使用-helm-post-rendering-定制">使用 Helm post rendering 定制</a></li>
+    <li><a href="#总结">总结</a></li>
+  </ul>
 </nav>
 </aside>
 
@@ -349,205 +334,179 @@ autocomplete('#aa-search-input',
           
 
           <p>如果你经常使用 Kubernetes，那么应该对 Helm 和 Kustomize 不陌生，这两个工具都是用来管理 Kubernetes 的资源清单的，但是二者有着不同的工作方式。</p>
-
 <p>Helm 使用的是模板，一个 Helm Chart 包中包含了很多模板和值文件，当被渲染时模板中的变量会使用值文件中对应的值替换。而 Kustomize 使用的是一种无模板的方式，它对 YAML 文件进行修补和合并操作，此外 Kustomize 也已经被原生内置到 kubectl 中了。这两个工具在 Kubernetes 的生态系统中都被广泛使用，而且这两个工具也可以一起结合使用。</p>
-
 <h2 id="是否要-fork">是否要 fork</h2>
-
 <p>我们知道很多项目其实都会为应用程序提供 Helm Chart 包，而模板变量的值通过值文件来控制。一个长期存在的问题就是我们应该如何定制上游的 Helm Chart 包，例如从 Helm Chart 包中添加或者一个 Kubernetes 资源清单，如果是通用的变更，最好的选择当然是直接贡献给上游仓库，但是如果是自定义的变更呢？</p>
-
 <p>通常我们可以自己 fork 上游的 Helm Chart 仓库，然后在自己的 repo 中对 Chart 包进行额外的变动。但是这样做，显然会带来额外的负担，特别是当 Chart 包只需要一点小改动的时候。</p>
-
 <p>这个时候我们可以使用 Kustomize 来定制现有的 Helm Chart，而不需要执行 fork 操作。</p>
-
 <blockquote>
 <p>本文使用的 Helm 版本为 3.3.1、Kustomize 3.8.2。</p>
 </blockquote>
-
 <h2 id="使用-chart-插件自定义">使用 Chart 插件自定义</h2>
-
 <p>Kustomize 提供了一个很好的插件生态系统，允许扩展 Kustomize 的功能。其中就有一个名为 <a href="https://github.com/kubernetes-sigs/kustomize/blob/v3.3.1/plugin/someteam.example.com/v1/chartinflator/ChartInflator">ChartInflator</a> 的非内置插件，它允许 Kustomize 来渲染 Helm Charts，并执行任何需要的变更。</p>
-
 <p>首先先安装 <code>ChartInflator</code> 插件：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ <span style="color:#8be9fd;font-style:italic">chartinflator_dir</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;./kustomize/plugin/kustomize.config.k8s.io/v1/chartinflator&#34;</span>
-
-<span style="color:#6272a4"># 创建插件目录</span>
-$ mkdir -p <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">chartinflator_dir</span><span style="color:#f1fa8c">}</span>
-
-<span style="color:#6272a4"># 下载插件</span>
-$ curl -L https://raw.githubusercontent.com/kubernetes-sigs/kustomize/kustomize/v3.8.2/plugin/someteam.example.com/v1/chartinflator/ChartInflator &gt; <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">chartinflator_dir</span><span style="color:#f1fa8c">}</span>/ChartInflator
-
-<span style="color:#6272a4"># 设置插件执行权限</span>
-$ chmod u+x <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">chartinflator_dir</span><span style="color:#f1fa8c">}</span>/ChartInflator</code></pre></div>
-<p>比如我们要定制 <a href="https://github.com/hashicorp/vault-helm">Vault Helm Chart</a> 包，接下来创建 ChartInflator 资源清单和 Helm 的 values.yaml 值文件：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># ChartInflator 资源清单</span>
-$ cat <span style="color:#f1fa8c">&lt;&lt; EOF &gt;&gt; chartinflator-vault.yaml
-</span><span style="color:#f1fa8c">apiVersion: kustomize.config.k8s.io/v1
-</span><span style="color:#f1fa8c">kind: ChartInflator
-</span><span style="color:#f1fa8c">metadata:
-</span><span style="color:#f1fa8c">  name: vault-official-helm-chart
-</span><span style="color:#f1fa8c">chartRepo: https://helm.releases.hashicorp.com  
-</span><span style="color:#f1fa8c">chartName: vault
-</span><span style="color:#f1fa8c">chartRelease: hashicorp
-</span><span style="color:#f1fa8c">chartVersion: 0.7.0
-</span><span style="color:#f1fa8c">releaseName: vault
-</span><span style="color:#f1fa8c">values: values.yaml
-</span><span style="color:#f1fa8c">EOF</span>
-
-<span style="color:#6272a4"># 创建 values 值文件</span>
-$ helm repo add hashicorp https://helm.releases.hashicorp.com 
-$ helm show values --version <span style="color:#bd93f9">0</span>.7.0 hashicorp/vault &gt; values.yaml
-
-<span style="color:#6272a4"># 创建 Kustomize 文件</span>
-$ kustomize init
-$ cat <span style="color:#f1fa8c">&lt;&lt; EOF &gt;&gt; kustomization.yaml
-</span><span style="color:#f1fa8c">generators:
-</span><span style="color:#f1fa8c">- chartinflator-vault.yaml
-</span><span style="color:#f1fa8c">EOF</span>
-
-<span style="color:#6272a4"># 为所有资源添加一个 label 标签</span>
-$ kustomize edit add label env:dev
-
-<span style="color:#6272a4"># 最后生成的 kustomize 文件如下所示：</span>
-$ cat kustomization.yaml
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-generators:
-- chartinflator-vault.yaml
-commonLabels:
-  env: dev
-
-<span style="color:#6272a4"># 整个资源清单目录结构</span>
-$ tree .
-.
-├── chartinflator-vault.yaml
-├── kustomization.yaml
-├── kustomize
-│   └── plugin
-│       └── kustomize.config.k8s.io
-│           └── v1
-│               └── chartinflator
-│                   └── ChartInflator
-└── values.yaml
-
-<span style="color:#bd93f9">5</span> directories, <span style="color:#bd93f9">4</span> files</code></pre></div>
-<p>现在就可以来渲染 Chart 模板了，执行如下所示的命令即可：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ kustomize build --enable_alpha_plugins .</code></pre></div>
-<p>正常渲染完成后我们可以看到所有的资源上都被添加了一个 <code>env: dev</code> 的标签，这是实时完成的，不需要维护任何额外的文件的。
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-5376999672787220"
-     data-ad-slot="9165834656"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ <span style="color:#8be9fd;font-style:italic">chartinflator_dir</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;./kustomize/plugin/kustomize.config.k8s.io/v1/chartinflator&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 创建插件目录</span>
+</span></span><span style="display:flex;"><span>$ mkdir -p <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">chartinflator_dir</span><span style="color:#f1fa8c">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 下载插件</span>
+</span></span><span style="display:flex;"><span>$ curl -L https://raw.githubusercontent.com/kubernetes-sigs/kustomize/kustomize/v3.8.2/plugin/someteam.example.com/v1/chartinflator/ChartInflator &gt; <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">chartinflator_dir</span><span style="color:#f1fa8c">}</span>/ChartInflator
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 设置插件执行权限</span>
+</span></span><span style="display:flex;"><span>$ chmod u+x <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">chartinflator_dir</span><span style="color:#f1fa8c">}</span>/ChartInflator
+</span></span></code></pre></div><p>比如我们要定制 <a href="https://github.com/hashicorp/vault-helm">Vault Helm Chart</a> 包，接下来创建 ChartInflator 资源清单和 Helm 的 values.yaml 值文件：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#6272a4"># ChartInflator 资源清单</span>
+</span></span><span style="display:flex;"><span>$ cat <span style="color:#f1fa8c">&lt;&lt; EOF &gt;&gt; chartinflator-vault.yaml
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">apiVersion: kustomize.config.k8s.io/v1
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">kind: ChartInflator
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">metadata:
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">  name: vault-official-helm-chart
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">chartRepo: https://helm.releases.hashicorp.com
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">chartName: vault
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">chartRelease: hashicorp
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">chartVersion: 0.7.0
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">releaseName: vault
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">values: values.yaml
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 创建 values 值文件</span>
+</span></span><span style="display:flex;"><span>$ helm repo add hashicorp https://helm.releases.hashicorp.com
+</span></span><span style="display:flex;"><span>$ helm show values --version 0.7.0 hashicorp/vault &gt; values.yaml
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 创建 Kustomize 文件</span>
+</span></span><span style="display:flex;"><span>$ kustomize init
+</span></span><span style="display:flex;"><span>$ cat <span style="color:#f1fa8c">&lt;&lt; EOF &gt;&gt; kustomization.yaml
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">generators:
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">- chartinflator-vault.yaml
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 为所有资源添加一个 label 标签</span>
+</span></span><span style="display:flex;"><span>$ kustomize edit add label env:dev
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 最后生成的 kustomize 文件如下所示：</span>
+</span></span><span style="display:flex;"><span>$ cat kustomization.yaml
+</span></span><span style="display:flex;"><span>apiVersion: kustomize.config.k8s.io/v1beta1
+</span></span><span style="display:flex;"><span>kind: Kustomization
+</span></span><span style="display:flex;"><span>generators:
+</span></span><span style="display:flex;"><span>- chartinflator-vault.yaml
+</span></span><span style="display:flex;"><span>commonLabels:
+</span></span><span style="display:flex;"><span>  env: dev
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 整个资源清单目录结构</span>
+</span></span><span style="display:flex;"><span>$ tree .
+</span></span><span style="display:flex;"><span>.
+</span></span><span style="display:flex;"><span>├── chartinflator-vault.yaml
+</span></span><span style="display:flex;"><span>├── kustomization.yaml
+</span></span><span style="display:flex;"><span>├── kustomize
+</span></span><span style="display:flex;"><span>│   └── plugin
+</span></span><span style="display:flex;"><span>│       └── kustomize.config.k8s.io
+</span></span><span style="display:flex;"><span>│           └── v1
+</span></span><span style="display:flex;"><span>│               └── chartinflator
+</span></span><span style="display:flex;"><span>│                   └── ChartInflator
+</span></span><span style="display:flex;"><span>└── values.yaml
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">5</span> directories, <span style="color:#bd93f9">4</span> files
+</span></span></code></pre></div><p>现在就可以来渲染 Chart 模板了，执行如下所示的命令即可：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ kustomize build --enable_alpha_plugins .
+</span></span></code></pre></div><p>正常渲染完成后我们可以看到所有的资源上都被添加了一个 <code>env: dev</code> 的标签，这是实时完成的，不需要维护任何额外的文件的。</p>
+<!-- raw HTML omitted -->
 <h2 id="用单一的-chart-文件定制">用单一的 Chart 文件定制</h2>
-
 <p>另一种使用 Kustomize 定制 Chart 的方法是使用 <code>helm template</code> 命令来生成一个单一的资源清单，这种方式可以对 Chart 进行更多的控制，但它需要更多的工作来出来处理更新该生成文件的版本控制。</p>
-
 <p>通常我们可以使用 Make 来进行辅助处理，如下示例所示：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># Makefile</span>
-CHART_REPO_NAME   :<span style="color:#ff79c6">=</span> hashicorp
-CHART_REPO_URL    :<span style="color:#ff79c6">=</span> https://helm.releases.hashicorp.com
-CHART_NAME        :<span style="color:#ff79c6">=</span> vault
-CHART_VERSION     :<span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>.7.0
-CHART_VALUES_FILE :<span style="color:#ff79c6">=</span> values.yaml
-
-add-chart-repo:
-    helm repo add <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CHART_REPO_NAME</span><span style="color:#f1fa8c">}</span> <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CHART_REPO_URL</span><span style="color:#f1fa8c">}</span>
-    helm repo update
-
-generate-chart-manifest:
-    helm template <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CHART_NAME</span><span style="color:#f1fa8c">}</span> <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CHART_REPO_NAME</span><span style="color:#f1fa8c">}</span>/<span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CHART_NAME</span><span style="color:#f1fa8c">}</span> <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>        --version <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CHART_VERSION</span><span style="color:#f1fa8c">}</span> <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>        --values <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CHART_VALUES_FILE</span><span style="color:#f1fa8c">}</span> &gt; <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CHART_NAME</span><span style="color:#f1fa8c">}</span>.yaml
-
-get-chart-values:
-    @helm show values --version <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CHART_VERSION</span><span style="color:#f1fa8c">}</span> <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>    <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CHART_REPO_NAME</span><span style="color:#f1fa8c">}</span>/<span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CHART_NAME</span><span style="color:#f1fa8c">}</span>
-
-generate-chart-values:
-    @echo <span style="color:#f1fa8c">&#34;Create values file: </span><span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CHART_VALUES_FILE</span><span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">&#34;</span>
-    @<span style="color:#ff79c6">$(</span>MAKE<span style="color:#ff79c6">)</span> -s get-chart-values &gt; <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CHART_VALUES_FILE</span><span style="color:#f1fa8c">}</span>
-
-diff-chart-values:
-    @echo <span style="color:#f1fa8c">&#34;Diff: Local &lt;==&gt; Remote&#34;</span>
-    @<span style="color:#ff79c6">$(</span>MAKE<span style="color:#ff79c6">)</span> -s get-chart-values | <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>    diff --suppress-common-lines --side-by-side <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CHART_VALUES_FILE</span><span style="color:#f1fa8c">}</span> - <span style="color:#ff79c6">||</span> <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>    <span style="color:#8be9fd;font-style:italic">exit</span> <span style="color:#bd93f9">0</span></code></pre></div>
-<p>要定制上游的 Vault Helm Chart，我们可以做如下操作：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># 初始化 chart 文件</span>
-$ make generate-chart-values generate-chart-manifest 
-
-<span style="color:#6272a4"># 创建 Kustomize 文件并添加一个 label 标签</span>
-$ kustomize init
-$ kustomize edit add resource vault.yaml
-$ kustomize edit add label env:dev
-
-<span style="color:#6272a4"># 最后生成的文件结构如下所示</span>
-$ tree .
-.
-├── kustomization.yaml
-├── makefile
-├── values.yaml
-└── vault.yaml
-
-<span style="color:#bd93f9">0</span> directories, <span style="color:#bd93f9">4</span> files
-
-<span style="color:#6272a4"># kustomize 文件内容如下所示</span>
-$ cat kustomization.yaml
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-resources:
-- vault.yaml
-commonLabels:
-  env: dev</code></pre></div>
-<p>最后同样用 <code>kustomize build</code> 命令来渲染：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ kustomize build .</code></pre></div>
-<p>在渲染的结果中同样可以看到所有的资源里面都被添加进了一个 <code>env: dev</code> 的标签。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#6272a4"># Makefile</span>
+</span></span><span style="display:flex;"><span>CHART_REPO_NAME   :<span style="color:#ff79c6">=</span> hashicorp
+</span></span><span style="display:flex;"><span>CHART_REPO_URL    :<span style="color:#ff79c6">=</span> https://helm.releases.hashicorp.com
+</span></span><span style="display:flex;"><span>CHART_NAME        :<span style="color:#ff79c6">=</span> vault
+</span></span><span style="display:flex;"><span>CHART_VERSION     :<span style="color:#ff79c6">=</span> 0.7.0
+</span></span><span style="display:flex;"><span>CHART_VALUES_FILE :<span style="color:#ff79c6">=</span> values.yaml
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>add-chart-repo:
+</span></span><span style="display:flex;"><span>    helm repo add <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CHART_REPO_NAME</span><span style="color:#f1fa8c">}</span> <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CHART_REPO_URL</span><span style="color:#f1fa8c">}</span>
+</span></span><span style="display:flex;"><span>    helm repo update
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>generate-chart-manifest:
+</span></span><span style="display:flex;"><span>    helm template <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CHART_NAME</span><span style="color:#f1fa8c">}</span> <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CHART_REPO_NAME</span><span style="color:#f1fa8c">}</span>/<span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CHART_NAME</span><span style="color:#f1fa8c">}</span> <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>        --version <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CHART_VERSION</span><span style="color:#f1fa8c">}</span> <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>        --values <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CHART_VALUES_FILE</span><span style="color:#f1fa8c">}</span> &gt; <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CHART_NAME</span><span style="color:#f1fa8c">}</span>.yaml
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>get-chart-values:
+</span></span><span style="display:flex;"><span>    @helm show values --version <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CHART_VERSION</span><span style="color:#f1fa8c">}</span> <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>    <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CHART_REPO_NAME</span><span style="color:#f1fa8c">}</span>/<span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CHART_NAME</span><span style="color:#f1fa8c">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>generate-chart-values:
+</span></span><span style="display:flex;"><span>    @echo <span style="color:#f1fa8c">&#34;Create values file: </span><span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CHART_VALUES_FILE</span><span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">&#34;</span>
+</span></span><span style="display:flex;"><span>    @<span style="color:#ff79c6">$(</span>MAKE<span style="color:#ff79c6">)</span> -s get-chart-values &gt; <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CHART_VALUES_FILE</span><span style="color:#f1fa8c">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>diff-chart-values:
+</span></span><span style="display:flex;"><span>    @echo <span style="color:#f1fa8c">&#34;Diff: Local &lt;==&gt; Remote&#34;</span>
+</span></span><span style="display:flex;"><span>    @<span style="color:#ff79c6">$(</span>MAKE<span style="color:#ff79c6">)</span> -s get-chart-values | <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>    diff --suppress-common-lines --side-by-side <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CHART_VALUES_FILE</span><span style="color:#f1fa8c">}</span> - <span style="color:#ff79c6">||</span> <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>    <span style="color:#8be9fd;font-style:italic">exit</span> <span style="color:#bd93f9">0</span>
+</span></span></code></pre></div><p>要定制上游的 Vault Helm Chart，我们可以做如下操作：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#6272a4"># 初始化 chart 文件</span>
+</span></span><span style="display:flex;"><span>$ make generate-chart-values generate-chart-manifest
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 创建 Kustomize 文件并添加一个 label 标签</span>
+</span></span><span style="display:flex;"><span>$ kustomize init
+</span></span><span style="display:flex;"><span>$ kustomize edit add resource vault.yaml
+</span></span><span style="display:flex;"><span>$ kustomize edit add label env:dev
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 最后生成的文件结构如下所示</span>
+</span></span><span style="display:flex;"><span>$ tree .
+</span></span><span style="display:flex;"><span>.
+</span></span><span style="display:flex;"><span>├── kustomization.yaml
+</span></span><span style="display:flex;"><span>├── makefile
+</span></span><span style="display:flex;"><span>├── values.yaml
+</span></span><span style="display:flex;"><span>└── vault.yaml
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#bd93f9">0</span> directories, <span style="color:#bd93f9">4</span> files
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># kustomize 文件内容如下所示</span>
+</span></span><span style="display:flex;"><span>$ cat kustomization.yaml
+</span></span><span style="display:flex;"><span>apiVersion: kustomize.config.k8s.io/v1beta1
+</span></span><span style="display:flex;"><span>kind: Kustomization
+</span></span><span style="display:flex;"><span>resources:
+</span></span><span style="display:flex;"><span>- vault.yaml
+</span></span><span style="display:flex;"><span>commonLabels:
+</span></span><span style="display:flex;"><span>  env: dev
+</span></span></code></pre></div><p>最后同样用 <code>kustomize build</code> 命令来渲染：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ kustomize build .
+</span></span></code></pre></div><p>在渲染的结果中同样可以看到所有的资源里面都被添加进了一个 <code>env: dev</code> 的标签。</p>
 <p>这种方法，需要以某种方式运行 make 命令来生成更新的一体化资源清单文件，另外，要将更新过程与你的 GitOps 工作流整合起来可能有点麻烦。</p>
-
 <h2 id="使用-helm-post-rendering-定制">使用 Helm post rendering 定制</h2>
-
-<p><a href="https://helm.sh/docs/topics/advanced/#post-rendering">Post Rendering</a> 是 Helm 3 带来的新功能之一，在前面的2种方法中，Kustomize 是用来处理生成图表清单的主要工具，但在这里，Kustomize 是作为 Helm 的助手进行工作的。</p>
-
+<p><a href="https://helm.sh/docs/topics/advanced/#post-rendering">Post Rendering</a> 是 Helm 3 带来的新功能之一，在前面的 2 种方法中，Kustomize 是用来处理生成图表清单的主要工具，但在这里，Kustomize 是作为 Helm 的助手进行工作的。</p>
 <p>下面我们来看下如何使用这种方法来进行定制：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># 创建 Kustomize 文件并添加一个 label 标签</span>
-$ kustomize init
-$ kustomize edit add label env:dev
-
-<span style="color:#6272a4"># 创建一个包装 Kustomize 的脚本文件，后面在 Helm 中会使用到</span>
-$ cat <span style="color:#f1fa8c">&lt;&lt; EOF &gt; kustomize-wrapper.sh
-</span><span style="color:#f1fa8c">#!/bin/bash
-</span><span style="color:#f1fa8c">cat &lt;&amp;0 &gt; chart.yaml
-</span><span style="color:#f1fa8c">kustomize edit add resource chart.yaml
-</span><span style="color:#f1fa8c">kustomize build . &amp;&amp; rm chart.yaml
-</span><span style="color:#f1fa8c">EOF</span>
-$ chmod +x kustomize-wrapper.sh</code></pre></div>
-<p>然后我们可以直接使用 Helm 渲染或者安装 Chart：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ helm repo add hashicorp https://helm.releases.hashicorp.com 
-$ helm template vault hashicorp/vault --post-renderer ./kustomize-wrapper.sh</code></pre></div>
-<p>正常情况下我们也可以看到最后渲染出来的每一个资源文件中都被添加进了一个 <code>env:dev</code> 的标签。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#6272a4"># 创建 Kustomize 文件并添加一个 label 标签</span>
+</span></span><span style="display:flex;"><span>$ kustomize init
+</span></span><span style="display:flex;"><span>$ kustomize edit add label env:dev
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 创建一个包装 Kustomize 的脚本文件，后面在 Helm 中会使用到</span>
+</span></span><span style="display:flex;"><span>$ cat <span style="color:#f1fa8c">&lt;&lt; EOF &gt; kustomize-wrapper.sh
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">cat &lt;&amp;0 &gt; chart.yaml
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">kustomize edit add resource chart.yaml
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">kustomize build . &amp;&amp; rm chart.yaml
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">EOF</span>
+</span></span><span style="display:flex;"><span>$ chmod +x kustomize-wrapper.sh
+</span></span></code></pre></div><p>然后我们可以直接使用 Helm 渲染或者安装 Chart：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ helm repo add hashicorp https://helm.releases.hashicorp.com
+</span></span><span style="display:flex;"><span>$ helm template vault hashicorp/vault --post-renderer ./kustomize-wrapper.sh
+</span></span></code></pre></div><p>正常情况下我们也可以看到最后渲染出来的每一个资源文件中都被添加进了一个 <code>env:dev</code> 的标签。</p>
 <p>这种方法就是需要管理一个额外的脚本，其余的和第一种方式基本上差不多，只是不使用 Kustomize 的插件，而是直接使用 Helm 本身的功能来渲染上游的 Chart 包。</p>
-
 <h2 id="总结">总结</h2>
-
 <p>我们可以看到上面几种方法都各有优缺点，使用哪种方式主要还是取决于我们自己的工作环境和工作流程，不过至少我们已经看到了 Kustomize 与 Helm 结合使用的高效了。</p>
-
-<p><a href="https://youdianzhishi.com/web/course/1030" title="从 Docker 到 Kubernetes 进阶课程"><img src="https://sdn.youdianzhishi.com/images/2019/10/24/65f2cfb229184268a18745fe202b281b.jpg?imageView2/2/format/webp" alt="Kubernetes进阶训练营"></a></p>
-
+<!-- raw HTML omitted -->
 
           <h2>微信公众号</h2>
-<p>扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的 kubernetes 讨论群里面共同学习。</p>
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/qrcode.png" alt="wechat-account-qrcode">
+<p>
+  扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的
+  kubernetes 讨论群里面共同学习。
+</p>
+<img
+  src="https://picdn.youdianzhishi.com/images/qrcode.png"
+  alt="wechat-account-qrcode"
+/>
 
   
           
@@ -748,7 +707,7 @@ $ helm template vault hashicorp/vault --post-renderer ./kustomize-wrapper.sh</co
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -760,7 +719,7 @@ $ helm template vault hashicorp/vault --post-renderer ./kustomize-wrapper.sh</co
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -777,7 +736,7 @@ $ helm template vault hashicorp/vault --post-renderer ./kustomize-wrapper.sh</co
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -786,7 +745,7 @@ $ helm template vault hashicorp/vault --post-renderer ./kustomize-wrapper.sh</co
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

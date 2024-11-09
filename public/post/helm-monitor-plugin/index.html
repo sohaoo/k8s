@@ -14,16 +14,15 @@
   <meta property="og:description" content="Helm release 基于日志或监控的自动回滚">
   <meta name="twitter:description" content="Helm release 基于日志或监控的自动回滚">
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/post/helm-monitor-plugin/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/post/helm-monitor-plugin/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -32,7 +31,7 @@
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -83,7 +82,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -245,12 +244,8 @@ autocomplete('#aa-search-input',
                 
                 
                   <span class="post-meta">
-  
-    发表于 January 22, 2019
-  
-  
+  发表于 January 22, 2019  
 </span>
-
 
                 
             </div>
@@ -304,82 +299,74 @@ autocomplete('#aa-search-input',
           
           
 
-          <p><a href="https://www.qikqiak.com/post/helm-monitor-plugin/"><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/kmnpRH.jpg" alt="helm monitor" /></a>
+          <p><a href="https://www.qikqiak.com/post/helm-monitor-plugin/"><img src="https://picdn.youdianzhishi.com/images/kmnpRH.jpg" alt="helm monitor"></a>
 使用<code>Helm</code>可以很方便的部署 Kubernetes 应用，但是如果对于线上的应用部署或者更新后出现了问题，要及时回滚到之前的版本该如何去做呢？当然我们可以手动通过<code>kubectl rollout</code>去进行控制，但是难免需要手动去操作。今天给大家介绍一个 Helm 的插件 Helm monitro，通过监听 Prometheus 或 ElasticSearch 监控或者日志数据，在发生故障时自动回滚 release。</p>
-
 <h3 id="helm-命令">Helm 命令</h3>
-
 <p>使用 helm 命令更新一个 release:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ helm upgrade my-release company-repo/common-chart</code></pre></div>
-<p>如果需要回滚：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ helm rollback my-release</code></pre></div>
-<p>安装 Helm 插件：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ helm plugin install https://github.com/repo/name</code></pre></div>
-<p>然后可以使用下面命令查看插件使用方法：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ helm foo --help</code></pre></div>
-<p>Helm 插件文件结构如下：
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/bBOC6W.jpg" alt="helm plugin" /></p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ helm upgrade my-release company-repo/common-chart
+</span></span></code></pre></div><p>如果需要回滚：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ helm rollback my-release
+</span></span></code></pre></div><p>安装 Helm 插件：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ helm plugin install https://github.com/repo/name
+</span></span></code></pre></div><p>然后可以使用下面命令查看插件使用方法：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ helm foo --help
+</span></span></code></pre></div><p>Helm 插件文件结构如下：
+<img src="https://picdn.youdianzhishi.com/images/bBOC6W.jpg" alt="helm plugin"></p>
 <h3 id="helm-monitor">Helm monitor</h3>
-
 <p>通过 Helm monitor 插件监控一个 release 示意图如下：
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/WAQ87k.jpg" alt="helm monitor" /></p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/xa6zM3.jpg" alt="helm monitor error"><figcaption>helm monitor error</figcaption></figure>
-
+<img src="https://picdn.youdianzhishi.com/images/WAQ87k.jpg" alt="helm monitor"></p>
+<p><img src="https://picdn.youdianzhishi.com/images/xa6zM3.jpg" alt="helm monitor error"></p>
 <p>安装 Helm monitor 插件：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ helm plugin install https://github.com/ContainerSolutions/helm-monitor</code></pre></div>
-<p>查看使用方法：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ helm monitor --help
-
-    This <span style="color:#8be9fd;font-style:italic">command</span> monitor a release by querying Prometheus or Elasticsearch at a given interval and take care of rolling back to the previous version <span style="color:#ff79c6">if</span> the query <span style="color:#ff79c6">return</span> a non-empty result.
-
-    Usage:
-        monitor <span style="color:#ff79c6">[</span>command<span style="color:#ff79c6">]</span>
-
-    Available Commands:
-        elasticsearch query an elasticsearch server
-        <span style="color:#8be9fd;font-style:italic">help</span> Help about any <span style="color:#8be9fd;font-style:italic">command</span>
-        prometheus query a prometheus server</code></pre></div>
-<p>如果在过去5分钟内的5xx错误率超过0，则启动回滚：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ helm monitor prometheus <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>--prometheus<span style="color:#ff79c6">=</span>http://prometheus <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>my-release <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span><span style="color:#f1fa8c">&#39;rate(http_requests_total{code=~&#34;^5.*$&#34;}[5m]) &gt; 0&#39;</span></code></pre></div>
-<p>需要通过<code>--prometheus</code>参数指定 prometheus server 的地址，默认连接地址<code>http://localhost:9090</code>。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ helm plugin install https://github.com/ContainerSolutions/helm-monitor
+</span></span></code></pre></div><p>查看使用方法：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ helm monitor --help
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    This <span style="color:#8be9fd;font-style:italic">command</span> monitor a release by querying Prometheus or Elasticsearch at a given interval and take care of rolling back to the previous version <span style="color:#ff79c6">if</span> the query <span style="color:#ff79c6">return</span> a non-empty result.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Usage:
+</span></span><span style="display:flex;"><span>        monitor <span style="color:#ff79c6">[</span>command<span style="color:#ff79c6">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Available Commands:
+</span></span><span style="display:flex;"><span>        elasticsearch query an elasticsearch server
+</span></span><span style="display:flex;"><span>        <span style="color:#8be9fd;font-style:italic">help</span> Help about any <span style="color:#8be9fd;font-style:italic">command</span>
+</span></span><span style="display:flex;"><span>        prometheus query a prometheus server
+</span></span></code></pre></div><p>如果在过去 5 分钟内的 5xx 错误率超过 0，则启动回滚：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ helm monitor prometheus <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>--prometheus<span style="color:#ff79c6">=</span>http://prometheus <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>my-release <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span><span style="color:#f1fa8c">&#39;rate(http_requests_total{code=~&#34;^5.*$&#34;}[5m]) &gt; 0&#39;</span>
+</span></span></code></pre></div><p>需要通过<code>--prometheus</code>参数指定 prometheus server 的地址，默认连接地址<code>http://localhost:9090</code>。</p>
 <p>使用 ElasticSearch, Lucene Query，在发现了 500 状态码后触发回滚操作：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ helm monitor elasticsearch <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>--elasticsearch<span style="color:#ff79c6">=</span>http://elasticsearch:9200 <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>my-release <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span><span style="color:#f1fa8c">&#39;status:500 AND kubernetes.labels.app:app AND version:2.0.0&#39;</span></code></pre></div>
-<p>同样需要通过<code>--elasticsearch</code>参数指定 Elasticsearch 集群的地址，默认连接地址：<code>http://localhost:9200</code>。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ helm monitor elasticsearch <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>--elasticsearch<span style="color:#ff79c6">=</span>http://elasticsearch:9200 <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>my-release <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span><span style="color:#f1fa8c">&#39;status:500 AND kubernetes.labels.app:app AND version:2.0.0&#39;</span>
+</span></span></code></pre></div><p>同样需要通过<code>--elasticsearch</code>参数指定 Elasticsearch 集群的地址，默认连接地址：<code>http://localhost:9200</code>。</p>
 <p>当然也可以使用一个查询的<code>DSL</code>文件进行监控:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ helm monitor elasticsearch my-release ./elasticsearch-query.json</code></pre></div>
-<p>除了使用 Prometheus 和 Elasticsearch 进行监控触发回滚之外，也可以使用<code>Sentry</code>：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ helm monitor sentry my-app <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>    --api-key &lt;SENTRY_API_KEY&gt; <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>    --organization sentry <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>    --project my-project <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>    --sentry http://sentry:9000 <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>    --tag <span style="color:#8be9fd;font-style:italic">release</span><span style="color:#ff79c6">=</span><span style="color:#bd93f9">2</span>.0.0 <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>    --regexp
-    <span style="color:#f1fa8c">&#39;Error with database connection.*&#39;</span></code></pre></div>
-<h3 id="demo">Demo</h3>
-
-<p><link rel="stylesheet" href="https://www.qikqiak.com/css/asciinema-player.css" />
-  <asciinema-player src="https://www.qikqiak.com/files/157939.json" cols="145" rows="45"></asciinema-player>
-  <script src="https://www.qikqiak.com/js/asciinema-player.js"></script></p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ helm monitor elasticsearch my-release ./elasticsearch-query.json
+</span></span></code></pre></div><p>除了使用 Prometheus 和 Elasticsearch 进行监控触发回滚之外，也可以使用<code>Sentry</code>：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ helm monitor sentry my-app <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>    --api-key &lt;SENTRY_API_KEY&gt; <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>    --organization sentry <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>    --project my-project <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>    --sentry http://sentry:9000 <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>    --tag <span style="color:#8be9fd;font-style:italic">release</span><span style="color:#ff79c6">=</span>2.0.0 <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>    --regexp
+</span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#39;Error with database connection.*&#39;</span>
+</span></span></code></pre></div><h3 id="demo">Demo</h3>
+<!-- raw HTML omitted -->
 <p>Helm monitor 插件地址：<a href="https://github.com/ContainerSolutions/helm-monitor">https://github.com/ContainerSolutions/helm-monitor</a></p>
-
-<p><a href="https://youdianzhishi.com/web/course/1030" title="从 Docker 到 Kubernetes 进阶课程"><img src="https://sdn.youdianzhishi.com/images/2019/10/24/65f2cfb229184268a18745fe202b281b.jpg?imageView2/2/format/webp" alt="Kubernetes进阶训练营"></a></p>
-
+<!-- raw HTML omitted -->
 
           <h2>微信公众号</h2>
-<p>扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的 kubernetes 讨论群里面共同学习。</p>
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/qrcode.png" alt="wechat-account-qrcode">
+<p>
+  扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的
+  kubernetes 讨论群里面共同学习。
+</p>
+<img
+  src="https://picdn.youdianzhishi.com/images/qrcode.png"
+  alt="wechat-account-qrcode"
+/>
 
   
           
@@ -580,7 +567,7 @@ autocomplete('#aa-search-input',
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -592,7 +579,7 @@ autocomplete('#aa-search-input',
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -609,7 +596,7 @@ autocomplete('#aa-search-input',
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -618,7 +605,7 @@ autocomplete('#aa-search-input',
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

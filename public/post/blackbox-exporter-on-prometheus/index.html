@@ -11,27 +11,22 @@
   <meta name="twitter:title" content="Prometheus 黑盒监控" />
 
   <meta name="description" content="前面我们主要介绍了 Prometheus 下如何进行白盒监控，我们监控主机的资源用量、容器的运行状态、数据库中间件的运行数据、自动发现 Kubernetes 集群中的资源等等，这些都是支持业务和服务的基础设施，通过白盒能够了解其内部的实际运行状态，通过对监控指标的观察能够预判可能出现的问题，从而对潜在的不确定因素进行优化。而从完整的监控逻辑的角度，除了大量的应用白盒监控以外，还应该添加适当的 Blackbox（黑盒）监控，黑盒监控即以用户的身份测试服务的外部可见性，常见的黑盒监控包括HTTP 探针、TCP 探针 等用于检测站点或者服务的可访问性，以及访问效率等。
-
 黑盒监控相较于白盒监控最大的不同在于黑盒监控是以故障为导向当故障发生时，黑盒监控能快速发现故障，而白盒监控则侧重于主动发现或者预测潜在的问题。一个完善的监控目标是要能够从白盒的角度发现潜在问题，能够在黑盒的角度快速发现已经发生的问题。
-
 Blackbox Exporter 是 Prometheus 社区提供的官方黑盒监控解决方案，其允许用户通过：HTTP、HTTPS、DNS、TCP 以及 ICMP 的方式对网络进行探测。">
   <meta property="og:description" content="前面我们主要介绍了 Prometheus 下如何进行白盒监控，我们监控主机的资源用量、容器的运行状态、数据库中间件的运行数据、自动发现 Kubernetes 集群中的资源等等，这些都是支持业务和服务的基础设施，通过白盒能够了解其内部的实际运行状态，通过对监控指标的观察能够预判可能出现的问题，从而对潜在的不确定因素进行优化。而从完整的监控逻辑的角度，除了大量的应用白盒监控以外，还应该添加适当的 Blackbox（黑盒）监控，黑盒监控即以用户的身份测试服务的外部可见性，常见的黑盒监控包括HTTP 探针、TCP 探针 等用于检测站点或者服务的可访问性，以及访问效率等。
-
 黑盒监控相较于白盒监控最大的不同在于黑盒监控是以故障为导向当故障发生时，黑盒监控能快速发现故障，而白盒监控则侧重于主动发现或者预测潜在的问题。一个完善的监控目标是要能够从白盒的角度发现潜在问题，能够在黑盒的角度快速发现已经发生的问题。
-
 Blackbox Exporter 是 Prometheus 社区提供的官方黑盒监控解决方案，其允许用户通过：HTTP、HTTPS、DNS、TCP 以及 ICMP 的方式对网络进行探测。">
   <meta name="twitter:description" content="前面我们主要介绍了 Prometheus 下如何进行白盒监控，我们监控主机的资源用量、容器的运行状态、数据库中间件的运行数据、自动发现 Kubernetes 集群中的资源等等，这些都是支持业务和服务的基础设施，通过白盒能够了解其内部的实际运行状态，通过对监控指标的观察能够预判可能出现的问题，从而对潜在的不确定因素进行优化。而从完整的监控逻辑的角度，除了大量的应用白盒监控以外， …">
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/post/blackbox-exporter-on-prometheus/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/post/blackbox-exporter-on-prometheus/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -40,7 +35,7 @@ Blackbox Exporter 是 Prometheus 社区提供的官方黑盒监控解决方案�
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -91,7 +86,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -234,7 +229,7 @@ autocomplete('#aa-search-input',
 
 
   
-    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/photo-1576132526842-61e6db8dbb9b.jpeg" data-img-desc-1="Cirkular Khrome-1"></div>
+    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://picdn.youdianzhishi.com/images/photo-1576132526842-61e6db8dbb9b.jpeg" data-img-desc-1="Cirkular Khrome-1"></div>
   
 
   <header class="header-section has-img">
@@ -249,12 +244,8 @@ autocomplete('#aa-search-input',
                   
                   
                     <span class="post-meta">
-  
-    发表于 December 13, 2019
-  
-  
+  发表于 December 13, 2019  
 </span>
-
 
                   
               </div>
@@ -276,12 +267,8 @@ autocomplete('#aa-search-input',
                 
                 
                   <span class="post-meta">
-  
-    发表于 December 13, 2019
-  
-  
+  发表于 December 13, 2019  
 </span>
-
 
                 
             </div>
@@ -334,260 +321,251 @@ autocomplete('#aa-search-input',
           
 
           <p>前面我们主要介绍了 Prometheus 下如何进行白盒监控，我们监控主机的资源用量、容器的运行状态、数据库中间件的运行数据、自动发现 Kubernetes 集群中的资源等等，这些都是支持业务和服务的基础设施，通过白盒能够了解其内部的实际运行状态，通过对监控指标的观察能够预判可能出现的问题，从而对潜在的不确定因素进行优化。而从完整的监控逻辑的角度，除了大量的应用白盒监控以外，还应该添加适当的 <code>Blackbox（黑盒）</code>监控，黑盒监控即以用户的身份测试服务的外部可见性，常见的黑盒监控包括<code>HTTP 探针</code>、<code>TCP 探针</code> 等用于检测站点或者服务的可访问性，以及访问效率等。</p>
-
 <p>黑盒监控相较于白盒监控最大的不同在于黑盒监控是以故障为导向当故障发生时，黑盒监控能快速发现故障，而白盒监控则侧重于主动发现或者预测潜在的问题。一个完善的监控目标是要能够从白盒的角度发现潜在问题，能够在黑盒的角度快速发现已经发生的问题。</p>
-
 <p><a href="https://github.com/prometheus/blackbox_exporter">Blackbox Exporter</a> 是 Prometheus 社区提供的官方黑盒监控解决方案，其允许用户通过：<code>HTTP</code>、<code>HTTPS</code>、<code>DNS</code>、<code>TCP</code> 以及 <code>ICMP</code> 的方式对网络进行探测。</p>
-
 <p>同样首先需要在 Kubernetes 集群中运行 <code>blackbox-exporter</code> 服务，同样通过一个 ConfigMap 资源对象来为 Blackbox 提供配置，如下所示：（prome-blackbox.yaml）</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: blackbox-config
-  namespace: kube-mon
-data:
-  blackbox.yml: |<span style="color:#f1fa8c">-
-</span><span style="color:#f1fa8c">    modules:</span>
-      http_2xx:  <span style="color:#6272a4"># http 检测模块  Blockbox-Exporter 中所有的探针均是以 Module 的信息进行配置</span>
-        prober: http
-        timeout: 10s
-        http:
-          valid_http_versions: [<span style="color:#f1fa8c">&#34;HTTP/1.1&#34;</span>, <span style="color:#f1fa8c">&#34;HTTP/2&#34;</span>]   
-          valid_status_codes: [<span style="color:#bd93f9">200</span>]  <span style="color:#6272a4"># 这里最好作一个返回状态码，在grafana作图时，有明示---陈刚注释。</span>
-          method: GET
-          preferred_ip_protocol: <span style="color:#f1fa8c">&#34;ip4&#34;</span>
-      http_post_2xx: <span style="color:#6272a4"># http post 监测模块</span>
-        prober: http
-        timeout: 10s
-        http:
-          valid_http_versions: [<span style="color:#f1fa8c">&#34;HTTP/1.1&#34;</span>, <span style="color:#f1fa8c">&#34;HTTP/2&#34;</span>]
-          method: POST
-          preferred_ip_protocol: <span style="color:#f1fa8c">&#34;ip4&#34;</span>
-      tcp_connect:  <span style="color:#6272a4"># TCP 检测模块</span>
-        prober: tcp
-        timeout: 10s
-      dns:  <span style="color:#6272a4"># DNS 检测模块</span>
-        prober: dns
-        dns:
-          transport_protocol: <span style="color:#f1fa8c">&#34;tcp&#34;</span>  <span style="color:#6272a4"># 默认是 udp</span>
-          preferred_ip_protocol: <span style="color:#f1fa8c">&#34;ip4&#34;</span>  <span style="color:#6272a4"># 默认是 ip6</span>
-          query_name: <span style="color:#f1fa8c">&#34;kubernetes.default.svc.cluster.local&#34;</span>
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: blackbox
-  namespace: kube-mon
-spec:
-  selector:
-    matchLabels:
-      app: blackbox
-  template:
-    metadata:
-      labels:
-        app: blackbox
-    spec:
-      containers:
-      - image: prom/blackbox-exporter:v0.<span style="color:#bd93f9">16.0</span>
-        name: blackbox
-        args:
-        - --config.file=/etc/blackbox_exporter/blackbox.yml <span style="color:#6272a4"># ConfigMap 中的配置文件</span>
-        - --log.level=error  <span style="color:#6272a4"># 错误级别控制</span>
-        ports:
-        - containerPort: <span style="color:#bd93f9">9115</span>
-        volumeMounts:
-        - name: config
-          mountPath: /etc/blackbox_exporter
-      volumes:
-      - name: config
-        configMap:
-          name: blackbox-config
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: blackbox
-  namespace: kube-mon
-spec:
-  selector:
-    app: blackbox
-  ports:
-  - port: <span style="color:#bd93f9">9115</span>
-    targetPort: <span style="color:#bd93f9">9115</span></code></pre></div>
-<p>直接创建上面的资源清单：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl apply -f content/monitor/manifests/install/prome-blackbox.yaml 
-configmap/blackbox-config created
-deployment.apps/blackbox created
-service/blackbox created</code></pre></div>
-<p>然后需要在 Prometheus 的配置文件中加入对 <code>BlackBox</code> 的抓取设置，如下所示：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: prometheus-config
-  namespace: kube-mon
-data:
-  prometheus.yml: <span style="color:#f1fa8c">|
-</span><span style="color:#f1fa8c">    global:</span>
-      scrape_interval: 15s
-      scrape_timeout: 15s
-    scrape_configs:
-    - job_name: <span style="color:#f1fa8c">&#39;prometheus&#39;</span>
-      static_configs:
-      - targets: [<span style="color:#f1fa8c">&#39;localhost:9090&#39;</span>]
-      
-    - job_name: <span style="color:#f1fa8c">&#34;kubernetes-service-dns&#34;</span>
-      metrics_path: /probe <span style="color:#6272a4"># 不是 metrics，是 probe</span>
-      params:
-        module: [dns] <span style="color:#6272a4"># 使用 DNS 模块</span>
-      static_configs:
-      - targets:
-        - kube-dns.kube-system:<span style="color:#bd93f9">53</span>  <span style="color:#6272a4"># 不要省略端口号</span>
-      relabel_configs:
-      - source_labels: [__address__]
-        target_label: __param_target
-      - source_labels: [__param_target]
-        target_label: instance
-      - target_label: __address__
-        replacement: blackbox:<span style="color:#bd93f9">9115</span>  <span style="color:#6272a4"># 服务地址，和上面的 Service 定义保持一致</span></code></pre></div>
-<p>首先获取 targets 实例的 <code>__address__</code> 值写进 <code>__param_target</code>，<code>__param_&lt;name&gt;</code> 形式的标签里的 name 和它的值会被添加到发送到黑盒的 http 的 header 的 params 当作键值，例如 <code>__param_module</code> 对应 <code>params</code> 里的<code>module</code>。然后获取 <code>__param_target</code> 的值，并覆写到 <code>instance</code> 标签中，覆写 Target 实例的 <code>__address__</code> 标签值为 <code>BlockBox Exporter</code> 实例的访问地址，向 <code>blackbox:9115</code> 发送请求获取实例的 metrics 信息。然后更新配置：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl apply -f prometheus-cm.yaml
-configmap/prometheus-config configured
-<span style="color:#6272a4"># 隔一会儿执行 reload 操作</span>
-$ curl -X POST <span style="color:#f1fa8c">&#34;http://10.244.3.174:9090/-/reload&#34;</span>  <span style="color:#6272a4"># promethues pod ip</span></code></pre></div>
-<p>打开 Prometheus 的 Target 页面，就会看到 上面定义的 kubernetes-service-dns 任务了：</p>
-
-<figure><img src="https://www.qikqiak.com/k8strain/assets/img/monitor/prometheus-webui-blackbox-dns.png" alt="prometheus blackbox dns"><figcaption>prometheus blackbox dns</figcaption></figure>
-
-<p>回到 Graph 页面，可以使用 <code>probe_success{job=&quot;kubernetes-service-dns&quot;}</code> 来查看检测结果，这样就实现了对 DNS 的黑盒监控。
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-5376999672787220"
-     data-ad-slot="9165834656"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-
-除了 DNS 的配置外，上面我们还配置了一个 <code>http_2xx</code> 的模块，也就是 HTTP 探针，HTTP 探针是进行黑盒监控时最常用的探针之一，通过 HTTP 探针能够对网站或者 HTTP 服务建立有效的监控，包括其本身的可用性，以及用户体验相关的如响应时间等等。除了能够在服务出现异常的时候及时报警，还能帮助系统管理员分析和优化网站体验。这里我们可以使用他来对 http 服务进行检测。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: v1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: ConfigMap
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: blackbox-config
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">namespace</span>: kube-mon
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">data</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">blackbox.yml</span>: |-<span style="color:#f1fa8c">
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">    modules:
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">      http_2xx:  # http 检测模块  Blockbox-Exporter 中所有的探针均是以 Module 的信息进行配置
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        prober: http
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        timeout: 10s
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        http:
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">          valid_http_versions: [&#34;HTTP/1.1&#34;, &#34;HTTP/2&#34;]   
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">          valid_status_codes: [200]  # 这里最好作一个返回状态码，在grafana作图时，有明示---陈刚注释。
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">          method: GET
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">          preferred_ip_protocol: &#34;ip4&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">      http_post_2xx: # http post 监测模块
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        prober: http
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        timeout: 10s
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        http:
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">          valid_http_versions: [&#34;HTTP/1.1&#34;, &#34;HTTP/2&#34;]
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">          method: POST
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">          preferred_ip_protocol: &#34;ip4&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">      tcp_connect:  # TCP 检测模块
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        prober: tcp
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        timeout: 10s
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">      dns:  # DNS 检测模块
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        prober: dns
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        dns:
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">          transport_protocol: &#34;tcp&#34;  # 默认是 udp
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">          preferred_ip_protocol: &#34;ip4&#34;  # 默认是 ip6
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">          query_name: &#34;kubernetes.default.svc.cluster.local&#34;</span>    
+</span></span><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: apps/v1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: Deployment
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: blackbox
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">namespace</span>: kube-mon
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">selector</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">matchLabels</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">app</span>: blackbox
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">template</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">labels</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">app</span>: blackbox
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">containers</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">image</span>: prom/blackbox-exporter:v0.16.0
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">name</span>: blackbox
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">args</span>:
+</span></span><span style="display:flex;"><span>            - --config.file=/etc/blackbox_exporter/blackbox.yml <span style="color:#6272a4"># ConfigMap 中的配置文件</span>
+</span></span><span style="display:flex;"><span>            - --log.level=error <span style="color:#6272a4"># 错误级别控制</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">ports</span>:
+</span></span><span style="display:flex;"><span>            - <span style="color:#ff79c6">containerPort</span>: <span style="color:#bd93f9">9115</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">volumeMounts</span>:
+</span></span><span style="display:flex;"><span>            - <span style="color:#ff79c6">name</span>: config
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">mountPath</span>: /etc/blackbox_exporter
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">volumes</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">name</span>: config
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">configMap</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">name</span>: blackbox-config
+</span></span><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: v1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: Service
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: blackbox
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">namespace</span>: kube-mon
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">selector</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">app</span>: blackbox
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">ports</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">port</span>: <span style="color:#bd93f9">9115</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">targetPort</span>: <span style="color:#bd93f9">9115</span>
+</span></span></code></pre></div><p>直接创建上面的资源清单：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl apply -f content/monitor/manifests/install/prome-blackbox.yaml
+</span></span><span style="display:flex;"><span>configmap/blackbox-config created
+</span></span><span style="display:flex;"><span>deployment.apps/blackbox created
+</span></span><span style="display:flex;"><span>service/blackbox created
+</span></span></code></pre></div><p>然后需要在 Prometheus 的配置文件中加入对 <code>BlackBox</code> 的抓取设置，如下所示：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: v1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: ConfigMap
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: prometheus-config
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">namespace</span>: kube-mon
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">data</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">prometheus.yml</span>: |<span style="color:#f1fa8c">
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">    global:
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">      scrape_interval: 15s
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">      scrape_timeout: 15s
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">    scrape_configs:
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">    - job_name: &#39;prometheus&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">      static_configs:
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">      - targets: [&#39;localhost:9090&#39;]
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">      
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">    - job_name: &#34;kubernetes-service-dns&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">      metrics_path: /probe # 不是 metrics，是 probe
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">      params:
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        module: [dns] # 使用 DNS 模块
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">      static_configs:
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">      - targets:
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        - kube-dns.kube-system:53  # 不要省略端口号
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">      relabel_configs:
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">      - source_labels: [__address__]
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        target_label: __param_target
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">      - source_labels: [__param_target]
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        target_label: instance
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">      - target_label: __address__
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        replacement: blackbox:9115  # 服务地址，和上面的 Service 定义保持一致</span>    
+</span></span></code></pre></div><p>首先获取 targets 实例的 <code>__address__</code> 值写进 <code>__param_target</code>，<code>__param_&lt;name&gt;</code> 形式的标签里的 name 和它的值会被添加到发送到黑盒的 http 的 header 的 params 当作键值，例如 <code>__param_module</code> 对应 <code>params</code> 里的<code>module</code>。然后获取 <code>__param_target</code> 的值，并覆写到 <code>instance</code> 标签中，覆写 Target 实例的 <code>__address__</code> 标签值为 <code>BlockBox Exporter</code> 实例的访问地址，向 <code>blackbox:9115</code> 发送请求获取实例的 metrics 信息。然后更新配置：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl apply -f prometheus-cm.yaml
+</span></span><span style="display:flex;"><span>configmap/prometheus-config configured
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 隔一会儿执行 reload 操作</span>
+</span></span><span style="display:flex;"><span>$ curl -X POST <span style="color:#f1fa8c">&#34;http://10.244.3.174:9090/-/reload&#34;</span>  <span style="color:#6272a4"># promethues pod ip</span>
+</span></span></code></pre></div><p>打开 Prometheus 的 Target 页面，就会看到 上面定义的 kubernetes-service-dns 任务了：</p>
+<p><img src="https://www.qikqiak.com/k8strain/assets/img/monitor/prometheus-webui-blackbox-dns.png" alt="prometheus blackbox dns"></p>
+<p>回到 Graph 页面，可以使用 <code>probe_success{job=&quot;kubernetes-service-dns&quot;}</code> 来查看检测结果，这样就实现了对 DNS 的黑盒监控。</p>
+<!-- raw HTML omitted -->
+<p>除了 DNS 的配置外，上面我们还配置了一个 <code>http_2xx</code> 的模块，也就是 HTTP 探针，HTTP 探针是进行黑盒监控时最常用的探针之一，通过 HTTP 探针能够对网站或者 HTTP 服务建立有效的监控，包括其本身的可用性，以及用户体验相关的如响应时间等等。除了能够在服务出现异常的时候及时报警，还能帮助系统管理员分析和优化网站体验。这里我们可以使用他来对 http 服务进行检测。</p>
 <p>因为前面已经给 Blackbox 配置了 <code>http_2xx</code> 模块，所以这里只需要在 Prometheus 中加入抓取任务，这里我们可以结合前面的 Prometheus 的服务发现功能来做黑盒监控，对于 Service 和 Ingress 类型的服务发现，用来进行黑盒监控是非常合适的，配置如下所示：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">- job_name: <span style="color:#f1fa8c">&#39;kubernetes-http-services&#39;</span>
-  metrics_path: /probe
-  params:
-    module: [http_2xx]  <span style="color:#6272a4"># 使用定义的http模块</span>
-  kubernetes_sd_configs:
-  - role: service  <span style="color:#6272a4"># service 类型的服务发现</span>
-  relabel_configs:
-  <span style="color:#6272a4"># 只有service的annotation中配置了 prometheus.io/http_probe=true 的才进行发现</span>
-  - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_http_probe]
-    action: keep
-    regex: <span style="color:#ff79c6">true</span>
-  - source_labels: [__address__]
-    target_label: __param_target
-  - target_label: __address__
-    replacement: blackbox:<span style="color:#bd93f9">9115</span>
-  - source_labels: [__param_target]
-    target_label: instance
-  - action: labelmap
-    regex: __meta_kubernetes_service_label_(.+)
-  - source_labels: [__meta_kubernetes_namespace]
-    target_label: kubernetes_namespace
-  - source_labels: [__meta_kubernetes_service_name]
-    target_label: kubernetes_name
-
-- job_name: <span style="color:#f1fa8c">&#39;kubernetes-ingresses&#39;</span>
-  metrics_path: /probe
-  params:
-    module: [http_2xx]  <span style="color:#6272a4"># 使用定义的http模块</span>
-  kubernetes_sd_configs:
-  - role: ingress  <span style="color:#6272a4"># ingress 类型的服务发现</span>
-  relabel_configs:
-  <span style="color:#6272a4"># 只有ingress的annotation中配置了 prometheus.io/http_probe=true的才进行发现</span>
-  - source_labels: [__meta_kubernetes_ingress_annotation_prometheus_io_http_probe]
-    action: keep
-    regex: <span style="color:#ff79c6">true</span>
-  - source_labels: [__meta_kubernetes_ingress_scheme,__address__,__meta_kubernetes_ingress_path]
-    regex: (.+);(.+);(.+)
-    replacement: ${<span style="color:#bd93f9">1</span>}://${<span style="color:#bd93f9">2</span>}${<span style="color:#bd93f9">3</span>}
-    target_label: __param_target
-  - target_label: __address__
-    replacement: blackbox:<span style="color:#bd93f9">9115</span>
-  - source_labels: [__param_target]
-    target_label: instance
-  - action: labelmap
-    regex: __meta_kubernetes_ingress_label_(.+)
-  - source_labels: [__meta_kubernetes_namespace]
-    target_label: kubernetes_namespace
-  - source_labels: [__meta_kubernetes_ingress_name]
-    target_label: kubernetes_name</code></pre></div>
-<p>我们结合前面的服务发现功能，通过过滤 <code>prometheus.io/http_probe=true</code> 的 Service 和 Ingress 才进行 HTTP 探针类型的黑盒监控，其他配置和上面配置 dns 监控的时候是一致的。然后更新配置：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl apply -f prometheus-cm.yaml
-configmap/prometheus-config configured
-<span style="color:#6272a4"># 隔一会儿执行reload操作</span>
-$ curl -X POST <span style="color:#f1fa8c">&#34;http://10.244.3.174:9090/-/reload&#34;</span></code></pre></div>
-<p>打开 Prometheus 的 Target 页面，就会看到 上面定义的两个任务了：</p>
-
-<figure><img src="https://www.qikqiak.com/k8strain/assets/img/monitor/prometheus-webui-blackbox-service-ingress.png" alt="prometheus blackbox service ingress"><figcaption>prometheus blackbox service ingress</figcaption></figure>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>- <span style="color:#ff79c6">job_name</span>: <span style="color:#f1fa8c">&#34;kubernetes-http-services&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">metrics_path</span>: /probe
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">params</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">module</span>: [http_2xx] <span style="color:#6272a4"># 使用定义的http模块</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">kubernetes_sd_configs</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">role</span>: service <span style="color:#6272a4"># service 类型的服务发现</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">relabel_configs</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># 只有service的annotation中配置了 prometheus.io/http_probe=true 的才进行发现</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">source_labels</span>:
+</span></span><span style="display:flex;"><span>        [__meta_kubernetes_service_annotation_prometheus_io_http_probe]
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">action</span>: keep
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">regex</span>: <span style="color:#ff79c6">true</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">source_labels</span>: [__address__]
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">target_label</span>: __param_target
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">target_label</span>: __address__
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">replacement</span>: blackbox:9115
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">source_labels</span>: [__param_target]
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">target_label</span>: instance
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">action</span>: labelmap
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">regex</span>: __meta_kubernetes_service_label_(.+)
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">source_labels</span>: [__meta_kubernetes_namespace]
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">target_label</span>: kubernetes_namespace
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">source_labels</span>: [__meta_kubernetes_service_name]
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">target_label</span>: kubernetes_name
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>- <span style="color:#ff79c6">job_name</span>: <span style="color:#f1fa8c">&#34;kubernetes-ingresses&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">metrics_path</span>: /probe
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">params</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">module</span>: [http_2xx] <span style="color:#6272a4"># 使用定义的http模块</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">kubernetes_sd_configs</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">role</span>: ingress <span style="color:#6272a4"># ingress 类型的服务发现</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">relabel_configs</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># 只有ingress的annotation中配置了 prometheus.io/http_probe=true的才进行发现</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">source_labels</span>:
+</span></span><span style="display:flex;"><span>        [__meta_kubernetes_ingress_annotation_prometheus_io_http_probe]
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">action</span>: keep
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">regex</span>: <span style="color:#ff79c6">true</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">source_labels</span>:
+</span></span><span style="display:flex;"><span>        [
+</span></span><span style="display:flex;"><span>          __meta_kubernetes_ingress_scheme,
+</span></span><span style="display:flex;"><span>          __address__,
+</span></span><span style="display:flex;"><span>          __meta_kubernetes_ingress_path,
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">regex</span>: (.+);(.+);(.+)
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">replacement</span>: ${1}://${2}${3}
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">target_label</span>: __param_target
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">target_label</span>: __address__
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">replacement</span>: blackbox:9115
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">source_labels</span>: [__param_target]
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">target_label</span>: instance
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">action</span>: labelmap
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">regex</span>: __meta_kubernetes_ingress_label_(.+)
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">source_labels</span>: [__meta_kubernetes_namespace]
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">target_label</span>: kubernetes_namespace
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">source_labels</span>: [__meta_kubernetes_ingress_name]
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">target_label</span>: kubernetes_name
+</span></span></code></pre></div><p>我们结合前面的服务发现功能，通过过滤 <code>prometheus.io/http_probe=true</code> 的 Service 和 Ingress 才进行 HTTP 探针类型的黑盒监控，其他配置和上面配置 dns 监控的时候是一致的。然后更新配置：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl apply -f prometheus-cm.yaml
+</span></span><span style="display:flex;"><span>configmap/prometheus-config configured
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 隔一会儿执行reload操作</span>
+</span></span><span style="display:flex;"><span>$ curl -X POST <span style="color:#f1fa8c">&#34;http://10.244.3.174:9090/-/reload&#34;</span>
+</span></span></code></pre></div><p>打开 Prometheus 的 Target 页面，就会看到 上面定义的两个任务了：</p>
+<p><img src="https://www.qikqiak.com/k8strain/assets/img/monitor/prometheus-webui-blackbox-service-ingress.png" alt="prometheus blackbox service ingress"></p>
 <p>但是现在还没有任何数据，这是因为上面是匹配 <code>__meta_kubernetes_ingress_annotation_prometheus_io_http_probe</code> 这个元信息，所以如果我们需要让这两个任务发现的话需要在 Service 或者 Ingress 中配置对应的 annotation：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">annotation:
-  prometheus.io/http-probe: <span style="color:#f1fa8c">&#34;true&#34;</span></code></pre></div>
-<p>比如在我们自己的一个 Ingress 对象中添加上面这个 annotation：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$  kubectl get ingress fe-trait-ingress -o yaml
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  annotations:
-    ......
-    prometheus.io/http-probe: <span style="color:#f1fa8c">&#34;true&#34;</span>  <span style="color:#6272a4"># 用于黑盒监控</span>
-......
-spec:
-  rules:
-  - host: todo.qikqiak.com
-    http:
-      paths:
-      - backend:
-          serviceName: fe
-          servicePort: <span style="color:#bd93f9">3000</span>
-        path: /app<span style="color:#ff79c6">(</span>/|$<span style="color:#ff79c6">)(</span>.*<span style="color:#ff79c6">)</span>
-status:
-  loadBalancer: <span style="color:#ff79c6">{}</span></code></pre></div>
-<p>这个时候我们查看到 Ingress 这个任务下面已经有抓取任务了：</p>
-
-<figure><img src="https://www.qikqiak.com/k8strain/assets/img/monitor/prometheus-webui-blackbox-ingress.png" alt="prometheus blackbox ingress"><figcaption>prometheus blackbox ingress</figcaption></figure>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">annotation</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">prometheus.io/http-probe</span>: <span style="color:#f1fa8c">&#34;true&#34;</span>
+</span></span></code></pre></div><p>比如在我们自己的一个 Ingress 对象中添加上面这个 annotation：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$  kubectl get ingress fe-trait-ingress -o yaml
+</span></span><span style="display:flex;"><span>apiVersion: extensions/v1beta1
+</span></span><span style="display:flex;"><span>kind: Ingress
+</span></span><span style="display:flex;"><span>metadata:
+</span></span><span style="display:flex;"><span>  annotations:
+</span></span><span style="display:flex;"><span>    ......
+</span></span><span style="display:flex;"><span>    prometheus.io/http-probe: <span style="color:#f1fa8c">&#34;true&#34;</span>  <span style="color:#6272a4"># 用于黑盒监控</span>
+</span></span><span style="display:flex;"><span>......
+</span></span><span style="display:flex;"><span>spec:
+</span></span><span style="display:flex;"><span>  rules:
+</span></span><span style="display:flex;"><span>  - host: todo.qikqiak.com
+</span></span><span style="display:flex;"><span>    http:
+</span></span><span style="display:flex;"><span>      paths:
+</span></span><span style="display:flex;"><span>      - backend:
+</span></span><span style="display:flex;"><span>          serviceName: fe
+</span></span><span style="display:flex;"><span>          servicePort: <span style="color:#bd93f9">3000</span>
+</span></span><span style="display:flex;"><span>        path: /app<span style="color:#ff79c6">(</span>/|$<span style="color:#ff79c6">)(</span>.*<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>status:
+</span></span><span style="display:flex;"><span>  loadBalancer: <span style="color:#ff79c6">{}</span>
+</span></span></code></pre></div><p>这个时候我们查看到 Ingress 这个任务下面已经有抓取任务了：</p>
+<p><img src="https://www.qikqiak.com/k8strain/assets/img/monitor/prometheus-webui-blackbox-ingress.png" alt="prometheus blackbox ingress"></p>
 <p>比如现在我们可以使用 <code>probe_duration_seconds</code> 来检查监控结果：</p>
-
-<figure><img src="https://www.qikqiak.com/k8strain/assets/img/monitor/prometheus-webui-blackbox-ingress-query.png" alt="prometheus blackbox ingress query"><figcaption>prometheus blackbox ingress query</figcaption></figure>
-
+<p><img src="https://www.qikqiak.com/k8strain/assets/img/monitor/prometheus-webui-blackbox-ingress-query.png" alt="prometheus blackbox ingress query"></p>
 <p>对于 Service 是一样的，当然如果你需要对监控的路径、端口这些做控制，我们可以自己在 relabel_configs 中去做相应的配置，比如我们想对 Service 的黑盒做自定义配置，可以想下面这样配置：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">- source_labels: [__meta_kubernetes_service_name, __meta_kubernetes_namespace, __meta_kubernetes_service_annotation_prometheus_io_http_probe_port, __meta_kubernetes_service_annotation_prometheus_io_http_probe_path]
-  action: replace
-  target_label: __param_target
-  regex: (.+);(.+);(.+);(.+)
-  replacement: $<span style="color:#bd93f9">1</span>.$<span style="color:#bd93f9">2</span>:$<span style="color:#bd93f9">3</span>$<span style="color:#bd93f9">4</span></code></pre></div>
-<p>这样我们就需要在 Service 中配置这样的 annotation 了：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">annotation:
-  prometheus.io/http-probe: <span style="color:#f1fa8c">&#34;true&#34;</span>
-  prometheus.io/http-probe-port: <span style="color:#f1fa8c">&#34;8080&#34;</span>
-  prometheus.io/http-probe-path: <span style="color:#f1fa8c">&#34;/healthz&#34;</span></code></pre></div>
-<p>这样我们就完成了 HTTP 探针的黑盒监控，除此之外，我们还可以配置 TCP 的监控，上面我们已经配置了这个模块，大家可以自己尝试去配置下。</p>
-
-<p>除了支持对 HTT P协议进行网络探测以外，Blackbox 还支持对 TCP、DNS、ICMP 等其他网络协议，感兴趣的读者可以从 Blackbox 的 <a href="https://github.com/prometheus/blackbox_exporter">Github 项目</a>中获取更多使用信息。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>- <span style="color:#ff79c6">source_labels</span>:
+</span></span><span style="display:flex;"><span>    [
+</span></span><span style="display:flex;"><span>      __meta_kubernetes_service_name,
+</span></span><span style="display:flex;"><span>      __meta_kubernetes_namespace,
+</span></span><span style="display:flex;"><span>      __meta_kubernetes_service_annotation_prometheus_io_http_probe_port,
+</span></span><span style="display:flex;"><span>      __meta_kubernetes_service_annotation_prometheus_io_http_probe_path,
+</span></span><span style="display:flex;"><span>    ]
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">action</span>: replace
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">target_label</span>: __param_target
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">regex</span>: (.+);(.+);(.+);(.+)
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">replacement</span>: $1.$2:$3$4
+</span></span></code></pre></div><p>这样我们就需要在 Service 中配置这样的 annotation 了：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">annotation</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">prometheus.io/http-probe</span>: <span style="color:#f1fa8c">&#34;true&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">prometheus.io/http-probe-port</span>: <span style="color:#f1fa8c">&#34;8080&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">prometheus.io/http-probe-path</span>: <span style="color:#f1fa8c">&#34;/healthz&#34;</span>
+</span></span></code></pre></div><p>这样我们就完成了 HTTP 探针的黑盒监控，除此之外，我们还可以配置 TCP 的监控，上面我们已经配置了这个模块，大家可以自己尝试去配置下。</p>
+<p>除了支持对 HTT P 协议进行网络探测以外，Blackbox 还支持对 TCP、DNS、ICMP 等其他网络协议，感兴趣的读者可以从 Blackbox 的 <a href="https://github.com/prometheus/blackbox_exporter">Github 项目</a>中获取更多使用信息。</p>
 <p>Prometheus 配置文件可以参考官方仓库：<a href="https://github.com/prometheus/prometheus/blob/master/documentation/examples/prometheus-kubernetes.yml">https://github.com/prometheus/prometheus/blob/master/documentation/examples/prometheus-kubernetes.yml</a></p>
-
 <p>Blackbox 的配置文件可以参考官方参考：<a href="https://github.com/prometheus/blackbox_exporter/blob/master/example.yml">https://github.com/prometheus/blackbox_exporter/blob/master/example.yml</a></p>
-
-<p><a href="https://youdianzhishi.com/web/course/1030" title="从 Docker 到 Kubernetes 进阶课程"><img src="https://sdn.youdianzhishi.com/images/2019/10/24/65f2cfb229184268a18745fe202b281b.jpg?imageView2/2/format/webp" alt="Kubernetes进阶训练营"></a></p>
-
+<!-- raw HTML omitted -->
 
           <h2>微信公众号</h2>
-<p>扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的 kubernetes 讨论群里面共同学习。</p>
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/qrcode.png" alt="wechat-account-qrcode">
+<p>
+  扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的
+  kubernetes 讨论群里面共同学习。
+</p>
+<img
+  src="https://picdn.youdianzhishi.com/images/qrcode.png"
+  alt="wechat-account-qrcode"
+/>
 
   
           
@@ -788,7 +766,7 @@ status:
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -800,7 +778,7 @@ status:
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -817,7 +795,7 @@ status:
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -826,7 +804,7 @@ status:
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

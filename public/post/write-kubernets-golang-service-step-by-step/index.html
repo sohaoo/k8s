@@ -14,16 +14,15 @@
   <meta property="og:description" content="我们前面介绍了很多关于kubernetes本身的操作，但是对于如何写一个完整的kubernetes应用还没有介绍过。在这篇文章中我们将介绍如何一步一步的写一个kubernetes的golang服务。">
   <meta name="twitter:description" content="我们前面介绍了很多关于kubernetes本身的操作，但是对于如何写一个完整的kubernetes应用还没有介绍过。在这篇文章中我们将介绍如何一步一步的写一个kubernetes的golang服务。">
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/post/write-kubernets-golang-service-step-by-step/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/post/write-kubernets-golang-service-step-by-step/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -32,7 +31,7 @@
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -83,7 +82,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -241,12 +240,8 @@ autocomplete('#aa-search-input',
                   
                   
                     <span class="post-meta">
-  
-    发表于 February 8, 2018
-  
-  
+  发表于 February 8, 2018  
 </span>
-
 
                   
               </div>
@@ -268,12 +263,8 @@ autocomplete('#aa-search-input',
                 
                 
                   <span class="post-meta">
-  
-    发表于 February 8, 2018
-  
-  
+  发表于 February 8, 2018  
 </span>
-
 
                 
             </div>
@@ -315,14 +306,11 @@ autocomplete('#aa-search-input',
             
 <aside class="toc">
   <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#golang">golang</a></li>
-<li><a href="#docker">Docker</a></li>
-<li><a href="#kubernetes">Kubernetes</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#golang">golang</a></li>
+    <li><a href="#docker">Docker</a></li>
+    <li><a href="#kubernetes">Kubernetes</a></li>
+  </ul>
 </nav>
 </aside>
 
@@ -341,203 +329,195 @@ autocomplete('#aa-search-input',
           
 
           <p>我们前面介绍了很多关于<code>kubernetes</code>本身的操作，但是对于如何写一个完整的<code>kubernetes</code>应用还没有介绍过。在这篇文章中我们将介绍如何一步一步的写一个<code>kubernetes</code>的<code>golang</code>服务。</p>
-
 <h2 id="golang">golang</h2>
-
 <p>对于 golang 的安装和配置，我们这里就不详细说明了，因为这也不是我们的重点，我相信这一步你是能够自己独立完成的。</p>
-
 <blockquote>
 <p>一个令人比较兴奋的事情是现在国内用户访问<code>golang</code>网站可以不用梯子了，我们可以自由的访问<a href="https://golang.google.cn/">https://golang.google.cn/</a>网站了。</p>
 </blockquote>
-
 <p>新建项目文件夹<strong>goappk8s</strong>，然后在该目录下面新建一个<strong>src</strong>目录</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ mkdir goappk8s <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#8be9fd;font-style:italic">cd</span> goappk8s
-$ mkdir src</code></pre></div>
-<p>在<strong>goappk8s</strong>目录下新建一个设置<code>GOPATH</code>的脚本：(<code>setup-gopath.sh</code>)</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#ff79c6">#!/bin/bash
-</span><span style="color:#ff79c6"></span><span style="color:#8be9fd;font-style:italic">DIR</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;</span><span style="color:#ff79c6">$(</span><span style="color:#8be9fd;font-style:italic">cd</span> <span style="color:#f1fa8c">&#34;</span><span style="color:#ff79c6">$(</span>dirname <span style="color:#f1fa8c">&#34;</span><span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">BASH_SOURCE</span>[0]<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">&#34;</span><span style="color:#ff79c6">)</span><span style="color:#f1fa8c">&#34;</span> <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#8be9fd;font-style:italic">pwd</span><span style="color:#ff79c6">)</span><span style="color:#f1fa8c">&#34;</span>
-<span style="color:#8be9fd;font-style:italic">export</span> <span style="color:#8be9fd;font-style:italic">GOPATH</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;</span><span style="color:#8be9fd;font-style:italic">$DIR</span><span style="color:#f1fa8c">&#34;</span></code></pre></div>
-<p>然后我们执行上面的脚本，设置<code>GOPATH</code>为当前工程目录：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ <span style="color:#8be9fd;font-style:italic">source</span> setup-gopath.sh
-$ <span style="color:#8be9fd;font-style:italic">echo</span> <span style="color:#8be9fd;font-style:italic">$GOPATH</span>
-/Users/ych/devs/workspace/yidianzhishi/goappk8s</code></pre></div>
-<p>我们可以看到<code>GOPATH</code>已经设置为当前项目根目录了。然后在<strong>src</strong>目录下面添加 golang 代码：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ mkdir -p github.com/cnych/goappk8s <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#8be9fd;font-style:italic">cd</span> github.com/cnych/goappk8s
-$ touch main.go</code></pre></div>
-<p>我们添加一个最简单的<code>golang</code>服务，提供了一个 ping 接口：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-golang" data-lang="golang"><span style="color:#ff79c6">package</span> main
-
-<span style="color:#ff79c6">import</span> (
-    <span style="color:#f1fa8c">&#34;github.com/gin-gonic/gin&#34;</span>
-    <span style="color:#f1fa8c">&#34;net/http&#34;</span>
-)
-
-<span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">main</span>() {
-    router <span style="color:#ff79c6">:=</span> gin.<span style="color:#50fa7b">Default</span>()
-    router.<span style="color:#50fa7b">GET</span>(<span style="color:#f1fa8c">&#34;/ping&#34;</span>, <span style="color:#8be9fd;font-style:italic">func</span>(c <span style="color:#ff79c6">*</span>gin.Context) {
-        c.<span style="color:#50fa7b">String</span>(http.StatusOK, <span style="color:#f1fa8c">&#34;PONG&#34;</span>)
-    })
-    router.<span style="color:#50fa7b">Run</span>(<span style="color:#f1fa8c">&#34;:8080&#34;</span>)
-}</code></pre></div>
-<p>我们可以看到上面的服务中依赖了一个第三方包<code>github.com/gin-gonic/gin</code>，你可以手动将该依赖包下载下来放置到<code>GOPATH</code>下面，我们这里为了使用<code>govendor</code>来进行管理，当然你可以使用其他的包管理工具，比如：dep、glide 等等。在<code>github.com/cnych/goappk8s</code>目录下面执行下面的操作：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ govendor init
-$ govendor fetch github.com/gin-gonic/gin</code></pre></div>
-<blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ mkdir goappk8s <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#8be9fd;font-style:italic">cd</span> goappk8s
+</span></span><span style="display:flex;"><span>$ mkdir src
+</span></span></code></pre></div><p>在<strong>goappk8s</strong>目录下新建一个设置<code>GOPATH</code>的脚本：(<code>setup-gopath.sh</code>)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#ff79c6">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6"></span><span style="color:#8be9fd;font-style:italic">DIR</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;</span><span style="color:#ff79c6">$(</span><span style="color:#8be9fd;font-style:italic">cd</span> <span style="color:#f1fa8c">&#34;</span><span style="color:#ff79c6">$(</span>dirname <span style="color:#f1fa8c">&#34;</span><span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">BASH_SOURCE</span>[0]<span style="color:#f1fa8c">}</span><span style="color:#f1fa8c">&#34;</span><span style="color:#ff79c6">)</span><span style="color:#f1fa8c">&#34;</span> <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#8be9fd;font-style:italic">pwd</span><span style="color:#ff79c6">)</span><span style="color:#f1fa8c">&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">export</span> <span style="color:#8be9fd;font-style:italic">GOPATH</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;</span><span style="color:#8be9fd;font-style:italic">$DIR</span><span style="color:#f1fa8c">&#34;</span>
+</span></span></code></pre></div><p>然后我们执行上面的脚本，设置<code>GOPATH</code>为当前工程目录：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ <span style="color:#8be9fd;font-style:italic">source</span> setup-gopath.sh
+</span></span><span style="display:flex;"><span>$ <span style="color:#8be9fd;font-style:italic">echo</span> <span style="color:#8be9fd;font-style:italic">$GOPATH</span>
+</span></span><span style="display:flex;"><span>/Users/ych/devs/workspace/yidianzhishi/goappk8s
+</span></span></code></pre></div><p>我们可以看到<code>GOPATH</code>已经设置为当前项目根目录了。然后在<strong>src</strong>目录下面添加 golang 代码：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ mkdir -p github.com/cnych/goappk8s <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#8be9fd;font-style:italic">cd</span> github.com/cnych/goappk8s
+</span></span><span style="display:flex;"><span>$ touch main.go
+</span></span></code></pre></div><p>我们添加一个最简单的<code>golang</code>服务，提供了一个 ping 接口：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-golang" data-lang="golang"><span style="display:flex;"><span><span style="color:#ff79c6">package</span> main
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> (
+</span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;github.com/gin-gonic/gin&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f1fa8c">&#34;net/http&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">func</span> <span style="color:#50fa7b">main</span>() {
+</span></span><span style="display:flex;"><span>    router <span style="color:#ff79c6">:=</span> gin.<span style="color:#50fa7b">Default</span>()
+</span></span><span style="display:flex;"><span>    router.<span style="color:#50fa7b">GET</span>(<span style="color:#f1fa8c">&#34;/ping&#34;</span>, <span style="color:#8be9fd;font-style:italic">func</span>(c <span style="color:#ff79c6">*</span>gin.Context) {
+</span></span><span style="display:flex;"><span>        c.<span style="color:#50fa7b">String</span>(http.StatusOK, <span style="color:#f1fa8c">&#34;PONG&#34;</span>)
+</span></span><span style="display:flex;"><span>    })
+</span></span><span style="display:flex;"><span>    router.<span style="color:#50fa7b">Run</span>(<span style="color:#f1fa8c">&#34;:8080&#34;</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>我们可以看到上面的服务中依赖了一个第三方包<code>github.com/gin-gonic/gin</code>，你可以手动将该依赖包下载下来放置到<code>GOPATH</code>下面，我们这里为了使用<code>govendor</code>来进行管理，当然你可以使用其他的包管理工具，比如：dep、glide 等等。在<code>github.com/cnych/goappk8s</code>目录下面执行下面的操作：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ govendor init
+</span></span><span style="display:flex;"><span>$ govendor fetch github.com/gin-gonic/gin
+</span></span></code></pre></div><blockquote>
 <p>注意上面的包需要拉取一些墙外的包。</p>
 </blockquote>
-
 <p>然后我们切换到项目根目录，也就是<code>GOPATH</code>的路径，执行以下命令：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ go install github.com/cnych/goappk8s <span style="color:#ff79c6">&amp;&amp;</span> ./bin/goappk8s
-<span style="color:#ff79c6">[</span>GIN-debug<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">[</span>WARNING<span style="color:#ff79c6">]</span> Creating an Engine instance with the Logger and Recovery middleware already attached.
-
-<span style="color:#ff79c6">[</span>GIN-debug<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">[</span>WARNING<span style="color:#ff79c6">]</span> Running in <span style="color:#f1fa8c">&#34;debug&#34;</span> mode. Switch to <span style="color:#f1fa8c">&#34;release&#34;</span> mode in production.
- - using env:   <span style="color:#8be9fd;font-style:italic">export</span> <span style="color:#8be9fd;font-style:italic">GIN_MODE</span><span style="color:#ff79c6">=</span>release
- - using code:  gin.SetMode<span style="color:#ff79c6">(</span>gin.ReleaseMode<span style="color:#ff79c6">)</span>
-
-<span style="color:#ff79c6">[</span>GIN-debug<span style="color:#ff79c6">]</span> GET    /ping                     --&gt; main.main.func1 <span style="color:#ff79c6">(</span><span style="color:#bd93f9">3</span> handlers<span style="color:#ff79c6">)</span>
-<span style="color:#ff79c6">[</span>GIN-debug<span style="color:#ff79c6">]</span> Listening and serving HTTP on :8080</code></pre></div>
-<p>我们可以看到我们的<code>golang</code>服务已经运行起来了，然后我们浏览器中打开链接<a href="http://127.0.0.1:8080/ping">http://127.0.0.1:8080/ping</a>，可以看到页面上打印出了<code>PONG</code>，证明我们的服务已经正常启动了。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ go install github.com/cnych/goappk8s <span style="color:#ff79c6">&amp;&amp;</span> ./bin/goappk8s
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>GIN-debug<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">[</span>WARNING<span style="color:#ff79c6">]</span> Creating an Engine instance with the Logger and Recovery middleware already attached.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>GIN-debug<span style="color:#ff79c6">]</span> <span style="color:#ff79c6">[</span>WARNING<span style="color:#ff79c6">]</span> Running in <span style="color:#f1fa8c">&#34;debug&#34;</span> mode. Switch to <span style="color:#f1fa8c">&#34;release&#34;</span> mode in production.
+</span></span><span style="display:flex;"><span> - using env:   <span style="color:#8be9fd;font-style:italic">export</span> <span style="color:#8be9fd;font-style:italic">GIN_MODE</span><span style="color:#ff79c6">=</span>release
+</span></span><span style="display:flex;"><span> - using code:  gin.SetMode<span style="color:#ff79c6">(</span>gin.ReleaseMode<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>GIN-debug<span style="color:#ff79c6">]</span> GET    /ping                     --&gt; main.main.func1 <span style="color:#ff79c6">(</span><span style="color:#bd93f9">3</span> handlers<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">[</span>GIN-debug<span style="color:#ff79c6">]</span> Listening and serving HTTP on :8080
+</span></span></code></pre></div><p>我们可以看到我们的<code>golang</code>服务已经运行起来了，然后我们浏览器中打开链接<a href="http://127.0.0.1:8080/ping">http://127.0.0.1:8080/ping</a>，可以看到页面上打印出了<code>PONG</code>，证明我们的服务已经正常启动了。</p>
 <h2 id="docker">Docker</h2>
-
 <p>根据上一篇文章 <a href="https://www.qikqiak.com/post/multi-stage-build-for-docker">Docker 的多阶段构建</a>我们可以很容易的为上面的<code>golang</code>服务写一个<code>Dockerfile</code>文件：（与<strong>main.go</strong>同目录）</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Dockerfile" data-lang="Dockerfile"><span style="color:#ff79c6">FROM</span><span style="color:#f1fa8c"> golang AS build-env</span>
-<span style="color:#ff79c6">ADD</span><span style="color:#f1fa8c"> . /go/src/app</span>
-<span style="color:#ff79c6">WORKDIR</span><span style="color:#f1fa8c"> /go/src/app</span>
-<span style="color:#ff79c6">RUN</span> go get -u -v github.com/kardianos/govendor
-<span style="color:#ff79c6">RUN</span> govendor sync
-<span style="color:#ff79c6">RUN</span> <span style="color:#8be9fd;font-style:italic">GOOS</span><span style="color:#ff79c6">=</span>linux <span style="color:#8be9fd;font-style:italic">GOARCH</span><span style="color:#ff79c6">=</span><span style="color:#bd93f9">386</span> go build -v -o /go/src/app/app-server
-
-<span style="color:#ff79c6">FROM</span><span style="color:#f1fa8c"> alpine</span>
-<span style="color:#ff79c6">RUN</span> apk add -U tzdata
-<span style="color:#ff79c6">RUN</span> ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
-COPY --from<span style="color:#ff79c6">=</span>build-env /go/src/app/app-server /usr/local/bin/app-server
-<span style="color:#ff79c6">EXPOSE</span><span style="color:#f1fa8c"> 8080</span>
-<span style="color:#ff79c6">CMD</span><span style="color:#f1fa8c"> [ &#34;app-server&#34; ]</span></code></pre></div>
-<p>然后构建<code>Docker</code>镜像：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ docker build -t cnych/goappk8s:v1.0.0 .
-.......<span style="color:#ff79c6">(</span>省略了<span style="color:#ff79c6">)</span>
-Successfully built 00751f94d8a9
-Successfully tagged cnych/goappk8s:v1.0.0
-$ docker push cnych/goappk8s:v1.0.0</code></pre></div>
-<p>上面的操作可以将我们本地的镜像<code>cnych/goappk8s:v1.0.0</code>推送到公共的<code>dockerhub</code>上面去（当然前提是你得先注册了）。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Dockerfile" data-lang="Dockerfile"><span style="display:flex;"><span><span style="color:#ff79c6">FROM</span><span style="color:#f1fa8c"> golang AS build-env</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">ADD</span> . /go/src/app
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">WORKDIR</span><span style="color:#f1fa8c"> /go/src/app</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">RUN</span> go get -u -v github.com/kardianos/govendor
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">RUN</span> govendor sync
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">RUN</span> <span style="color:#8be9fd;font-style:italic">GOOS</span><span style="color:#ff79c6">=</span>linux <span style="color:#8be9fd;font-style:italic">GOARCH</span><span style="color:#ff79c6">=</span><span style="color:#bd93f9">386</span> go build -v -o /go/src/app/app-server
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">FROM</span><span style="color:#f1fa8c"> alpine</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">RUN</span> apk add -U tzdata
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">RUN</span> ln -sf /usr/share/zoneinfo/Asia/Shanghai  /etc/localtime
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">COPY</span> --from<span style="color:#ff79c6">=</span>build-env /go/src/app/app-server /usr/local/bin/app-server
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">EXPOSE</span><span style="color:#f1fa8c"> 8080</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">CMD</span> [ <span style="color:#f1fa8c">&#34;app-server&#34;</span> ]
+</span></span></code></pre></div><p>然后构建<code>Docker</code>镜像：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ docker build -t cnych/goappk8s:v1.0.0 .
+</span></span><span style="display:flex;"><span>.......<span style="color:#ff79c6">(</span>省略了<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>Successfully built 00751f94d8a9
+</span></span><span style="display:flex;"><span>Successfully tagged cnych/goappk8s:v1.0.0
+</span></span><span style="display:flex;"><span>$ docker push cnych/goappk8s:v1.0.0
+</span></span></code></pre></div><p>上面的操作可以将我们本地的镜像<code>cnych/goappk8s:v1.0.0</code>推送到公共的<code>dockerhub</code>上面去（当然前提是你得先注册了）。</p>
 <p>到这里的话其实我们已经可以利用上面的镜像很容易的跑一个容器了，下面我们介绍下如何将服务部署到<code>kubernetes</code>上去。</p>
-
 <h2 id="kubernetes">Kubernetes</h2>
-
 <p>当然首先你得有一套可用的<code>kubernetes</code>环境，如果你对这部分还不熟悉的话，建议你可以先看下我们前面的<a href="https://www.qikqiak.com/tags/kubernetes/">相关文章</a>。
 在<code>Dockerfile</code>同目录下面新建文件用于描述<code>kubernetes</code>的部署方式：（<strong>k8s.yaml</strong>）</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">---
-apiVersion: extensions/v1beta1
-kind: Deployment
-metadata:
-  name: goapp-deploy
-  namespace: kube-apps
-  labels:
-    k8s-app: goappk8s
-spec:
-  replicas: <span style="color:#bd93f9">2</span>
-  revisionHistoryLimit: <span style="color:#bd93f9">10</span>
-  minReadySeconds: <span style="color:#bd93f9">5</span>
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: <span style="color:#bd93f9">1</span>
-      maxUnavailable: <span style="color:#bd93f9">1</span>
-  template:
-    metadata:
-      labels:
-        k8s-app: goappk8s
-    spec:
-      containers:
-      - image: cnych/goappk8s:v1.<span style="color:#bd93f9">0.0</span>
-        imagePullPolicy: Always
-        name: goappk8s
-        ports:
-        - containerPort: <span style="color:#bd93f9">8080</span>
-          protocol: TCP
-        resources:
-          limits:
-            cpu: 100m
-            memory: 100Mi
-          requests:
-            cpu: 50m
-            memory: 50Mi
-        livenessProbe:
-          tcpSocket:
-            port: <span style="color:#bd93f9">8080</span>
-          initialDelaySeconds: <span style="color:#bd93f9">10</span>
-          timeoutSeconds: <span style="color:#bd93f9">3</span>
-        readinessProbe:
-          httpGet:
-            path: /ping
-            port: <span style="color:#bd93f9">8080</span>
-          initialDelaySeconds: <span style="color:#bd93f9">10</span>
-          timeoutSeconds: <span style="color:#bd93f9">2</span>
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: goapp-svc
-  namespace: kube-apps
-  labels:
-    k8s-app: goappk8s
-spec:
-  ports:
-    - name: api
-      port: <span style="color:#bd93f9">8080</span>
-      protocol: TCP
-      targetPort: <span style="color:#bd93f9">8080</span>
-  selector:
-    k8s-app: goappk8s
-
----
-apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: goapp-ingress
-  namespace: kube-apps
-spec:
-  rules:
-  - host: goappk8s.local
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: goapp-svc
-          servicePort: api</code></pre></div>
-<p>上面的<code>k8s.yaml</code>文件中，我们定义了3类资源：<code>Deployment</code>、<code>Service</code>、<code>Ingress</code>，如果对<code>YAML</code>文件还不太了解的同学，可以查看前面的文章<a href="https://www.qikqiak.com/post/use-yaml-create-kubernetes-deployment/">使用YAML 文件创建 Kubernetes Deployment</a>，其中我们设置了<code>replicas: 2</code>，表示我们会运行两个<code>POD</code>，下面还定义了<code>strategy</code>的滚动策略为<code>RollingUpdate</code>，<code>resources</code>区域定义了我们一个<code>POD</code>的资源限制，通过<code>livenessProbe</code>和<code>readinessProbe</code>设置了健康检查。然后我们用<code>kubectl</code>执行下面的命令：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl apply -f k8s.yaml
-deployment <span style="color:#f1fa8c">&#34;goapp-deploy&#34;</span> created
-service <span style="color:#f1fa8c">&#34;goapp-svc&#34;</span> created
-ingress <span style="color:#f1fa8c">&#34;goapp-ingress&#34;</span> created</code></pre></div>
-<p>我们可以看到上面定义的三种资源都创建成功了。然后查看资源状态：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl get deployments -n kube-apps |grep goapp
-goapp-deploy     <span style="color:#bd93f9">2</span>         <span style="color:#bd93f9">2</span>         <span style="color:#bd93f9">2</span>            <span style="color:#bd93f9">2</span>           57s
-$ kubectl get svc -n kube-apps |grep goapp
-goapp-svc      ClusterIP   <span style="color:#bd93f9">10</span>.254.109.69    &lt;none&gt;        <span style="color:#bd93f9">8080</span>/TCP                         1m
-$ kubectl get ingress -n kube-apps |grep goapp
-goapp-ingress   goappk8s.local              <span style="color:#bd93f9">80</span>        1m
-$ kubectl get pods -n kube-apps |grep goapp
-goapp-deploy-84bb6979c-59qkl                             <span style="color:#bd93f9">1</span>/1       Running   <span style="color:#bd93f9">0</span>          2m
-goapp-deploy-84bb6979c-mgg2r                             <span style="color:#bd93f9">1</span>/1       Running   <span style="color:#bd93f9">0</span>          2m</code></pre></div>
-<p>我们可以看到在<code>kubernetes</code>集群中已经有两个<code>POD</code>在运行了，然后我们可以本地<code>/etc/hosts</code>中定义上面<code>Ingress</code>中定义的域名：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">你的k8s集群节点IP goappk8s.local</code></pre></div>
-<p>然后我们在浏览器中访问链接<a href="http://goappk8s.local/ping">http://goappk8s.local/ping</a>，可以看到页面上已经打印出来<strong>PONG</strong>。
-<img src="https://www.qikqiak.com/img/posts/WX20180208-171124.png" alt="PONG" /></p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: extensions/v1beta1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: Deployment
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: goapp-deploy
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">namespace</span>: kube-apps
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">labels</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">k8s-app</span>: goappk8s
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">replicas</span>: <span style="color:#bd93f9">2</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">revisionHistoryLimit</span>: <span style="color:#bd93f9">10</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">minReadySeconds</span>: <span style="color:#bd93f9">5</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">strategy</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">type</span>: RollingUpdate
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">rollingUpdate</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">maxSurge</span>: <span style="color:#bd93f9">1</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">maxUnavailable</span>: <span style="color:#bd93f9">1</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">template</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">labels</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">k8s-app</span>: goappk8s
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">containers</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ff79c6">image</span>: cnych/goappk8s:v1.0.0
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">imagePullPolicy</span>: Always
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">name</span>: goappk8s
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">ports</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">containerPort</span>: <span style="color:#bd93f9">8080</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">protocol</span>: TCP
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">resources</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">limits</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">cpu</span>: 100m
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">memory</span>: 100Mi
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">requests</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">cpu</span>: 50m
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">memory</span>: 50Mi
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">livenessProbe</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">tcpSocket</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">port</span>: <span style="color:#bd93f9">8080</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">initialDelaySeconds</span>: <span style="color:#bd93f9">10</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">timeoutSeconds</span>: <span style="color:#bd93f9">3</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">readinessProbe</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">httpGet</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">path</span>: /ping
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">port</span>: <span style="color:#bd93f9">8080</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">initialDelaySeconds</span>: <span style="color:#bd93f9">10</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">timeoutSeconds</span>: <span style="color:#bd93f9">2</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: v1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: Service
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: goapp-svc
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">namespace</span>: kube-apps
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">labels</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">k8s-app</span>: goappk8s
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">ports</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">name</span>: api
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">port</span>: <span style="color:#bd93f9">8080</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">protocol</span>: TCP
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">targetPort</span>: <span style="color:#bd93f9">8080</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">selector</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">k8s-app</span>: goappk8s
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: extensions/v1beta1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: Ingress
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: goapp-ingress
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">namespace</span>: kube-apps
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">rules</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ff79c6">host</span>: goappk8s.local
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">http</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">paths</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ff79c6">path</span>: /
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">backend</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">serviceName</span>: goapp-svc
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">servicePort</span>: api
+</span></span></code></pre></div><p>上面的<code>k8s.yaml</code>文件中，我们定义了3类资源：<code>Deployment</code>、<code>Service</code>、<code>Ingress</code>，如果对<code>YAML</code>文件还不太了解的同学，可以查看前面的文章<a href="https://www.qikqiak.com/post/use-yaml-create-kubernetes-deployment/">使用YAML 文件创建 Kubernetes Deployment</a>，其中我们设置了<code>replicas: 2</code>，表示我们会运行两个<code>POD</code>，下面还定义了<code>strategy</code>的滚动策略为<code>RollingUpdate</code>，<code>resources</code>区域定义了我们一个<code>POD</code>的资源限制，通过<code>livenessProbe</code>和<code>readinessProbe</code>设置了健康检查。然后我们用<code>kubectl</code>执行下面的命令：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl apply -f k8s.yaml
+</span></span><span style="display:flex;"><span>deployment <span style="color:#f1fa8c">&#34;goapp-deploy&#34;</span> created
+</span></span><span style="display:flex;"><span>service <span style="color:#f1fa8c">&#34;goapp-svc&#34;</span> created
+</span></span><span style="display:flex;"><span>ingress <span style="color:#f1fa8c">&#34;goapp-ingress&#34;</span> created
+</span></span></code></pre></div><p>我们可以看到上面定义的三种资源都创建成功了。然后查看资源状态：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl get deployments -n kube-apps |grep goapp
+</span></span><span style="display:flex;"><span>goapp-deploy     <span style="color:#bd93f9">2</span>         <span style="color:#bd93f9">2</span>         <span style="color:#bd93f9">2</span>            <span style="color:#bd93f9">2</span>           57s
+</span></span><span style="display:flex;"><span>$ kubectl get svc -n kube-apps |grep goapp
+</span></span><span style="display:flex;"><span>goapp-svc      ClusterIP   10.254.109.69    &lt;none&gt;        8080/TCP                         1m
+</span></span><span style="display:flex;"><span>$ kubectl get ingress -n kube-apps |grep goapp
+</span></span><span style="display:flex;"><span>goapp-ingress   goappk8s.local              <span style="color:#bd93f9">80</span>        1m
+</span></span><span style="display:flex;"><span>$ kubectl get pods -n kube-apps |grep goapp
+</span></span><span style="display:flex;"><span>goapp-deploy-84bb6979c-59qkl                             1/1       Running   <span style="color:#bd93f9">0</span>          2m
+</span></span><span style="display:flex;"><span>goapp-deploy-84bb6979c-mgg2r                             1/1       Running   <span style="color:#bd93f9">0</span>          2m
+</span></span></code></pre></div><p>我们可以看到在<code>kubernetes</code>集群中已经有两个<code>POD</code>在运行了，然后我们可以本地<code>/etc/hosts</code>中定义上面<code>Ingress</code>中定义的域名：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>你的k8s集群节点IP goappk8s.local
+</span></span></code></pre></div><p>然后我们在浏览器中访问链接<a href="http://goappk8s.local/ping">http://goappk8s.local/ping</a>，可以看到页面上已经打印出来<strong>PONG</strong>。
+<img src="https://www.qikqiak.com/img/posts/WX20180208-171124.png" alt="PONG"></p>
 <p>最后整理下代码，将我们的代码提交到<a href="https://github.com/cnych/goappk8s">github</a>去吧。</p>
-
 <p>最后我们还可以结合<code>CI/CD</code>，增加持续集成功能，做到我们更新代码后，自动更新我们的<code>kubernetes</code>应用，这部分我们后面再单独进行说明。</p>
-
-<p><a href="https://youdianzhishi.com/web/course/1030" title="从 Docker 到 Kubernetes 进阶课程"><img src="https://sdn.youdianzhishi.com/images/2019/10/24/65f2cfb229184268a18745fe202b281b.jpg?imageView2/2/format/webp" alt="Kubernetes进阶训练营"></a></p>
-
+<!-- raw HTML omitted -->
 
           <h2>微信公众号</h2>
-<p>扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的 kubernetes 讨论群里面共同学习。</p>
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/qrcode.png" alt="wechat-account-qrcode">
+<p>
+  扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的
+  kubernetes 讨论群里面共同学习。
+</p>
+<img
+  src="https://picdn.youdianzhishi.com/images/qrcode.png"
+  alt="wechat-account-qrcode"
+/>
 
   
           
@@ -738,7 +718,7 @@ goapp-deploy-84bb6979c-mgg2r                             <span style="color:#bd9
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -750,7 +730,7 @@ goapp-deploy-84bb6979c-mgg2r                             <span style="color:#bd9
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -767,7 +747,7 @@ goapp-deploy-84bb6979c-mgg2r                             <span style="color:#bd9
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -776,7 +756,7 @@ goapp-deploy-84bb6979c-mgg2r                             <span style="color:#bd9
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

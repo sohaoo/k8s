@@ -11,29 +11,28 @@
   <meta name="twitter:title" content="django下url函数的用法" />
 
   <meta name="description" content="Django下有一个比较隐含的函数url，在django/conf/urls/defaults模块中，虽然只有短短的10行代码，但功能却很了得。起初初学Django，并没有发现它，Templates的链接地址都是根据urlpatterns定义的地址，拼凑成地址字符串，很难看，而且Templates里拼凑成的地址，随着页面的增加而不断增加，一旦在urlpatterns里的某个地址改变了名称，那眼泪可是哗哗的，有多少的拼凑的地址就得改动多少处！这时发现了url函数，这下可都好了，不管urlpatterns里的某个地址叫法怎么改变，Templates里的地址都不用修改了。
-
 比如没有采用url函数的时候：urlpatterns里定义了资讯的首页地址,
 urlpatterns = patterns(&#39;&#39;,
     (r&#39;^article$&#39;,&#39;news_index&#39; ),
-)">
+)
+">
   <meta property="og:description" content="Django下有一个比较隐含的函数url，在django/conf/urls/defaults模块中，虽然只有短短的10行代码，但功能却很了得。起初初学Django，并没有发现它，Templates的链接地址都是根据urlpatterns定义的地址，拼凑成地址字符串，很难看，而且Templates里拼凑成的地址，随着页面的增加而不断增加，一旦在urlpatterns里的某个地址改变了名称，那眼泪可是哗哗的，有多少的拼凑的地址就得改动多少处！这时发现了url函数，这下可都好了，不管urlpatterns里的某个地址叫法怎么改变，Templates里的地址都不用修改了。
-
 比如没有采用url函数的时候：urlpatterns里定义了资讯的首页地址,
 urlpatterns = patterns(&#39;&#39;,
     (r&#39;^article$&#39;,&#39;news_index&#39; ),
-)">
+)
+">
   <meta name="twitter:description" content="Django下有一个比较隐含的函数url，在django/conf/urls/defaults模块中，虽然只有短短的10行代码，但功能却很了得。起初初学Django，并没有发现它，Templates的链接地址都是根据urlpatterns定义的地址，拼凑成地址字符串，很难看，而且Templates里拼凑成的地址，随着页面的增加而不断增加，一旦在urlpatterns里的某个地址改变了名称，那眼泪可 …">
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/post/django-url-function-usage/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/post/django-url-function-usage/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -42,7 +41,7 @@ urlpatterns = patterns(&#39;&#39;,
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -93,7 +92,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -251,12 +250,8 @@ autocomplete('#aa-search-input',
                 
                 
                   <span class="post-meta">
-  
-    发表于 June 13, 2014
-  
-  
+  发表于 June 13, 2014  
 </span>
-
 
                 
             </div>
@@ -309,55 +304,55 @@ autocomplete('#aa-search-input',
           
 
           <p>Django下有一个比较隐含的函数<strong>url</strong>，在<code>django/conf/urls/defaults</code>模块中，虽然只有短短的10行代码，但功能却很了得。起初初学<code>Django</code>，并没有发现它，Templates的链接地址都是根据<code>urlpatterns</code>定义的地址，拼凑成地址字符串，很难看，而且Templates里拼凑成的地址，随着页面的增加而不断增加，一旦在<code>urlpatterns</code>里的某个地址改变了名称，那眼泪可是哗哗的，有多少的拼凑的地址就得改动多少处！这时发现了url函数，这下可都好了，不管<code>urlpatterns</code>里的某个地址叫法怎么改变，<code>Templates</code>里的地址都不用修改了。</p>
-
 <p>比如没有采用url函数的时候：<code>urlpatterns</code>里定义了资讯的首页地址,</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">urlpatterns = patterns(&#39;&#39;,
-    (r&#39;^article$&#39;,&#39;news_index&#39; ),
-)</code></pre></div>
-<p>Templates里的html为</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#ff79c6">a</span> <span style="color:#50fa7b">href</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;/article&#34;</span>&gt;资讯&lt;/<span style="color:#ff79c6">a</span>&gt;</code></pre></div>
-<p>而且不止一个页面，可能有10个页面使用到资讯的链接，这时你的Templates上就会有10个那样的页面a标签，当有一天，你突然想改变地址的叫法，</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">urlpatterns <span style="color:#ff79c6">=</span> patterns(<span style="color:#f1fa8c">&#39;&#39;</span>,
-    (<span style="color:#f1fa8c">r</span><span style="color:#f1fa8c">&#39;^news$&#39;</span>,<span style="color:#f1fa8c">&#39;news_index&#39;</span> ),
-)</code></pre></div>
-<p>你会发现，你在Templates中得修改10个<code>&lt;a href=&quot;/article&quot;&gt;资讯&lt;/a&gt;</code>成<code>html&lt;a href=&quot;/news&quot;&gt;资讯&lt;/a&gt;</code></p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>urlpatterns = patterns(&#39;&#39;,
+</span></span><span style="display:flex;"><span>    (r&#39;^article$&#39;,&#39;news_index&#39; ),
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><p>Templates里的html为</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">a</span> <span style="color:#50fa7b">href</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;/article&#34;</span>&gt;资讯&lt;/<span style="color:#ff79c6">a</span>&gt;
+</span></span></code></pre></div><p>而且不止一个页面，可能有10个页面使用到资讯的链接，这时你的Templates上就会有10个那样的页面a标签，当有一天，你突然想改变地址的叫法，</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>urlpatterns <span style="color:#ff79c6">=</span> patterns(<span style="color:#f1fa8c">&#39;&#39;</span>,
+</span></span><span style="display:flex;"><span>    (<span style="color:#f1fa8c">r</span><span style="color:#f1fa8c">&#39;^news$&#39;</span>,<span style="color:#f1fa8c">&#39;news_index&#39;</span> ),
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><p>你会发现，你在Templates中得修改10个<code>&lt;a href=&quot;/article&quot;&gt;资讯&lt;/a&gt;</code>成<code>html&lt;a href=&quot;/news&quot;&gt;资讯&lt;/a&gt;</code></p>
 <p>可恨的是那样的标签分布在不同的页面上，有更糟糕的时候就是 你不知道到底有多少个那样的<code>a</code>标签（总不能一个个数嘛）。</p>
-
 <p>有了url情况就大为不一样了，<code>urlpatterns</code>里定义了资讯的首页地址,</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">urlpatterns = patterns(&#39;&#39;,
-    url(r&#39;^article$&#39;,&#39;news_index&#39; ，name=&#34;news_index&#34;),
-)</pre></div>
-<p>Templates里的html为</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#ff79c6">a</span> <span style="color:#50fa7b">href</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;http://mxjloveyou.blog.163.com/blog/{%url news_index%}&#34;</span>&gt;资讯&lt;/<span style="color:#ff79c6">a</span>&gt;</code></pre></div>
-<p>你怎么修改<code>urlpatterns</code>的地址，Template都会随着改变，省事了不少。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>urlpatterns = patterns(&#39;&#39;,
+</span></span><span style="display:flex;"><span>    url(r&#39;^article$&#39;,&#39;news_index&#39; ，name=&#34;news_index&#34;),
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><p>Templates里的html为</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">a</span> <span style="color:#50fa7b">href</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;http://mxjloveyou.blog.163.com/blog/{%url news_index%}&#34;</span>&gt;资讯&lt;/<span style="color:#ff79c6">a</span>&gt;
+</span></span></code></pre></div><p>你怎么修改<code>urlpatterns</code>的地址，Template都会随着改变，省事了不少。</p>
 <p>url的用法也很简单，只要在urlpatterns里使用它，附加一个name，如：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">url(<span style="color:#f1fa8c">r</span><span style="color:#f1fa8c">&#39;^article$&#39;</span>,<span style="color:#f1fa8c">&#39;news_index&#39;</span> ，name<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;news_index&#34;</span>),</code></pre></div>
-<p>Templates里 这样使用
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>url(<span style="color:#f1fa8c">r</span><span style="color:#f1fa8c">&#39;^article$&#39;</span>,<span style="color:#f1fa8c">&#39;news_index&#39;</span> ，name<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;news_index&#34;</span>),
+</span></span></code></pre></div><p>Templates里 这样使用
 <code>{%url name%}，</code>
 地址链接就能使用了。注意的是<strong>name</strong>是全局的，你整个<code>urlpatterns</code>里只能有一个唯一的name，这个道理应该好理解，就像网站的地址也是唯一性的。</p>
-
 <p>Templates里的用法简单，在<code>views</code>里怎么用呢？以前在没有使用的url函数的时候，可能指向一个地址使用</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">HttpResponseRedirect（<span style="color:#f1fa8c">&#34;/article&#34;</span>）</code></pre></div>
-<p>当然urlpatterns改变地址叫法的时候，所用的views的指向函数的参数都得跟着变。有了url函数，变成：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">HttpResponseRedirect(reverse(<span style="color:#f1fa8c">&#34;news_index&#34;</span>))</code></pre></div>
-<p>好处和Template里使用的情形一样的。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>HttpResponseRedirect（<span style="color:#f1fa8c">&#34;/article&#34;</span>）
+</span></span></code></pre></div><p>当然urlpatterns改变地址叫法的时候，所用的views的指向函数的参数都得跟着变。有了url函数，变成：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>HttpResponseRedirect(reverse(<span style="color:#f1fa8c">&#34;news_index&#34;</span>))
+</span></span></code></pre></div><p>好处和Template里使用的情形一样的。</p>
 <p>当遇到urlpatterns的地址包含有参数的时候，如：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">(<span style="color:#f1fa8c">r</span><span style="color:#f1fa8c">&#39;^(?P&lt;year&gt;\d{4})/(?P&lt;month&gt;\d{1,2})/$&#39;</span>,<span style="color:#f1fa8c">&#39;news_list&#39;</span> ),</code></pre></div>
-<p>有两个参数，最终的地址如归档的地址<code>http://xxxx.com/2014/06</code>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>(<span style="color:#f1fa8c">r</span><span style="color:#f1fa8c">&#39;^(?P&lt;year&gt;\d</span><span style="color:#f1fa8c">{4}</span><span style="color:#f1fa8c">)/(?P&lt;month&gt;\d{1,2})/$&#39;</span>,<span style="color:#f1fa8c">&#39;news_list&#39;</span> ),
+</span></span></code></pre></div><p>有两个参数，最终的地址如归档的地址<code>http://xxxx.com/2014/06</code>
 情况变复杂点了，<code>urlpatterns</code>的以上的用法不变：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">url(<span style="color:#f1fa8c">r</span><span style="color:#f1fa8c">&#39;^(?P&lt;year&gt;\d{4})/(?P&lt;month&gt;\d{1,2})/$&#39;</span>,<span style="color:#f1fa8c">&#39;news_list&#39;</span>,name<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;news_archive&#34;</span> ),</code></pre></div>
-<p>Templates里的用法就需要改改了，我们把url看成一个方法，结合templates的语法，结果就出来了：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">&lt;<span style="color:#ff79c6">a</span> <span style="color:#50fa7b">href</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;{%url news_archive 2014 ,06%}&#34;</span>&gt;2014年06月&lt;/<span style="color:#ff79c6">a</span>&gt;</code></pre></div>
-<p>后面的2014, 06 就是参数了，参数之间用逗号隔开，多少个参数用法都一样的。当然，2014 06 参数是某个实体获得的，具体的情况具体分析。而在views呢，有了参数怎么写，万变不离宗：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">reverse（<span style="color:#f1fa8c">&#34;news_archive&#34;</span>，kwargs<span style="color:#ff79c6">=</span>{<span style="color:#f1fa8c">&#34;year&#34;</span>:<span style="color:#bd93f9">2014</span>,<span style="color:#f1fa8c">&#34;month&#34;</span>:<span style="color:#bd93f9">06</span>}）</code></pre></div>
-<p>即可，最后解析出来的地址为<code>/2014/06</code>。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>url(<span style="color:#f1fa8c">r</span><span style="color:#f1fa8c">&#39;^(?P&lt;year&gt;\d</span><span style="color:#f1fa8c">{4}</span><span style="color:#f1fa8c">)/(?P&lt;month&gt;\d{1,2})/$&#39;</span>,<span style="color:#f1fa8c">&#39;news_list&#39;</span>,name<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;news_archive&#34;</span> ),
+</span></span></code></pre></div><p>Templates里的用法就需要改改了，我们把url看成一个方法，结合templates的语法，结果就出来了：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">a</span> <span style="color:#50fa7b">href</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;{%url news_archive 2014 ,06%}&#34;</span>&gt;2014年06月&lt;/<span style="color:#ff79c6">a</span>&gt;
+</span></span></code></pre></div><p>后面的2014, 06 就是参数了，参数之间用逗号隔开，多少个参数用法都一样的。当然，2014 06 参数是某个实体获得的，具体的情况具体分析。而在views呢，有了参数怎么写，万变不离宗：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>reverse（<span style="color:#f1fa8c">&#34;news_archive&#34;</span>，kwargs<span style="color:#ff79c6">=</span>{<span style="color:#f1fa8c">&#34;year&#34;</span>:<span style="color:#bd93f9">2014</span>,<span style="color:#f1fa8c">&#34;month&#34;</span>:<span style="color:#bd93f9">06</span>}）
+</span></span></code></pre></div><p>即可，最后解析出来的地址为<code>/2014/06</code>。</p>
 
           <h2>微信公众号</h2>
-<p>扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的 kubernetes 讨论群里面共同学习。</p>
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/qrcode.png" alt="wechat-account-qrcode">
+<p>
+  扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的
+  kubernetes 讨论群里面共同学习。
+</p>
+<img
+  src="https://picdn.youdianzhishi.com/images/qrcode.png"
+  alt="wechat-account-qrcode"
+/>
 
   
           
@@ -441,7 +436,7 @@ autocomplete('#aa-search-input',
         <ul class="pager blog-pager">
           
             <li class="previous">
-              <a href="https://www.qikqiak.com/post/some-pits-of-memcached/" data-toggle="tooltip" data-placement="top" title="Memcached的一些坑!!!">&larr; 前一篇</a>
+              <a href="https://www.qikqiak.com/post/django-i18n/" data-toggle="tooltip" data-placement="top" title="django国际化问题">&larr; 前一篇</a>
             </li>
           
           
@@ -554,7 +549,7 @@ autocomplete('#aa-search-input',
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -566,7 +561,7 @@ autocomplete('#aa-search-input',
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -583,7 +578,7 @@ autocomplete('#aa-search-input',
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -592,7 +587,7 @@ autocomplete('#aa-search-input',
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

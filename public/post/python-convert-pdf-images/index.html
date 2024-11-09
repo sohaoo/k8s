@@ -11,25 +11,21 @@
   <meta name="twitter:title" content="利用Python 优雅的将PDF 转换成图片" />
 
   <meta name="description" content="之前收集了很多优秀的PDF文档，但是需要看的时候不是很方便，需要去找到这个文件，如果是在手机上的话往往还需要下载PDF相关的插件才行，而且最大的问题是不便于资料的整理和分享。如果能够将PDF转换成网页，岂不是就能解决这些问题了？还能直接分享出去。
-
 这里利用PyPDF包来处理PDF文件，为了方便快捷，我这里直接将一个页面转换成图片，就不需要去识别页面中的每一个PDF元素了，这是没必要的。">
   <meta property="og:description" content="之前收集了很多优秀的PDF文档，但是需要看的时候不是很方便，需要去找到这个文件，如果是在手机上的话往往还需要下载PDF相关的插件才行，而且最大的问题是不便于资料的整理和分享。如果能够将PDF转换成网页，岂不是就能解决这些问题了？还能直接分享出去。
-
 这里利用PyPDF包来处理PDF文件，为了方便快捷，我这里直接将一个页面转换成图片，就不需要去识别页面中的每一个PDF元素了，这是没必要的。">
   <meta name="twitter:description" content="之前收集了很多优秀的PDF文档，但是需要看的时候不是很方便，需要去找到这个文件，如果是在手机上的话往往还需要下载PDF相关的插件才行，而且最大的问题是不便于资料的整理和分享。如果能够将PDF转换成网页，岂不是就能解决这些问题了？还能直接分享出去。
-
 这里利用PyPDF包来处理PDF文件，为了方便快捷，我这里直接将一个页面转换成图片，就不需要去识别页面中的每一个PDF元素了，这是没必要的。">
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/post/python-convert-pdf-images/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/post/python-convert-pdf-images/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -38,7 +34,7 @@
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -89,7 +85,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -247,12 +243,8 @@ autocomplete('#aa-search-input',
                   
                   
                     <span class="post-meta">
-  
-    发表于 October 30, 2017
-  
-  
+  发表于 October 30, 2017  
 </span>
-
 
                   
               </div>
@@ -274,12 +266,8 @@ autocomplete('#aa-search-input',
                 
                 
                   <span class="post-meta">
-  
-    发表于 October 30, 2017
-  
-  
+  发表于 October 30, 2017  
 </span>
-
 
                 
             </div>
@@ -332,65 +320,63 @@ autocomplete('#aa-search-input',
           
 
           <p>之前收集了很多优秀的<code>PDF</code>文档，但是需要看的时候不是很方便，需要去找到这个文件，如果是在手机上的话往往还需要下载<code>PDF</code>相关的插件才行，而且最大的问题是不便于资料的整理和分享。如果能够将<code>PDF</code>转换成网页，岂不是就能解决这些问题了？还能直接分享出去。</p>
-
 <p>这里利用<code>PyPDF</code>包来处理<code>PDF</code>文件，为了方便快捷，我这里直接将一个页面转换成图片，就不需要去识别页面中的每一个<code>PDF</code>元素了，这是没必要的。</p>
-
 <h2 id="转换">转换</h2>
-
 <p>核心代码很简单，就是将<code>PDF</code>文件读取出来，转换成<code>PdfFileReader</code>，然后就可以根据<code>PyPDF2</code>的API去获得每一个页面的二进制数据，拿到二进制数据过后，就能很方便的进行图片处理了，这里用<code>wand</code>包来进行图片处理。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#6272a4"># -*- coding: utf-8 -*-</span>
-<span style="color:#ff79c6">import</span> io
-
-<span style="color:#ff79c6">from</span> wand.image <span style="color:#ff79c6">import</span> Image
-<span style="color:#ff79c6">from</span> wand.color <span style="color:#ff79c6">import</span> Color
-<span style="color:#ff79c6">from</span> PyPDF2 <span style="color:#ff79c6">import</span> PdfFileReader, PdfFileWriter
-
-memo <span style="color:#ff79c6">=</span> {}
-
-<span style="color:#ff79c6">def</span> <span style="color:#50fa7b">getPdfReader</span>(filename):
-    reader <span style="color:#ff79c6">=</span> memo<span style="color:#ff79c6">.</span>get(filename, None)
-    <span style="color:#ff79c6">if</span> reader <span style="color:#ff79c6">is</span> None:
-        reader <span style="color:#ff79c6">=</span> PdfFileReader(filename, strict<span style="color:#ff79c6">=</span>False)
-        memo[filename] <span style="color:#ff79c6">=</span> reader
-    <span style="color:#ff79c6">return</span> reader
-
-<span style="color:#ff79c6">def</span> <span style="color:#50fa7b">_run_convert</span>(filename, page, res<span style="color:#ff79c6">=</span><span style="color:#bd93f9">120</span>):
-    idx <span style="color:#ff79c6">=</span> page <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>
-    pdfile <span style="color:#ff79c6">=</span> getPdfReader(filename)
-    pageObj <span style="color:#ff79c6">=</span> pdfile<span style="color:#ff79c6">.</span>getPage(page)
-    dst_pdf <span style="color:#ff79c6">=</span> PdfFileWriter()
-    dst_pdf<span style="color:#ff79c6">.</span>addPage(pageObj)
-
-    pdf_bytes <span style="color:#ff79c6">=</span> io<span style="color:#ff79c6">.</span>BytesIO()
-    dst_pdf<span style="color:#ff79c6">.</span>write(pdf_bytes)
-    pdf_bytes<span style="color:#ff79c6">.</span>seek(<span style="color:#bd93f9">0</span>)
-
-    img <span style="color:#ff79c6">=</span> Image(<span style="color:#8be9fd;font-style:italic">file</span><span style="color:#ff79c6">=</span>pdf_bytes, resolution<span style="color:#ff79c6">=</span>res)
-    img<span style="color:#ff79c6">.</span>format <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;png&#39;</span>
-    img<span style="color:#ff79c6">.</span>compression_quality <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">90</span>
-    img<span style="color:#ff79c6">.</span>background_color <span style="color:#ff79c6">=</span> Color(<span style="color:#f1fa8c">&#34;white&#34;</span>)
-    img_path <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;</span><span style="color:#f1fa8c">%s%d</span><span style="color:#f1fa8c">.png&#39;</span> <span style="color:#ff79c6">%</span> (filename[:filename<span style="color:#ff79c6">.</span>rindex(<span style="color:#f1fa8c">&#39;.&#39;</span>)], idx)
-    img<span style="color:#ff79c6">.</span>save(filename<span style="color:#ff79c6">=</span>img_path)
-    img<span style="color:#ff79c6">.</span>destroy()</code></pre></div>
-<blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#6272a4"># -*- coding: utf-8 -*-</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">import</span> io
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">from</span> wand.image <span style="color:#ff79c6">import</span> Image
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">from</span> wand.color <span style="color:#ff79c6">import</span> Color
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">from</span> PyPDF2 <span style="color:#ff79c6">import</span> PdfFileReader, PdfFileWriter
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>memo <span style="color:#ff79c6">=</span> {}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">def</span> <span style="color:#50fa7b">getPdfReader</span>(filename):
+</span></span><span style="display:flex;"><span>    reader <span style="color:#ff79c6">=</span> memo<span style="color:#ff79c6">.</span>get(filename, <span style="color:#ff79c6">None</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> reader <span style="color:#ff79c6">is</span> <span style="color:#ff79c6">None</span>:
+</span></span><span style="display:flex;"><span>        reader <span style="color:#ff79c6">=</span> PdfFileReader(filename, strict<span style="color:#ff79c6">=</span><span style="color:#ff79c6">False</span>)
+</span></span><span style="display:flex;"><span>        memo[filename] <span style="color:#ff79c6">=</span> reader
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> reader
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">def</span> <span style="color:#50fa7b">_run_convert</span>(filename, page, res<span style="color:#ff79c6">=</span><span style="color:#bd93f9">120</span>):
+</span></span><span style="display:flex;"><span>    idx <span style="color:#ff79c6">=</span> page <span style="color:#ff79c6">+</span> <span style="color:#bd93f9">1</span>
+</span></span><span style="display:flex;"><span>    pdfile <span style="color:#ff79c6">=</span> getPdfReader(filename)
+</span></span><span style="display:flex;"><span>    pageObj <span style="color:#ff79c6">=</span> pdfile<span style="color:#ff79c6">.</span>getPage(page)
+</span></span><span style="display:flex;"><span>    dst_pdf <span style="color:#ff79c6">=</span> PdfFileWriter()
+</span></span><span style="display:flex;"><span>    dst_pdf<span style="color:#ff79c6">.</span>addPage(pageObj)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    pdf_bytes <span style="color:#ff79c6">=</span> io<span style="color:#ff79c6">.</span>BytesIO()
+</span></span><span style="display:flex;"><span>    dst_pdf<span style="color:#ff79c6">.</span>write(pdf_bytes)
+</span></span><span style="display:flex;"><span>    pdf_bytes<span style="color:#ff79c6">.</span>seek(<span style="color:#bd93f9">0</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    img <span style="color:#ff79c6">=</span> Image(file<span style="color:#ff79c6">=</span>pdf_bytes, resolution<span style="color:#ff79c6">=</span>res)
+</span></span><span style="display:flex;"><span>    img<span style="color:#ff79c6">.</span>format <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;png&#39;</span>
+</span></span><span style="display:flex;"><span>    img<span style="color:#ff79c6">.</span>compression_quality <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">90</span>
+</span></span><span style="display:flex;"><span>    img<span style="color:#ff79c6">.</span>background_color <span style="color:#ff79c6">=</span> Color(<span style="color:#f1fa8c">&#34;white&#34;</span>)
+</span></span><span style="display:flex;"><span>    img_path <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;</span><span style="color:#f1fa8c">%s%d</span><span style="color:#f1fa8c">.png&#39;</span> <span style="color:#ff79c6">%</span> (filename[:filename<span style="color:#ff79c6">.</span>rindex(<span style="color:#f1fa8c">&#39;.&#39;</span>)], idx)
+</span></span><span style="display:flex;"><span>    img<span style="color:#ff79c6">.</span>save(filename<span style="color:#ff79c6">=</span>img_path)
+</span></span><span style="display:flex;"><span>    img<span style="color:#ff79c6">.</span>destroy()
+</span></span></code></pre></div><blockquote>
 <p>需要注意的是一般PDF文件较大，如果一次性转换整个PDF文件需要小心内存溢出的问题，我们这里将第一次载入的整个PDF文件保存到内存，避免每次读取的时候都重新载入。</p>
 </blockquote>
-
 <h2 id="批量处理">批量处理</h2>
-
 <p>上面已经完成了一个<code>PDF</code>页面的转换，要完成整个文件的转换就很简单了，只需要拿到文件的总页码，然后循环执行就行。考虑到转换比较耗时，可以使用异步处理的方式加快速度。比如可以使用<code>celery</code>来搭配处理，一定注意小心内存泄露。</p>
-
 <p>核心代码已经整理放到<a href="https://github.com/cnych/pdf2images">github</a>上去了，好了，等有时间的时候准备做一个公共的<code>PDF</code>转成<code>H5</code>的服务，开放给大众使用。</p>
-
 <blockquote>
 <p>花了点时间，做成了一个独立的服务：<a href="https://pdfh5.com">https://pdfh5.com</a>，欢迎大家试用</p>
 </blockquote>
-
-<figure><img src="https://www.qikqiak.com/img/posts/pdfh5.com.png" alt="pdfh5.com"><figcaption>pdfh5.com</figcaption></figure>
+<p><img src="https://www.qikqiak.com/img/posts/pdfh5.com.png" alt="pdfh5.com"></p>
 
           <h2>微信公众号</h2>
-<p>扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的 kubernetes 讨论群里面共同学习。</p>
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/qrcode.png" alt="wechat-account-qrcode">
+<p>
+  扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的
+  kubernetes 讨论群里面共同学习。
+</p>
+<img
+  src="https://picdn.youdianzhishi.com/images/qrcode.png"
+  alt="wechat-account-qrcode"
+/>
 
   
           
@@ -591,7 +577,7 @@ memo <span style="color:#ff79c6">=</span> {}
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -603,7 +589,7 @@ memo <span style="color:#ff79c6">=</span> {}
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -620,7 +606,7 @@ memo <span style="color:#ff79c6">=</span> {}
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -629,7 +615,7 @@ memo <span style="color:#ff79c6">=</span> {}
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

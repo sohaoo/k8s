@@ -11,25 +11,21 @@
   <meta name="twitter:title" content="自定义 Traefik（本地）插件" />
 
   <meta name="description" content="
-
 虽然 Traefik 已经默认实现了很多中间件，可以满足大部分我们日常的需求，但是在实际工作中，用户仍然还是有自定义中间件的需求，为解决这个问题，官方推出了一个 Traefik Pilot 的功能了，此外在 Traefik v2.5 版本还推出了支持本地插件的功能。">
   <meta property="og:description" content="
-
 虽然 Traefik 已经默认实现了很多中间件，可以满足大部分我们日常的需求，但是在实际工作中，用户仍然还是有自定义中间件的需求，为解决这个问题，官方推出了一个 Traefik Pilot 的功能了，此外在 Traefik v2.5 版本还推出了支持本地插件的功能。">
   <meta name="twitter:description" content="
-
 虽然 Traefik 已经默认实现了很多中间件，可以满足大部分我们日常的需求，但是在实际工作中，用户仍然还是有自定义中间件的需求，为解决这个问题，官方推出了一个 Traefik Pilot 的功能了，此外在 Traefik v2.5 版本还推出了支持本地插件的功能。">
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/post/custom-traefik-local-middleware/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/post/custom-traefik-local-middleware/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -38,7 +34,7 @@
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -89,7 +85,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -247,12 +243,8 @@ autocomplete('#aa-search-input',
                 
                 
                   <span class="post-meta">
-  
-    发表于 December 27, 2021
-  
-  
+  发表于 December 27, 2021  
 </span>
-
 
                 
             </div>
@@ -304,195 +296,159 @@ autocomplete('#aa-search-input',
           
           
 
-          <figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20211227113321.png" alt="自定义traefik插件"><figcaption>自定义traefik插件</figcaption></figure>
-
+          <p><img src="https://picdn.youdianzhishi.com/images/20211227113321.png" alt="自定义traefik插件"></p>
 <p>虽然 Traefik 已经默认实现了很多中间件，可以满足大部分我们日常的需求，但是在实际工作中，用户仍然还是有自定义中间件的需求，为解决这个问题，官方推出了一个 <a href="https://pilot.traefik.io/">Traefik Pilot</a> 的功能了，此外在 Traefik v2.5 版本还推出了支持本地插件的功能。</p>
-
 <h2 id="traefik-pilot">Traefik Pilot</h2>
-
 <p><code>Traefik Pilot</code> 是一个 SaaS 平台，和 Traefik 进行链接来扩展其功能，它提供了很多功能，通过一个全局控制面板和 Dashboard 来增强对 Traefik 的观测和控制：</p>
-
 <ul>
 <li>Traefik 代理和代理组的网络活动的指标</li>
 <li>服务健康问题和安全漏洞警报</li>
 <li>扩展 Traefik 功能的插件</li>
 </ul>
-
 <p>在 Traefik 可以使用 <code>Traefik Pilot</code> 的功能之前，必须先连接它们，我们只需要对 Traefik 的静态配置进行少量更改即可。</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20201225100314.png" alt="pilot"><figcaption>pilot</figcaption></figure>
-
+<p><img src="https://picdn.youdianzhishi.com/images/20201225100314.png" alt="pilot"></p>
 <blockquote>
 <p>Traefik 代理必须要能访问互联网才能连接到 <code>Traefik Pilot</code>，通过 HTTPS 在 443 端口上建立连接。</p>
 </blockquote>
-
 <p>首先我们需要在 <code>Traefik Pilot</code> 主页上(<a href="https://pilot.traefik.io/">https://pilot.traefik.io/</a>)创建一个帐户，注册新的 <code>Traefik</code> 实例并开始使用 <code>Traefik Pilot</code>。登录后，可以通过选择 <code>Register New Traefik Instance</code>来创建新实例。</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20201225100714.png" alt="创建实例"><figcaption>创建实例</figcaption></figure>
-
+<p><img src="https://picdn.youdianzhishi.com/images/20201225100714.png" alt="创建实例"></p>
 <p>另外，当我们的 Traefik 尚未连接到 <code>Traefik Pilot</code> 时，Traefik Web UI 中将出现一个响铃图标，我们可以选择 <code>Connect with Traefik Pilot</code> 导航到 Traefik Pilot UI 进行操作。</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20201225100905.png" alt="Pilot UI"><figcaption>Pilot UI</figcaption></figure>
-
+<p><img src="https://picdn.youdianzhishi.com/images/20201225100905.png" alt="Pilot UI"></p>
 <p>登录完成后，<code>Traefik Pilot</code> 会生成一个新实例的令牌，我们需要将这个 Token 令牌添加到 Traefik 静态配置中。</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20201225101104.png" alt="Pilot 配置"><figcaption>Pilot 配置</figcaption></figure>
-
+<p><img src="https://picdn.youdianzhishi.com/images/20201225101104.png" alt="Pilot 配置"></p>
 <p>在 Traefik 安装配置文件中启用 Pilot 的配置：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#6272a4"># Activate Pilot integration</span>
-pilot:
-  enabled: <span style="color:#ff79c6">true</span>
-  token: <span style="color:#f1fa8c">&#34;e079ea6e-536a-48c6-b3e3-f7cfaf94f477&#34;</span></code></pre></div>
-<p>更新完成后，我们在 Traefik 的 Web UI 中就可以看到 Traefik Pilot UI 相关的信息了。</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20201225101951.png" alt="更新完成"><figcaption>更新完成</figcaption></figure>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#6272a4"># Activate Pilot integration</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">pilot</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">enabled</span>: <span style="color:#ff79c6">true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">token</span>: <span style="color:#f1fa8c">&#34;e079ea6e-536a-48c6-b3e3-f7cfaf94f477&#34;</span>
+</span></span></code></pre></div><p>更新完成后，我们在 Traefik 的 Web UI 中就可以看到 Traefik Pilot UI 相关的信息了。</p>
+<p><img src="https://picdn.youdianzhishi.com/images/20201225101951.png" alt="更新完成"></p>
 <p>接下来我们就可以在 Traefik Pilot 的插件页面选择我们想要使用的插件，比如我们这里使用 <a href="https://github.com/traefik/plugindemo">Demo Plugin</a> 这个插件。</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20201225102230.png" alt="Demo 插件"><figcaption>Demo 插件</figcaption></figure>
-
+<p><img src="https://picdn.youdianzhishi.com/images/20201225102230.png" alt="Demo 插件"></p>
 <p>点击右上角的 <code>Install Plugin</code> 按钮安装插件会弹出一个对话框提示我们如何安装。</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20201225102357.png" alt="插件提示"><figcaption>插件提示</figcaption></figure>
-
+<p><img src="https://picdn.youdianzhishi.com/images/20201225102357.png" alt="插件提示"></p>
 <p>首先我们需要将当前 Traefik 注册到 Traefik Pilot（已完成），然后需要以静态配置的方式添加这个插件到 Traefik 中，然后添加插件启动参数：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#6272a4"># Activate Pilot integration</span>
-pilot:
-  enabled: <span style="color:#ff79c6">true</span>
-  token: <span style="color:#f1fa8c">&#34;e079ea6e-536a-48c6-b3e3-f7cfaf94f477&#34;</span>
-
-additionalArguments:
-<span style="color:#6272a4"># 添加 demo plugin 的支持</span>
-- --experimental.plugins.plugindemo.modulename=github.com/traefik/plugindemo
-- --experimental.plugins.plugindemo.version=v0.<span style="color:#bd93f9">2.1</span>
-<span style="color:#6272a4"># 其他配置</span></code></pre></div>
-<p>更新完成后创建一个如下所示的 Middleware 对象：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">➜ cat &lt;&lt;EOF | kubectl apply -f -
-apiVersion: traefik.containo.us/v1alpha1
-kind: Middleware
-metadata:
-  name: myplugin
-spec:
-  plugin:
-    plugindemo:  <span style="color:#6272a4"># 插件名</span>
-      Headers:
-        X-Demo: test
-        Foo: bar
-EOF</code></pre></div>
-<p>然后添加到上面的 whoami 应用的 IngressRoute 对象中去：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: ingressroute-demo
-  namespace: default
-spec:
-  entryPoints:
-  - web
-  routes:
-  - match: Host(`who.qikqiak.com`) <span style="color:#ff79c6">&amp;&amp;</span> PathPrefix(`/notls`)
-    kind: Rule
-    services:
-    - name: whoami  <span style="color:#6272a4"># K8s Service</span>
-      port: <span style="color:#bd93f9">80</span>
-    middlewares:
-    - name: myplugin  <span style="color:#6272a4"># 使用上面新建的 middleware</span></code></pre></div>
-<p>更新完成后，当我们去访问 <code>http://who.qikqiak.com/notls</code> 的时候就可以看到新增了两个上面插件中定义的两个 Header。</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20201225104027.png" alt="自定义插件显示"><figcaption>自定义插件显示</figcaption></figure>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#6272a4"># Activate Pilot integration</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">pilot</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">enabled</span>: <span style="color:#ff79c6">true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">token</span>: <span style="color:#f1fa8c">&#34;e079ea6e-536a-48c6-b3e3-f7cfaf94f477&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">additionalArguments</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4"># 添加 demo plugin 的支持</span>
+</span></span><span style="display:flex;"><span>  - --experimental.plugins.plugindemo.modulename=github.com/traefik/plugindemo
+</span></span><span style="display:flex;"><span>  - --experimental.plugins.plugindemo.version=v0.2.1
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 其他配置</span>
+</span></span></code></pre></div><p>更新完成后创建一个如下所示的 Middleware 对象：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>➜ cat &lt;&lt;EOF | kubectl apply -f -
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: traefik.containo.us/v1alpha1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: Middleware
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: myplugin
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">plugin</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">plugindemo</span>:  <span style="color:#6272a4"># 插件名</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">Headers</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">X-Demo</span>: test
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">Foo</span>: bar
+</span></span><span style="display:flex;"><span>EOF
+</span></span></code></pre></div><p>然后添加到上面的 whoami 应用的 IngressRoute 对象中去：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: traefik.containo.us/v1alpha1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: IngressRoute
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: ingressroute-demo
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">namespace</span>: default
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">entryPoints</span>:
+</span></span><span style="display:flex;"><span>    - web
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">routes</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">match</span>: Host(`who.qikqiak.com`) &amp;&amp; PathPrefix(`/notls`)
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">kind</span>: Rule
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">services</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">name</span>: whoami <span style="color:#6272a4"># K8s Service</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">port</span>: <span style="color:#bd93f9">80</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">middlewares</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">name</span>: myplugin <span style="color:#6272a4"># 使用上面新建的 middleware</span>
+</span></span></code></pre></div><p>更新完成后，当我们去访问 <code>http://who.qikqiak.com/notls</code> 的时候就可以看到新增了两个上面插件中定义的两个 Header。</p>
+<p><img src="https://picdn.youdianzhishi.com/images/20201225104027.png" alt="自定义插件显示"></p>
 <p>当然除了使用 Traefik Pilot 上开发者提供的插件之外，我们也可以根据自己的需求自行开发自己的插件，可以自行参考文档：<a href="https://doc.traefik.io/traefik-pilot/plugins/plugin-dev/">https://doc.traefik.io/traefik-pilot/plugins/plugin-dev/</a>。</p>
-
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-5376999672787220"
-     data-ad-slot="9165834656"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-
-
+<!-- raw HTML omitted -->
 <h2 id="私有插件">私有插件</h2>
-
 <p>上面我们介绍了可以使用 Traefik Pilot 来使用插件，但是这是一个 SaaS 服务平台，对于大部分企业场景下面不是很适用，我们更多的场景下需要在本地环境加载插件，为解决这个问题，在 Traefik v2.5 版本后，就提供了一种直接从本地存储目录加载插件的新方法，不需要启用 Traefik Pilot，只需要将插件源码放入一个名为 <code>/plugins-local</code> 的新目录，相对于当前工作目录去创建这个目录，比如我们直接使用的是 traefik 的 docker 镜像，则入口点则是根目录 <code>/</code>，Traefik 本身会去构建你的插件，所以我们要做的就是编写源代码，并把它放在正确的目录下，让 Traefik 来加载它即可。</p>
-
 <p>需要注意的是由于在每次启动的时候插件只加载一次，所以如果我们希望重新加载你的插件源码的时候需要重新启动 Traefik。</p>
-
 <p>下面我们使用一个简单的自定义插件示例来说明如何使用私有插件。首先我们定义一个名为 <code>Dockerfile.demo</code> 的 Dockerfile 文件，先从 git 仓库中克隆插件源码，然后以 <code>traefik:v2.5</code> 为基础镜像，将插件源码拷贝刀 <code>/plugins-local</code> 目录，如下所示：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-docker" data-lang="docker"><span style="color:#ff79c6">FROM</span><span style="color:#f1fa8c"> alpine:3</span>
-ARG <span style="color:#8be9fd;font-style:italic">PLUGIN_MODULE</span><span style="color:#ff79c6">=</span>github.com/traefik/plugindemo
-ARG <span style="color:#8be9fd;font-style:italic">PLUGIN_GIT_REPO</span><span style="color:#ff79c6">=</span>https://github.com/traefik/plugindemo.git
-ARG <span style="color:#8be9fd;font-style:italic">PLUGIN_GIT_BRANCH</span><span style="color:#ff79c6">=</span>master
-<span style="color:#ff79c6">RUN</span> apk add --update git <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>    git clone <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">PLUGIN_GIT_REPO</span><span style="color:#f1fa8c">}</span> /plugins-local/src/<span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">PLUGIN_MODULE</span><span style="color:#f1fa8c">}</span> <span style="color:#f1fa8c">\
-</span><span style="color:#f1fa8c"></span>      --depth <span style="color:#bd93f9">1</span> --single-branch --branch <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">PLUGIN_GIT_BRANCH</span><span style="color:#f1fa8c">}</span>
-
-<span style="color:#ff79c6">FROM</span><span style="color:#f1fa8c"> traefik:v2.5</span>
-COPY --from<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span> /plugins-local /plugins-local</code></pre></div>
-<p>我们这里使用的演示插件和上面 Pilot 中演示的是同一个插件，我们可以通过该插件去自定义请求头信息。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-docker" data-lang="docker"><span style="display:flex;"><span><span style="color:#ff79c6">FROM</span><span style="color:#f1fa8c"> alpine:3</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">ARG</span> <span style="color:#8be9fd;font-style:italic">PLUGIN_MODULE</span><span style="color:#ff79c6">=</span>github.com/traefik/plugindemo
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">ARG</span> <span style="color:#8be9fd;font-style:italic">PLUGIN_GIT_REPO</span><span style="color:#ff79c6">=</span>https://github.com/traefik/plugindemo.git
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">ARG</span> <span style="color:#8be9fd;font-style:italic">PLUGIN_GIT_BRANCH</span><span style="color:#ff79c6">=</span>master
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">RUN</span> apk add --update git <span style="color:#ff79c6">&amp;&amp;</span> <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>    git clone <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">PLUGIN_GIT_REPO</span><span style="color:#f1fa8c">}</span> /plugins-local/src/<span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">PLUGIN_MODULE</span><span style="color:#f1fa8c">}</span> <span style="color:#f1fa8c">\
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c"></span>      --depth <span style="color:#bd93f9">1</span> --single-branch --branch <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">PLUGIN_GIT_BRANCH</span><span style="color:#f1fa8c">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">FROM</span><span style="color:#f1fa8c"> traefik:v2.5</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">COPY</span> --from<span style="color:#ff79c6">=</span><span style="color:#bd93f9">0</span> /plugins-local /plugins-local
+</span></span></code></pre></div><p>我们这里使用的演示插件和上面 Pilot 中演示的是同一个插件，我们可以通过该插件去自定义请求头信息。</p>
 <p>然后在 <code>Dockerfile.demo</code> 目录下面，构建镜像：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">➜ docker build -f Dockerfile.demo -t cnych/traefik-private-demo-plugin:2.5.4 .
-<span style="color:#6272a4"># 推送到镜像仓库</span>
-➜ docker push cnych/traefik-private-demo-plugin:2.5.4</code></pre></div>
-<p>镜像构建完成后就可以使用这个镜像来测试 demo 插件了，将镜像修改成上面我们自定义的镜像地址：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">image:
-  name: cnych/traefik-private-demo-plugin
-  tag: <span style="color:#bd93f9">2.5</span>.<span style="color:#bd93f9">4</span>
-
-<span style="color:#6272a4"># 其他省略</span>
-
-<span style="color:#6272a4"># 不需要开启 pilot 了</span>
-pilot:
-  enabled: <span style="color:#ff79c6">false</span>
-
-additionalArguments:
-<span style="color:#6272a4"># 添加 demo plugin 的本地支持</span>
-- --experimental.localPlugins.plugindemo.moduleName=github.com/traefik/plugindemo
-<span style="color:#6272a4"># 其他省略</span></code></pre></div>
-<p>注意上面我们添加 Traefik 的启动参数的时候使用的 <code>--experimental.localPlugins</code>。更新完成后就可以使用我们的私有插件来创建一个 Middleware 对象了：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">➜ cat &lt;&lt;EOF | kubectl apply -f -
-apiVersion: traefik.containo.us/v1alpha1
-kind: Middleware
-metadata:
-  name: my-private-plugin
-spec:
-  plugin:
-    plugindemo:  <span style="color:#6272a4"># 插件名</span>
-      Headers:
-        X-Demo: private-demo
-        Foo: bar
-EOF</code></pre></div>
-<p>然后添加到上面的 whoami 应用的 IngressRoute 对象中去：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: ingressroute-demo
-  namespace: default
-spec:
-  entryPoints:
-  - web
-  routes:
-  - match: Host(`who.qikqiak.com`) <span style="color:#ff79c6">&amp;&amp;</span> PathPrefix(`/notls`)
-    kind: Rule
-    services:
-    - name: whoami  <span style="color:#6272a4"># K8s Service</span>
-      port: <span style="color:#bd93f9">80</span>
-    middlewares:
-    - name: my-private-plugin  <span style="color:#6272a4"># 使用上面新建的 middleware</span></code></pre></div>
-<p>更新上面的资源对象后，我们再去访问 <code>http://who.qikqiak.com/notls</code> 就可以看到新增了两个上面插件中定义的两个 Header，证明我们的私有插件配置成功了：</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20211227110109.png" alt="自定义插件显示"><figcaption>自定义插件显示</figcaption></figure>
-
-<p><a href="https://youdianzhishi.com/web/course/1030" title="从 Docker 到 Kubernetes 进阶课程"><img src="https://sdn.youdianzhishi.com/images/2019/10/24/65f2cfb229184268a18745fe202b281b.jpg?imageView2/2/format/webp" alt="Kubernetes进阶训练营"></a></p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>➜ docker build -f Dockerfile.demo -t cnych/traefik-private-demo-plugin:2.5.4 .
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 推送到镜像仓库</span>
+</span></span><span style="display:flex;"><span>➜ docker push cnych/traefik-private-demo-plugin:2.5.4
+</span></span></code></pre></div><p>镜像构建完成后就可以使用这个镜像来测试 demo 插件了，将镜像修改成上面我们自定义的镜像地址：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">image</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: cnych/traefik-private-demo-plugin
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">tag</span>: <span style="color:#bd93f9">2.5.4</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 其他省略</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 不需要开启 pilot 了</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">pilot</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">enabled</span>: <span style="color:#ff79c6">false</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">additionalArguments</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4"># 添加 demo plugin 的本地支持</span>
+</span></span><span style="display:flex;"><span>  - --experimental.localPlugins.plugindemo.moduleName=github.com/traefik/plugindemo
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 其他省略</span>
+</span></span></code></pre></div><p>注意上面我们添加 Traefik 的启动参数的时候使用的 <code>--experimental.localPlugins</code>。更新完成后就可以使用我们的私有插件来创建一个 Middleware 对象了：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>➜ cat &lt;&lt;EOF | kubectl apply -f -
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: traefik.containo.us/v1alpha1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: Middleware
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: my-private-plugin
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">plugin</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">plugindemo</span>:  <span style="color:#6272a4"># 插件名</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">Headers</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">X-Demo</span>: private-demo
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">Foo</span>: bar
+</span></span><span style="display:flex;"><span>EOF
+</span></span></code></pre></div><p>然后添加到上面的 whoami 应用的 IngressRoute 对象中去：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: traefik.containo.us/v1alpha1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: IngressRoute
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: ingressroute-demo
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">namespace</span>: default
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">entryPoints</span>:
+</span></span><span style="display:flex;"><span>    - web
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">routes</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">match</span>: Host(`who.qikqiak.com`) &amp;&amp; PathPrefix(`/notls`)
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">kind</span>: Rule
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">services</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">name</span>: whoami <span style="color:#6272a4"># K8s Service</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">port</span>: <span style="color:#bd93f9">80</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">middlewares</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">name</span>: my-private-plugin <span style="color:#6272a4"># 使用上面新建的 middleware</span>
+</span></span></code></pre></div><p>更新上面的资源对象后，我们再去访问 <code>http://who.qikqiak.com/notls</code> 就可以看到新增了两个上面插件中定义的两个 Header，证明我们的私有插件配置成功了：</p>
+<p><img src="https://picdn.youdianzhishi.com/images/20211227110109.png" alt="自定义插件显示"></p>
+<!-- raw HTML omitted -->
 
           <h2>微信公众号</h2>
-<p>扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的 kubernetes 讨论群里面共同学习。</p>
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/qrcode.png" alt="wechat-account-qrcode">
+<p>
+  扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的
+  kubernetes 讨论群里面共同学习。
+</p>
+<img
+  src="https://picdn.youdianzhishi.com/images/qrcode.png"
+  alt="wechat-account-qrcode"
+/>
 
   
           
@@ -693,7 +649,7 @@ spec:
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -705,7 +661,7 @@ spec:
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -722,7 +678,7 @@ spec:
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -731,7 +687,7 @@ spec:
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

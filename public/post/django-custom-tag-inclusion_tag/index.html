@@ -14,16 +14,15 @@
   <meta property="og:description" content="django提供了强大的自定义标签、自定义过滤器等强大功能，今天首先介绍一下自定义标签的inclusion_tags的用法。">
   <meta name="twitter:description" content="django提供了强大的自定义标签、自定义过滤器等强大功能，今天首先介绍一下自定义标签的inclusion_tags的用法。">
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/post/django-custom-tag-inclusion_tag/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/post/django-custom-tag-inclusion_tag/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -32,7 +31,7 @@
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -83,7 +82,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -241,12 +240,8 @@ autocomplete('#aa-search-input',
                 
                 
                   <span class="post-meta">
-  
-    发表于 May 28, 2014
-  
-  
+  发表于 May 28, 2014  
 </span>
-
 
                 
             </div>
@@ -299,46 +294,50 @@ autocomplete('#aa-search-input',
           
 
           <p><code>django</code>提供了强大的自定义标签、自定义过滤器等强大功能，今天首先介绍一下自定义标签的<code>inclusion_tags</code>的用法。</p>
-
 <p>1.在model目录下面新建templatetags文件夹，在该文件夹下面新建<code>__init__.py</code>文件，标识该目录为一个可以引用的包</p>
-
 <p>2.新建<code>buttons.py</code>文件，文件内容如下：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#ff79c6">from</span> django <span style="color:#ff79c6">import</span> template
-register <span style="color:#ff79c6">=</span> template<span style="color:#ff79c6">.</span>Library()
-@register.inclusion_tag(<span style="color:#f1fa8c">&#39;tags/digg_button.html&#39;</span>, takes_context<span style="color:#ff79c6">=</span>True)
-<span style="color:#ff79c6">def</span> <span style="color:#50fa7b">digg_button</span>(context, comment):
-<span style="color:#6272a4"># context可以获取访问的request等变量，需要将上面的takes_context设置为True，</span>
-<span style="color:#6272a4"># 而且方法的第一个参数必须为&#39;context&#39;</span>
-    user <span style="color:#ff79c6">=</span> context[<span style="color:#f1fa8c">&#39;user&#39;</span>]
-    <span style="color:#ff79c6">if</span> user<span style="color:#ff79c6">.</span>is_authenticated():
-        <span style="color:#ff79c6">return</span> {<span style="color:#f1fa8c">&#39;is_digg&#39;</span>: comment<span style="color:#ff79c6">.</span>is_digg(user), <span style="color:#f1fa8c">&#39;uuid&#39;</span>: comment<span style="color:#ff79c6">.</span>uuid,
-            <span style="color:#f1fa8c">&#39;up_times&#39;</span>: comment<span style="color:#ff79c6">.</span>up_times}
-
-    <span style="color:#ff79c6">return</span> {<span style="color:#f1fa8c">&#39;is_digg&#39;</span>: False, <span style="color:#f1fa8c">&#39;uuid&#39;</span>: comment<span style="color:#ff79c6">.</span>uuid,
-        <span style="color:#f1fa8c">&#39;up_times&#39;</span>: comment<span style="color:#ff79c6">.</span>up_times}</code></pre></div>
-<p>3.在模板目录新建tags目录，在目录下面新建<code>digg_button.html</code>，内容如下(注意上一步中digg_button方法的返回结果)：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">{% if is_digg %}
-&lt;<span style="color:#ff79c6">a</span> <span style="color:#50fa7b">href</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;javascript:void(0);&#34;</span> <span style="color:#50fa7b">style</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;color:#ae3910;&#34;</span>&gt;
-    &lt;<span style="color:#ff79c6">i</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;glyphicon glyphicon-thumbs-up&#34;</span>&gt;&lt;/<span style="color:#ff79c6">i</span>&gt;
-    &lt;<span style="color:#ff79c6">span</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;heart-name&#34;</span>&gt;赞 {{ up_times }}&lt;/<span style="color:#ff79c6">span</span>&gt;
-&lt;/<span style="color:#ff79c6">a</span>&gt;
-{% else %}
-&lt;<span style="color:#ff79c6">a</span> <span style="color:#50fa7b">href</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;javascript:void(0);&#34;</span> <span style="color:#50fa7b">onclick</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;doThumbsUp(&#39;{{ uuid }}&#39;)&#34;</span>&gt;
-    &lt;<span style="color:#ff79c6">i</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;glyphicon glyphicon-thumbs-up&#34;</span>&gt;&lt;/<span style="color:#ff79c6">i</span>&gt;
-    &lt;<span style="color:#ff79c6">span</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;heart-name&#34;</span>&gt;赞 {{ up_times }}&lt;/<span style="color:#ff79c6">span</span>&gt;
-&lt;/<span style="color:#ff79c6">a</span>&gt;
-{% endif %}</code></pre></div>
-<p>4.然后自定义的标签<code>digg_button</code>其实就已经定义好了，只是在使用的时候需要注意，我用的django 1.6.2版本，需要在使用的模板中加载buttons文件，代码如下(注意这里加载的buttons为第一步中<code>templatetags</code>目录下面新建的文件):</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">{% load buttons %}</code></pre></div>
-<p>5.最后就可以在上一步操作的模板中使用<code>digg_button</code>标签了：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-html" data-lang="html">{% digg_button comment %}</code></pre></div>
-<blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff79c6">from</span> django <span style="color:#ff79c6">import</span> template
+</span></span><span style="display:flex;"><span>register <span style="color:#ff79c6">=</span> template<span style="color:#ff79c6">.</span>Library()
+</span></span><span style="display:flex;"><span>@register.inclusion_tag(<span style="color:#f1fa8c">&#39;tags/digg_button.html&#39;</span>, takes_context<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>)
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">def</span> <span style="color:#50fa7b">digg_button</span>(context, comment):
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># context可以获取访问的request等变量，需要将上面的takes_context设置为True，</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 而且方法的第一个参数必须为&#39;context&#39;</span>
+</span></span><span style="display:flex;"><span>    user <span style="color:#ff79c6">=</span> context[<span style="color:#f1fa8c">&#39;user&#39;</span>]
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">if</span> user<span style="color:#ff79c6">.</span>is_authenticated():
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> {<span style="color:#f1fa8c">&#39;is_digg&#39;</span>: comment<span style="color:#ff79c6">.</span>is_digg(user), <span style="color:#f1fa8c">&#39;uuid&#39;</span>: comment<span style="color:#ff79c6">.</span>uuid,
+</span></span><span style="display:flex;"><span>            <span style="color:#f1fa8c">&#39;up_times&#39;</span>: comment<span style="color:#ff79c6">.</span>up_times}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> {<span style="color:#f1fa8c">&#39;is_digg&#39;</span>: <span style="color:#ff79c6">False</span>, <span style="color:#f1fa8c">&#39;uuid&#39;</span>: comment<span style="color:#ff79c6">.</span>uuid,
+</span></span><span style="display:flex;"><span>        <span style="color:#f1fa8c">&#39;up_times&#39;</span>: comment<span style="color:#ff79c6">.</span>up_times}
+</span></span></code></pre></div><p>3.在模板目录新建tags目录，在目录下面新建<code>digg_button.html</code>，内容如下(注意上一步中digg_button方法的返回结果)：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>{% if is_digg %}
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">a</span> <span style="color:#50fa7b">href</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;javascript:void(0);&#34;</span> <span style="color:#50fa7b">style</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;color:#ae3910;&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#ff79c6">i</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;glyphicon glyphicon-thumbs-up&#34;</span>&gt;&lt;/<span style="color:#ff79c6">i</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#ff79c6">span</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;heart-name&#34;</span>&gt;赞 {{ up_times }}&lt;/<span style="color:#ff79c6">span</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#ff79c6">a</span>&gt;
+</span></span><span style="display:flex;"><span>{% else %}
+</span></span><span style="display:flex;"><span>&lt;<span style="color:#ff79c6">a</span> <span style="color:#50fa7b">href</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;javascript:void(0);&#34;</span> <span style="color:#50fa7b">onclick</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;doThumbsUp(&#39;{{ uuid }}&#39;)&#34;</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#ff79c6">i</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;glyphicon glyphicon-thumbs-up&#34;</span>&gt;&lt;/<span style="color:#ff79c6">i</span>&gt;
+</span></span><span style="display:flex;"><span>    &lt;<span style="color:#ff79c6">span</span> <span style="color:#50fa7b">class</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;heart-name&#34;</span>&gt;赞 {{ up_times }}&lt;/<span style="color:#ff79c6">span</span>&gt;
+</span></span><span style="display:flex;"><span>&lt;/<span style="color:#ff79c6">a</span>&gt;
+</span></span><span style="display:flex;"><span>{% endif %}
+</span></span></code></pre></div><p>4.然后自定义的标签<code>digg_button</code>其实就已经定义好了，只是在使用的时候需要注意，我用的django 1.6.2版本，需要在使用的模板中加载buttons文件，代码如下(注意这里加载的buttons为第一步中<code>templatetags</code>目录下面新建的文件):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>{% load buttons %}
+</span></span></code></pre></div><p>5.最后就可以在上一步操作的模板中使用<code>digg_button</code>标签了：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-html" data-lang="html"><span style="display:flex;"><span>{% digg_button comment %}
+</span></span></code></pre></div><blockquote>
 <p>注意django 1.6.2版本一定需要加载标签文件，其他版本的暂未测试。</p>
 </blockquote>
 
           <h2>微信公众号</h2>
-<p>扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的 kubernetes 讨论群里面共同学习。</p>
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/qrcode.png" alt="wechat-account-qrcode">
+<p>
+  扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的
+  kubernetes 讨论群里面共同学习。
+</p>
+<img
+  src="https://picdn.youdianzhishi.com/images/qrcode.png"
+  alt="wechat-account-qrcode"
+/>
 
   
           
@@ -418,6 +417,10 @@ register <span style="color:#ff79c6">=</span> template<span style="color:#ff79c6
   
         
         <ul class="pager blog-pager">
+          
+            <li class="previous">
+              <a href="https://www.qikqiak.com/post/some-pits-of-memcached/" data-toggle="tooltip" data-placement="top" title="Memcached的一些坑!!!">&larr; 前一篇</a>
+            </li>
           
           
             <li class="next">
@@ -529,7 +532,7 @@ register <span style="color:#ff79c6">=</span> template<span style="color:#ff79c6
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -541,7 +544,7 @@ register <span style="color:#ff79c6">=</span> template<span style="color:#ff79c6
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -558,7 +561,7 @@ register <span style="color:#ff79c6">=</span> template<span style="color:#ff79c6
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -567,7 +570,7 @@ register <span style="color:#ff79c6">=</span> template<span style="color:#ff79c6
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

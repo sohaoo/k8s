@@ -12,30 +12,23 @@
 
   <meta name="description" content="昨天在 Prometheus 课程辅导群里面有同学提到一个问题，是关于 Prometheus 监控 Job 任务误报的问题，大概的意思就 CronJob 控制的 Job，前面执行失败了，监控会触发报警，解决后后面生成的新的 Job 可以正常执行了，但是还是会收到前面的报警：
 
-
-
 这是因为一般在执行 Job 任务的时候我们会保留一些历史记录方便排查问题，所以如果之前有失败的 Job 了，即便稍后会变成成功的，那么之前的 Job 也会继续存在，而大部分直接使用 kube-prometheus 安装部署的话使用的默认报警规则是kube_job_status_failed &gt; 0，这显然是不准确的，只有我们去手动删除之前这个失败的 Job 任务才可以消除误报，当然这种方式是可以解决问题的，但是不够自动化，一开始没有想得很深入，想去自动化删除失败的 Job 来解决，但是这也会给运维人员带来问题，就是不方便回头去排查问题。下面我们来重新整理下思路解决下这个问题。">
   <meta property="og:description" content="昨天在 Prometheus 课程辅导群里面有同学提到一个问题，是关于 Prometheus 监控 Job 任务误报的问题，大概的意思就 CronJob 控制的 Job，前面执行失败了，监控会触发报警，解决后后面生成的新的 Job 可以正常执行了，但是还是会收到前面的报警：
-
-
 
 这是因为一般在执行 Job 任务的时候我们会保留一些历史记录方便排查问题，所以如果之前有失败的 Job 了，即便稍后会变成成功的，那么之前的 Job 也会继续存在，而大部分直接使用 kube-prometheus 安装部署的话使用的默认报警规则是kube_job_status_failed &gt; 0，这显然是不准确的，只有我们去手动删除之前这个失败的 Job 任务才可以消除误报，当然这种方式是可以解决问题的，但是不够自动化，一开始没有想得很深入，想去自动化删除失败的 Job 来解决，但是这也会给运维人员带来问题，就是不方便回头去排查问题。下面我们来重新整理下思路解决下这个问题。">
   <meta name="twitter:description" content="昨天在 Prometheus 课程辅导群里面有同学提到一个问题，是关于 Prometheus 监控 Job 任务误报的问题，大概的意思就 CronJob 控制的 Job，前面执行失败了，监控会触发报警，解决后后面生成的新的 Job 可以正常执行了，但是还是会收到前面的报警：
 
-
-
-这是因为一般在执行 Job 任务的时候我们会保留一些历史记录方便排查问题，所以如果之前有失败的 Job 了，即便稍后会 …">
+这是因为一般在执行 Job 任务的时候我们会保留一些历史记录方便排查问题，所以如果之前有失败的 Job 了，即便稍后会变成 …">
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/post/prometheus-monitor-k8s-job-trap/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/post/prometheus-monitor-k8s-job-trap/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -44,7 +37,7 @@
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -95,7 +88,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -238,7 +231,7 @@ autocomplete('#aa-search-input',
 
 
   
-    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20220306100118.png" data-img-desc-1="https://unsplash.com/photos/_LXb4Yw-iVA"></div>
+    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://picdn.youdianzhishi.com/images/20220306100118.png" data-img-desc-1="https://unsplash.com/photos/_LXb4Yw-iVA"></div>
   
 
   <header class="header-section has-img">
@@ -253,12 +246,8 @@ autocomplete('#aa-search-input',
                   
                   
                     <span class="post-meta">
-  
-    发表于 March 6, 2022
-  
-  
+  发表于 March 6, 2022  
 </span>
-
 
                   
               </div>
@@ -280,12 +269,8 @@ autocomplete('#aa-search-input',
                 
                 
                   <span class="post-meta">
-  
-    发表于 March 6, 2022
-  
-  
+  发表于 March 6, 2022  
 </span>
-
 
                 
             </div>
@@ -340,163 +325,150 @@ autocomplete('#aa-search-input',
           
 
           <p>昨天在 Prometheus 课程辅导群里面有同学提到一个问题，是关于 Prometheus 监控 Job 任务误报的问题，大概的意思就 CronJob 控制的 Job，前面执行失败了，监控会触发报警，解决后后面生成的新的 Job 可以正常执行了，但是还是会收到前面的报警：</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20220305200158.png" alt="问题描述"><figcaption>问题描述</figcaption></figure>
-
+<p><img src="https://picdn.youdianzhishi.com/images/20220305200158.png" alt="问题描述"></p>
 <p>这是因为一般在执行 Job 任务的时候我们会保留一些历史记录方便排查问题，所以如果之前有失败的 Job 了，即便稍后会变成成功的，那么之前的 Job 也会继续存在，而大部分直接使用 kube-prometheus 安装部署的话使用的默认报警规则是<code>kube_job_status_failed &gt; 0</code>，这显然是不准确的，只有我们去手动删除之前这个失败的 Job 任务才可以消除误报，当然这种方式是可以解决问题的，但是不够自动化，一开始没有想得很深入，想去自动化删除失败的 Job 来解决，但是这也会给运维人员带来问题，就是不方便回头去排查问题。下面我们来重新整理下思路解决下这个问题。</p>
-
-<p><code>CronJob</code> 会在计划的每个执行时间创建一个 Job 对象，可以通过 <code>.spec.successfulJobsHistoryLimit</code> 和 <code>.spec.failedJobsHistoryLimit</code> 属性来保留多少已完成和失败的 Job，默认分别为3和1，比如下面声明一个 <code>CronJob</code> 的资源对象：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: batch/v1
-kind: CronJob
-metadata:
-  name: hello
-spec:
-  schedule: <span style="color:#f1fa8c">&#34;*/1 * * * *&#34;</span>
-  successfulJobsHistoryLimit: <span style="color:#bd93f9">1</span>
-  failedJobsHistoryLimit: <span style="color:#bd93f9">1</span>
-  jobTemplate:
-    spec:
-      template:
-        spec:
-          containers:
-          - name: hello
-            image: busybox
-            imagePullPolicy: IfNotPresent
-            command:
-            - /bin/sh
-            - -c
-            - date;
-          restartPolicy: OnFailure</code></pre></div>
-<p>根据上面的资源对象规范，Kubernetes 将只保留一个失败的 Job 和一个成功的 Job：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">NAME               COMPLETIONS   DURATION   AGE
-hello-4111706356   <span style="color:#bd93f9">0</span>/1           2m         10d
-hello-4111706356   <span style="color:#bd93f9">1</span>/1           5s         5s</code></pre></div>
-<p>要解决上面的误报问题，同样还是需要使用到 <code>kube-state-metrics</code> 这个服务，它通过监听 Kubernetes APIServer 并生成有关对象状态的指标，它并不关注单个 Kubernetes 组件的健康状况，而是关注内部各种对象的健康状况，例如 Deployment、Node、Job、Pod 等资源对象的状态。这里我们将要使用到以下几个指标：</p>
-
+<p><code>CronJob</code> 会在计划的每个执行时间创建一个 Job 对象，可以通过 <code>.spec.successfulJobsHistoryLimit</code> 和 <code>.spec.failedJobsHistoryLimit</code> 属性来保留多少已完成和失败的 Job，默认分别为 3 和 1，比如下面声明一个 <code>CronJob</code> 的资源对象：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: batch/v1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: CronJob
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: hello
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">schedule</span>: <span style="color:#f1fa8c">&#34;*/1 * * * *&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">successfulJobsHistoryLimit</span>: <span style="color:#bd93f9">1</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">failedJobsHistoryLimit</span>: <span style="color:#bd93f9">1</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">jobTemplate</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">template</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">containers</span>:
+</span></span><span style="display:flex;"><span>            - <span style="color:#ff79c6">name</span>: hello
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">image</span>: busybox
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">imagePullPolicy</span>: IfNotPresent
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">command</span>:
+</span></span><span style="display:flex;"><span>                - /bin/sh
+</span></span><span style="display:flex;"><span>                - -c
+</span></span><span style="display:flex;"><span>                - date;
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">restartPolicy</span>: OnFailure
+</span></span></code></pre></div><p>根据上面的资源对象规范，Kubernetes 将只保留一个失败的 Job 和一个成功的 Job：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>NAME               COMPLETIONS   DURATION   AGE
+</span></span><span style="display:flex;"><span>hello-4111706356   0/1           2m         10d
+</span></span><span style="display:flex;"><span>hello-4111706356   1/1           5s         5s
+</span></span></code></pre></div><p>要解决上面的误报问题，同样还是需要使用到 <code>kube-state-metrics</code> 这个服务，它通过监听 Kubernetes APIServer 并生成有关对象状态的指标，它并不关注单个 Kubernetes 组件的健康状况，而是关注内部各种对象的健康状况，例如 Deployment、Node、Job、Pod 等资源对象的状态。这里我们将要使用到以下几个指标：</p>
 <ul>
 <li><code>kube_job_owner</code>：用来查找 Job 和触发它的 CronJob 之间的关系</li>
 <li><code>kube_job_status_start_time</code>：获取 Job 被触发的时间</li>
 <li><code>kube_job_status_failed</code>：获取执行失败的任务</li>
 <li><code>kube_cronjob_spec_suspend</code>：过滤掉挂起的作业</li>
 </ul>
-
 <p>下面是一个指标示例，其中包含 CronJob 触发运行的<code>hello</code> 任务生成的标签：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">kube_job_owner<span style="color:#ff79c6">{</span><span style="color:#8be9fd;font-style:italic">job_name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hello-1604875860&#34;</span>, <span style="color:#8be9fd;font-style:italic">namespace</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;myNamespace&#34;</span>, <span style="color:#8be9fd;font-style:italic">owner_is_controller</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;true&#34;</span>, <span style="color:#8be9fd;font-style:italic">owner_kind</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;CronJob&#34;</span>, <span style="color:#8be9fd;font-style:italic">owner_name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hello&#34;</span><span style="color:#ff79c6">}</span> <span style="color:#bd93f9">1</span>
-kube_job_status_start_time<span style="color:#ff79c6">{</span><span style="color:#8be9fd;font-style:italic">job_name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hello-1604875860&#34;</span>, <span style="color:#8be9fd;font-style:italic">namespace</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;myNamespace&#34;</span><span style="color:#ff79c6">}</span> <span style="color:#bd93f9">1604875874</span>
-kube_job_status_failed<span style="color:#ff79c6">{</span><span style="color:#8be9fd;font-style:italic">job_name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hello-1604875860&#34;</span>, <span style="color:#8be9fd;font-style:italic">namespace</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;myNamespace&#34;</span>, <span style="color:#8be9fd;font-style:italic">reason</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;BackoffLimitExceeded&#34;</span><span style="color:#ff79c6">}</span> <span style="color:#bd93f9">1</span>
-kube_cronjob_spec_suspend<span style="color:#ff79c6">{</span><span style="color:#8be9fd;font-style:italic">cronjob</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hello&#34;</span>,job<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;kube-state-metrics&#34;</span>, <span style="color:#8be9fd;font-style:italic">namespace</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;myNamespace&#34;</span><span style="color:#ff79c6">}</span> <span style="color:#bd93f9">0</span></code></pre></div>
-<p>要想做到监控报警准确，其实我们只需要去<strong>获取同一个 CronJob 触发的一组 Job 的最后一次任务，只有该 Job 在执行失败的时候才触发报警</strong>即可。
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-5376999672787220"
-     data-ad-slot="9165834656"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-
-由于 <code>kube_job_status_failed</code> 和 <code>kube_job_status_start_time</code> 指标中并不包含所属 CronJob 的标签，所以第一步需要加入这个标签，而 <code>kube_job_owner</code> 指标中的 <code>owner_name</code> 就是我们需要的，可以用下面的 promql 语句来进行合并：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">max<span style="color:#ff79c6">(</span>
-  kube_job_status_start_time
-  * ON<span style="color:#ff79c6">(</span>job_name, namespace<span style="color:#ff79c6">)</span> GROUP_RIGHT<span style="color:#ff79c6">()</span>
-  kube_job_owner<span style="color:#ff79c6">{</span>owner_name !<span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">}</span>
-  <span style="color:#ff79c6">)</span>
-BY <span style="color:#ff79c6">(</span>job_name, owner_name, namespace<span style="color:#ff79c6">)</span></code></pre></div>
-<p>这里我们使用 <code>max</code> 函数是因为我们可能会因为 HA 运行多个 kube-state-metrics，所以用 max 函数来返回每个 Job 任务的一个结果即可。假设我们的 Job 历史记录包含 2 个任务（一个失败，另一个成功），结果将如下所示：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#ff79c6">{</span><span style="color:#8be9fd;font-style:italic">job_name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hello-1623578940&#34;</span>, <span style="color:#8be9fd;font-style:italic">namespace</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;myNamespace&#34;</span>, <span style="color:#8be9fd;font-style:italic">owner_name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hello&#34;</span><span style="color:#ff79c6">}</span> <span style="color:#bd93f9">1623578959</span>
-<span style="color:#ff79c6">{</span><span style="color:#8be9fd;font-style:italic">job_name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hello-1617667200&#34;</span>, <span style="color:#8be9fd;font-style:italic">namespace</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;myNamespace&#34;</span>, <span style="color:#8be9fd;font-style:italic">owner_name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hello&#34;</span><span style="color:#ff79c6">}</span> <span style="color:#bd93f9">1617667204</span></code></pre></div>
-<p>现在我们知道每个 Job 的所有者了，接着我们需要找出最后执行的任务，我们可以通过按 <code>owner_name</code> 标签聚合结果来实现这一点：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">max<span style="color:#ff79c6">(</span>
-  kube_job_status_start_time
-  * ON<span style="color:#ff79c6">(</span>job_name,namespace<span style="color:#ff79c6">)</span> GROUP_RIGHT<span style="color:#ff79c6">()</span>
-  kube_job_owner<span style="color:#ff79c6">{</span>owner_name!<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">}</span>
-<span style="color:#ff79c6">)</span> 
-BY <span style="color:#ff79c6">(</span>owner_name<span style="color:#ff79c6">)</span></code></pre></div>
-<p>上面这条语句会找到每个 owner（也就是 CronJob）最新的任务开始时间，然后再和上面的语句进行合并，保留开始时间相同的记录即为最新执行的 Job 任务了：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">max<span style="color:#ff79c6">(</span>
- kube_job_status_start_time
- * ON<span style="color:#ff79c6">(</span>job_name,namespace<span style="color:#ff79c6">)</span> GROUP_RIGHT<span style="color:#ff79c6">()</span>
- kube_job_owner<span style="color:#ff79c6">{</span>owner_name!<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">}</span>
-<span style="color:#ff79c6">)</span>
-BY <span style="color:#ff79c6">(</span>job_name, owner_name, namespace<span style="color:#ff79c6">)</span>
-<span style="color:#ff79c6">==</span> ON<span style="color:#ff79c6">(</span>owner_name<span style="color:#ff79c6">)</span> GROUP_LEFT<span style="color:#ff79c6">()</span>
-max<span style="color:#ff79c6">(</span>
- kube_job_status_start_time
- * ON<span style="color:#ff79c6">(</span>job_name,namespace<span style="color:#ff79c6">)</span> GROUP_RIGHT<span style="color:#ff79c6">()</span>
- kube_job_owner<span style="color:#ff79c6">{</span>owner_name!<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">}</span>
-<span style="color:#ff79c6">)</span>
-BY <span style="color:#ff79c6">(</span>owner_name<span style="color:#ff79c6">)</span></code></pre></div>
-<p>结果将显示每个 CronJob 最后执行的作业，并且仅显示最后一个：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#ff79c6">{</span><span style="color:#8be9fd;font-style:italic">job_name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hello-1623578940&#34;</span>, <span style="color:#8be9fd;font-style:italic">namespace</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;myNamespace&#34;</span>, <span style="color:#8be9fd;font-style:italic">owner_name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hello&#34;</span><span style="color:#ff79c6">}</span> <span style="color:#bd93f9">1623578959</span></code></pre></div>
-<p>为了增加可读性我们还可以将 job_name、owner_name 标签替换为 job 和 cronjob，这样更容易看明白：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">label_replace<span style="color:#ff79c6">(</span>
-  label_replace<span style="color:#ff79c6">(</span>
-    max<span style="color:#ff79c6">(</span>
-      kube_job_status_start_time
-      * ON<span style="color:#ff79c6">(</span>job_name,namespace<span style="color:#ff79c6">)</span> GROUP_RIGHT<span style="color:#ff79c6">()</span>
-      kube_job_owner<span style="color:#ff79c6">{</span>owner_name!<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">}</span>
-    <span style="color:#ff79c6">)</span>
-    BY <span style="color:#ff79c6">(</span>job_name, owner_name, namespace<span style="color:#ff79c6">)</span>
-    <span style="color:#ff79c6">==</span> ON<span style="color:#ff79c6">(</span>owner_name<span style="color:#ff79c6">)</span> GROUP_LEFT<span style="color:#ff79c6">()</span>
-    max<span style="color:#ff79c6">(</span>
-      kube_job_status_start_time
-      * ON<span style="color:#ff79c6">(</span>job_name,namespace<span style="color:#ff79c6">)</span> GROUP_RIGHT<span style="color:#ff79c6">()</span>
-      kube_job_owner<span style="color:#ff79c6">{</span>owner_name!<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">}</span>
-    <span style="color:#ff79c6">)</span>
-    BY <span style="color:#ff79c6">(</span>owner_name<span style="color:#ff79c6">)</span>,
-  <span style="color:#f1fa8c">&#34;job&#34;</span>, <span style="color:#f1fa8c">&#34;</span><span style="color:#8be9fd;font-style:italic">$1</span><span style="color:#f1fa8c">&#34;</span>, <span style="color:#f1fa8c">&#34;job_name&#34;</span>, <span style="color:#f1fa8c">&#34;(.+)&#34;</span><span style="color:#ff79c6">)</span>,
-<span style="color:#f1fa8c">&#34;cronjob&#34;</span>, <span style="color:#f1fa8c">&#34;</span><span style="color:#8be9fd;font-style:italic">$1</span><span style="color:#f1fa8c">&#34;</span>, <span style="color:#f1fa8c">&#34;owner_name&#34;</span>, <span style="color:#f1fa8c">&#34;(.+)&#34;</span><span style="color:#ff79c6">)</span></code></pre></div>
-<p>现在将会看到类似于下面的结果：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#ff79c6">{</span><span style="color:#8be9fd;font-style:italic">job</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hello-1623578940&#34;</span>, <span style="color:#8be9fd;font-style:italic">cronjob</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hello&#34;</span>, <span style="color:#8be9fd;font-style:italic">job_name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hello-1623578940&#34;</span>, <span style="color:#8be9fd;font-style:italic">namespace</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;myNamespace&#34;</span>, <span style="color:#8be9fd;font-style:italic">owner_name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hello&#34;</span><span style="color:#ff79c6">}</span> <span style="color:#bd93f9">1623578959</span></code></pre></div>
-<p>由于上面的查询语句比较复杂，如果每次报警评估的时候都去进行一次实时计算会对 Prometheus 产生非常大的压力，这里我们可以借助记录规则来实现类离线计算的方式，大大提高效率，创建如下所示的记录规则，用来表示获取每个 CronJob 最后执行的作业记录：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">- record: job:kube_job_status_start_time:max
-  expr: <span style="color:#f1fa8c">|
-</span><span style="color:#f1fa8c">    label_replace(</span>
-      label_replace(
-        max(
-          kube_job_status_start_time
-          * ON(job_name,namespace) GROUP_RIGHT()
-          kube_job_owner{owner_name!=<span style="color:#f1fa8c">&#34;&#34;</span>}
-        )
-        BY (job_name, owner_name, namespace)
-        == ON(owner_name) GROUP_LEFT()
-        max(
-          kube_job_status_start_time
-          * ON(job_name,namespace) GROUP_RIGHT()
-          kube_job_owner{owner_name!=<span style="color:#f1fa8c">&#34;&#34;</span>}
-        )
-        BY (owner_name),
-      <span style="color:#f1fa8c">&#34;job&#34;</span>, <span style="color:#f1fa8c">&#34;$1&#34;</span>, <span style="color:#f1fa8c">&#34;job_name&#34;</span>, <span style="color:#f1fa8c">&#34;(.+)&#34;</span>),
-    <span style="color:#f1fa8c">&#34;cronjob&#34;</span>, <span style="color:#f1fa8c">&#34;$1&#34;</span>, <span style="color:#f1fa8c">&#34;owner_name&#34;</span>, <span style="color:#f1fa8c">&#34;(.+)&#34;</span>)</code></pre></div>
-<p>现在我们知道了 CronJob 最近开始执行的 Job 了，那么想要过滤出失败的，则再使用 <code>kube_job_status_failed</code> 指标就可以了：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">- record: job:kube_job_status_failed:sum
-  expr: <span style="color:#f1fa8c">|
-</span><span style="color:#f1fa8c">    clamp_max(job:kube_job_status_start_time:max, 1)</span>
-      * ON(job) GROUP_LEFT()
-      label_replace(
-        (kube_job_status_failed &gt; <span style="color:#bd93f9">0</span>),
-        <span style="color:#f1fa8c">&#34;job&#34;</span>, <span style="color:#f1fa8c">&#34;$1&#34;</span>, <span style="color:#f1fa8c">&#34;job_name&#34;</span>, <span style="color:#f1fa8c">&#34;(.+)&#34;</span>
-      )</code></pre></div>
-<p>这里使用 <code>clamp_max</code> 函数将 <code>job:kube_job_status_start_time:max</code> 的结果转换为一组上限为 1 的时间序列，使用它来通过乘法过滤失败的作业，得到包含一组最近失败的 Job 任务，这里我们也添加到名为 <code>kube_job_status_failed:sum</code> 的记录规则中。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>kube_job_owner<span style="color:#ff79c6">{</span><span style="color:#8be9fd;font-style:italic">job_name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hello-1604875860&#34;</span>, <span style="color:#8be9fd;font-style:italic">namespace</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;myNamespace&#34;</span>, <span style="color:#8be9fd;font-style:italic">owner_is_controller</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;true&#34;</span>, <span style="color:#8be9fd;font-style:italic">owner_kind</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;CronJob&#34;</span>, <span style="color:#8be9fd;font-style:italic">owner_name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hello&#34;</span><span style="color:#ff79c6">}</span> <span style="color:#bd93f9">1</span>
+</span></span><span style="display:flex;"><span>kube_job_status_start_time<span style="color:#ff79c6">{</span><span style="color:#8be9fd;font-style:italic">job_name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hello-1604875860&#34;</span>, <span style="color:#8be9fd;font-style:italic">namespace</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;myNamespace&#34;</span><span style="color:#ff79c6">}</span> <span style="color:#bd93f9">1604875874</span>
+</span></span><span style="display:flex;"><span>kube_job_status_failed<span style="color:#ff79c6">{</span><span style="color:#8be9fd;font-style:italic">job_name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hello-1604875860&#34;</span>, <span style="color:#8be9fd;font-style:italic">namespace</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;myNamespace&#34;</span>, <span style="color:#8be9fd;font-style:italic">reason</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;BackoffLimitExceeded&#34;</span><span style="color:#ff79c6">}</span> <span style="color:#bd93f9">1</span>
+</span></span><span style="display:flex;"><span>kube_cronjob_spec_suspend<span style="color:#ff79c6">{</span><span style="color:#8be9fd;font-style:italic">cronjob</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hello&#34;</span>,job<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;kube-state-metrics&#34;</span>, <span style="color:#8be9fd;font-style:italic">namespace</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;myNamespace&#34;</span><span style="color:#ff79c6">}</span> <span style="color:#bd93f9">0</span>
+</span></span></code></pre></div><p>要想做到监控报警准确，其实我们只需要去<strong>获取同一个 CronJob 触发的一组 Job 的最后一次任务，只有该 Job 在执行失败的时候才触发报警</strong>即可。</p>
+<!-- raw HTML omitted -->
+<p>由于 <code>kube_job_status_failed</code> 和 <code>kube_job_status_start_time</code> 指标中并不包含所属 CronJob 的标签，所以第一步需要加入这个标签，而 <code>kube_job_owner</code> 指标中的 <code>owner_name</code> 就是我们需要的，可以用下面的 promql 语句来进行合并：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>max<span style="color:#ff79c6">(</span>
+</span></span><span style="display:flex;"><span>  kube_job_status_start_time
+</span></span><span style="display:flex;"><span>  * ON<span style="color:#ff79c6">(</span>job_name, namespace<span style="color:#ff79c6">)</span> GROUP_RIGHT<span style="color:#ff79c6">()</span>
+</span></span><span style="display:flex;"><span>  kube_job_owner<span style="color:#ff79c6">{</span>owner_name !<span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>BY <span style="color:#ff79c6">(</span>job_name, owner_name, namespace<span style="color:#ff79c6">)</span>
+</span></span></code></pre></div><p>这里我们使用 <code>max</code> 函数是因为我们可能会因为 HA 运行多个 kube-state-metrics，所以用 max 函数来返回每个 Job 任务的一个结果即可。假设我们的 Job 历史记录包含 2 个任务（一个失败，另一个成功），结果将如下所示：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#ff79c6">{</span><span style="color:#8be9fd;font-style:italic">job_name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hello-1623578940&#34;</span>, <span style="color:#8be9fd;font-style:italic">namespace</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;myNamespace&#34;</span>, <span style="color:#8be9fd;font-style:italic">owner_name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hello&#34;</span><span style="color:#ff79c6">}</span> <span style="color:#bd93f9">1623578959</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">{</span><span style="color:#8be9fd;font-style:italic">job_name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hello-1617667200&#34;</span>, <span style="color:#8be9fd;font-style:italic">namespace</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;myNamespace&#34;</span>, <span style="color:#8be9fd;font-style:italic">owner_name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hello&#34;</span><span style="color:#ff79c6">}</span> <span style="color:#bd93f9">1617667204</span>
+</span></span></code></pre></div><p>现在我们知道每个 Job 的所有者了，接着我们需要找出最后执行的任务，我们可以通过按 <code>owner_name</code> 标签聚合结果来实现这一点：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>max<span style="color:#ff79c6">(</span>
+</span></span><span style="display:flex;"><span>  kube_job_status_start_time
+</span></span><span style="display:flex;"><span>  * ON<span style="color:#ff79c6">(</span>job_name,namespace<span style="color:#ff79c6">)</span> GROUP_RIGHT<span style="color:#ff79c6">()</span>
+</span></span><span style="display:flex;"><span>  kube_job_owner<span style="color:#ff79c6">{</span>owner_name!<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>BY <span style="color:#ff79c6">(</span>owner_name<span style="color:#ff79c6">)</span>
+</span></span></code></pre></div><p>上面这条语句会找到每个 owner（也就是 CronJob）最新的任务开始时间，然后再和上面的语句进行合并，保留开始时间相同的记录即为最新执行的 Job 任务了：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>max<span style="color:#ff79c6">(</span>
+</span></span><span style="display:flex;"><span> kube_job_status_start_time
+</span></span><span style="display:flex;"><span> * ON<span style="color:#ff79c6">(</span>job_name,namespace<span style="color:#ff79c6">)</span> GROUP_RIGHT<span style="color:#ff79c6">()</span>
+</span></span><span style="display:flex;"><span> kube_job_owner<span style="color:#ff79c6">{</span>owner_name!<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>BY <span style="color:#ff79c6">(</span>job_name, owner_name, namespace<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">==</span> ON<span style="color:#ff79c6">(</span>owner_name<span style="color:#ff79c6">)</span> GROUP_LEFT<span style="color:#ff79c6">()</span>
+</span></span><span style="display:flex;"><span>max<span style="color:#ff79c6">(</span>
+</span></span><span style="display:flex;"><span> kube_job_status_start_time
+</span></span><span style="display:flex;"><span> * ON<span style="color:#ff79c6">(</span>job_name,namespace<span style="color:#ff79c6">)</span> GROUP_RIGHT<span style="color:#ff79c6">()</span>
+</span></span><span style="display:flex;"><span> kube_job_owner<span style="color:#ff79c6">{</span>owner_name!<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>BY <span style="color:#ff79c6">(</span>owner_name<span style="color:#ff79c6">)</span>
+</span></span></code></pre></div><p>结果将显示每个 CronJob 最后执行的作业，并且仅显示最后一个：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#ff79c6">{</span><span style="color:#8be9fd;font-style:italic">job_name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hello-1623578940&#34;</span>, <span style="color:#8be9fd;font-style:italic">namespace</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;myNamespace&#34;</span>, <span style="color:#8be9fd;font-style:italic">owner_name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hello&#34;</span><span style="color:#ff79c6">}</span> <span style="color:#bd93f9">1623578959</span>
+</span></span></code></pre></div><p>为了增加可读性我们还可以将 job_name、owner_name 标签替换为 job 和 cronjob，这样更容易看明白：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>label_replace<span style="color:#ff79c6">(</span>
+</span></span><span style="display:flex;"><span>  label_replace<span style="color:#ff79c6">(</span>
+</span></span><span style="display:flex;"><span>    max<span style="color:#ff79c6">(</span>
+</span></span><span style="display:flex;"><span>      kube_job_status_start_time
+</span></span><span style="display:flex;"><span>      * ON<span style="color:#ff79c6">(</span>job_name,namespace<span style="color:#ff79c6">)</span> GROUP_RIGHT<span style="color:#ff79c6">()</span>
+</span></span><span style="display:flex;"><span>      kube_job_owner<span style="color:#ff79c6">{</span>owner_name!<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>    BY <span style="color:#ff79c6">(</span>job_name, owner_name, namespace<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">==</span> ON<span style="color:#ff79c6">(</span>owner_name<span style="color:#ff79c6">)</span> GROUP_LEFT<span style="color:#ff79c6">()</span>
+</span></span><span style="display:flex;"><span>    max<span style="color:#ff79c6">(</span>
+</span></span><span style="display:flex;"><span>      kube_job_status_start_time
+</span></span><span style="display:flex;"><span>      * ON<span style="color:#ff79c6">(</span>job_name,namespace<span style="color:#ff79c6">)</span> GROUP_RIGHT<span style="color:#ff79c6">()</span>
+</span></span><span style="display:flex;"><span>      kube_job_owner<span style="color:#ff79c6">{</span>owner_name!<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;&#34;</span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>    BY <span style="color:#ff79c6">(</span>owner_name<span style="color:#ff79c6">)</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f1fa8c">&#34;job&#34;</span>, <span style="color:#f1fa8c">&#34;</span><span style="color:#8be9fd;font-style:italic">$1</span><span style="color:#f1fa8c">&#34;</span>, <span style="color:#f1fa8c">&#34;job_name&#34;</span>, <span style="color:#f1fa8c">&#34;(.+)&#34;</span><span style="color:#ff79c6">)</span>,
+</span></span><span style="display:flex;"><span><span style="color:#f1fa8c">&#34;cronjob&#34;</span>, <span style="color:#f1fa8c">&#34;</span><span style="color:#8be9fd;font-style:italic">$1</span><span style="color:#f1fa8c">&#34;</span>, <span style="color:#f1fa8c">&#34;owner_name&#34;</span>, <span style="color:#f1fa8c">&#34;(.+)&#34;</span><span style="color:#ff79c6">)</span>
+</span></span></code></pre></div><p>现在将会看到类似于下面的结果：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#ff79c6">{</span><span style="color:#8be9fd;font-style:italic">job</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hello-1623578940&#34;</span>, <span style="color:#8be9fd;font-style:italic">cronjob</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hello&#34;</span>, <span style="color:#8be9fd;font-style:italic">job_name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hello-1623578940&#34;</span>, <span style="color:#8be9fd;font-style:italic">namespace</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;myNamespace&#34;</span>, <span style="color:#8be9fd;font-style:italic">owner_name</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;hello&#34;</span><span style="color:#ff79c6">}</span> <span style="color:#bd93f9">1623578959</span>
+</span></span></code></pre></div><p>由于上面的查询语句比较复杂，如果每次报警评估的时候都去进行一次实时计算会对 Prometheus 产生非常大的压力，这里我们可以借助记录规则来实现类离线计算的方式，大大提高效率，创建如下所示的记录规则，用来表示获取每个 CronJob 最后执行的作业记录：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>- <span style="color:#ff79c6">record</span>: job:kube_job_status_start_time:max
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">expr</span>: |<span style="color:#f1fa8c">
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">    label_replace(
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">      label_replace(
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        max(
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">          kube_job_status_start_time
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">          * ON(job_name,namespace) GROUP_RIGHT()
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">          kube_job_owner{owner_name!=&#34;&#34;}
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        )
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        BY (job_name, owner_name, namespace)
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        == ON(owner_name) GROUP_LEFT()
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        max(
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">          kube_job_status_start_time
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">          * ON(job_name,namespace) GROUP_RIGHT()
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">          kube_job_owner{owner_name!=&#34;&#34;}
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        )
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        BY (owner_name),
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">      &#34;job&#34;, &#34;$1&#34;, &#34;job_name&#34;, &#34;(.+)&#34;),
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">    &#34;cronjob&#34;, &#34;$1&#34;, &#34;owner_name&#34;, &#34;(.+)&#34;)</span>    
+</span></span></code></pre></div><p>现在我们知道了 CronJob 最近开始执行的 Job 了，那么想要过滤出失败的，则再使用 <code>kube_job_status_failed</code> 指标就可以了：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>- <span style="color:#ff79c6">record</span>: job:kube_job_status_failed:sum
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">expr</span>: |<span style="color:#f1fa8c">
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">    clamp_max(job:kube_job_status_start_time:max, 1)
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">      * ON(job) GROUP_LEFT()
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">      label_replace(
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        (kube_job_status_failed &gt; 0),
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">        &#34;job&#34;, &#34;$1&#34;, &#34;job_name&#34;, &#34;(.+)&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">      )</span>    
+</span></span></code></pre></div><p>这里使用 <code>clamp_max</code> 函数将 <code>job:kube_job_status_start_time:max</code> 的结果转换为一组上限为 1 的时间序列，使用它来通过乘法过滤失败的作业，得到包含一组最近失败的 Job 任务，这里我们也添加到名为 <code>kube_job_status_failed:sum</code> 的记录规则中。</p>
 <p>最后一步就是直接为失败的 Job 任务添加报警规则，如下所示：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">- alert: CronJobStatusFailed
-  expr: <span style="color:#f1fa8c">|
-</span><span style="color:#f1fa8c">    job:kube_job_status_failed:sum</span>
-    * ON(cronjob, namespace) GROUP_LEFT()
-    (kube_cronjob_spec_suspend == <span style="color:#bd93f9">0</span>)</code></pre></div>
-<p>为避免误报，我们已将挂起的任务排除在外了。到这里我们就解决了 Prometheus 监控 CronJob 的任务误报的问题，虽然 kube-prometheus 为我们内置了大量的监控报警规则，但是也不能完全迷信，有时候并不一定适合实际的需求。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>- <span style="color:#ff79c6">alert</span>: CronJobStatusFailed
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">expr</span>: |<span style="color:#f1fa8c">
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">    job:kube_job_status_failed:sum
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">    * ON(cronjob, namespace) GROUP_LEFT()
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">    (kube_cronjob_spec_suspend == 0)</span>    
+</span></span></code></pre></div><p>为避免误报，我们已将挂起的任务排除在外了。到这里我们就解决了 Prometheus 监控 CronJob 的任务误报的问题，虽然 kube-prometheus 为我们内置了大量的监控报警规则，但是也不能完全迷信，有时候并不一定适合实际的需求。</p>
 <p>最后也为大家推荐下我们全新制作的 Prometheus 课程正在上新促销中，内容丰富、价格优惠，扫描下方海报二维码前往购买：</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20220306095902.png" alt="Prometheus"><figcaption>Prometheus</figcaption></figure>
+<p><img src="https://picdn.youdianzhishi.com/images/20220306095902.png" alt="Prometheus"></p>
 
           <h2>微信公众号</h2>
-<p>扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的 kubernetes 讨论群里面共同学习。</p>
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/qrcode.png" alt="wechat-account-qrcode">
+<p>
+  扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的
+  kubernetes 讨论群里面共同学习。
+</p>
+<img
+  src="https://picdn.youdianzhishi.com/images/qrcode.png"
+  alt="wechat-account-qrcode"
+/>
 
   
           
@@ -697,7 +669,7 @@ BY <span style="color:#ff79c6">(</span>owner_name<span style="color:#ff79c6">)</
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -709,7 +681,7 @@ BY <span style="color:#ff79c6">(</span>owner_name<span style="color:#ff79c6">)</
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -726,7 +698,7 @@ BY <span style="color:#ff79c6">(</span>owner_name<span style="color:#ff79c6">)</
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -735,7 +707,7 @@ BY <span style="color:#ff79c6">(</span>owner_name<span style="color:#ff79c6">)</
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

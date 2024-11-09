@@ -14,16 +14,15 @@
   <meta property="og:description" content="前面的文章中我们已经使用 Traefik2.0 实现了 暴露 Redis(TCP) 服务 以及 自动化 HTTPS 得功能，在 Traefik2.0 发布的特性 中我们了解到除了这些基础功能之外，还支持一些其他的特性，本文就将来实现灰度发布的高级功能。">
   <meta name="twitter:description" content="前面的文章中我们已经使用 Traefik2.0 实现了 暴露 Redis(TCP) 服务 以及 自动化 HTTPS 得功能，在 Traefik2.0 发布的特性 中我们了解到除了这些基础功能之外，还支持一些其他的特性，本文就将来实现灰度发布的高级功能。">
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/post/canary-with-traefik2/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/post/canary-with-traefik2/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -32,7 +31,7 @@
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -83,7 +82,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -226,7 +225,7 @@ autocomplete('#aa-search-input',
 
 
   
-    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/toa-heftiba-6Y6gaGnVrr4-unsplash.jpg" data-img-desc-1="https://unsplash.com/photos/6Y6gaGnVrr4"></div>
+    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://picdn.youdianzhishi.com/images/toa-heftiba-6Y6gaGnVrr4-unsplash.jpg" data-img-desc-1="https://unsplash.com/photos/6Y6gaGnVrr4"></div>
   
 
   <header class="header-section has-img">
@@ -241,12 +240,8 @@ autocomplete('#aa-search-input',
                   
                   
                     <span class="post-meta">
-  
-    发表于 October 25, 2019
-  
-  
+  发表于 October 25, 2019  
 </span>
-
 
                   
               </div>
@@ -268,12 +263,8 @@ autocomplete('#aa-search-input',
                 
                 
                   <span class="post-meta">
-  
-    发表于 October 25, 2019
-  
-  
+  发表于 October 25, 2019  
 </span>
-
 
                 
             </div>
@@ -328,196 +319,174 @@ autocomplete('#aa-search-input',
           
 
           <p>前面的文章中我们已经使用 Traefik2.0 实现了 <a href="https://www.qikqiak.com/post/expose-redis-by-traefik2">暴露 Redis(TCP) 服务</a> 以及 <a href="https://www.qikqiak.com/post/automatic-https-with-traefik2">自动化 HTTPS</a> 得功能，在 <a href="https://www.qikqiak.com/post/traefik2-ga/">Traefik2.0 发布的特性</a> 中我们了解到除了这些基础功能之外，还支持一些其他的特性，本文就将来实现灰度发布的高级功能。</p>
-
 <blockquote>
 <p>Traefik 的官方文档实在是有点混乱，特别是在 Kubernetes 下面的使用更不详细，我在业余时间已经在尝试对官方文档进行翻译，地址：<a href="https://www.qikqiak.com/traefik-book/">https://www.qikqiak.com/traefik-book</a>，去掉了一些多余的文档，增加一些在 Kubernetes 下面的使用案例。</p>
 </blockquote>
-
 <p>需要注意的是，目前的最新版本是 v2.0.2，截止该版本，要实现上面的灰度发布、流量复制这些高级功能，只能通过 <code>File Provider</code> 来实现，所以我们不能直接使用前面的 <code>KubernetesCRD Provider</code> 了。</p>
-
 <p>灰度发布我们有时候也会称为金丝雀发布（Canary），主要就是让一部分测试的服务也参与到线上去，经过测试观察看是否符号上线要求。</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/RvcM4f.jpg" alt="canary deployment"><figcaption>canary deployment</figcaption></figure>
-
-<p>比如现在我们有两个名为 appv1 和 appv2 的 Nginx 服务，我们希望通过 Traefik 来控制我们的流量，将 <sup>3</sup>&frasl;<sub>4</sub> 的流量路由到 appv1，1/4 的流量路由到 appv2 去，这个时候就可以利用 Traefik2.0 中提供的带权重的轮询（WRR）来实现该功能，首先在 Kubernetes 集群中部署上面的两个服务。</p>
-
+<p><img src="https://picdn.youdianzhishi.com/images/RvcM4f.jpg" alt="canary deployment"></p>
+<p>比如现在我们有两个名为 appv1 和 appv2 的 Nginx 服务，我们希望通过 Traefik 来控制我们的流量，将 3/4 的流量路由到 appv1，1/4 的流量路由到 appv2 去，这个时候就可以利用 Traefik2.0 中提供的带权重的轮询（WRR）来实现该功能，首先在 Kubernetes 集群中部署上面的两个服务。</p>
 <p>appv1 服务的资源清单如下所示：（appv1.yaml）</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: appv1
-  namespace: kube-system
-spec:
-  selector:
-    matchLabels:
-      app: appv1
-  template:
-    metadata:
-      labels:
-        use: test
-        app: appv1
-    spec:
-      containers:
-      - name: nginx
-        image: nginx
-        ports:
-        - containerPort: <span style="color:#bd93f9">80</span>
-          name: portv1
-
---<span style="color:#f1fa8c">-
-</span><span style="color:#f1fa8c">
-</span><span style="color:#f1fa8c">apiVersion: v1</span>
-kind: Service
-metadata:
-  name: appv1
-  namespace: kube-system
-spec:
-  selector:
-    app: appv1
-  ports:
-  - name: http
-    port: <span style="color:#bd93f9">80</span>
-    targetPort: portv1</code></pre></div>
-<p>appv2 服务的资源清单如下所示：（appv2.yaml）</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: appv2
-  namespace: kube-system
-spec:
-  selector:
-    matchLabels:
-      app: appv2
-  template:
-    metadata:
-      labels:
-        use: test
-        app: appv2
-    spec:
-      containers:
-      - name: nginx
-        image: nginx
-        ports:
-        - containerPort: <span style="color:#bd93f9">80</span>
-          name: portv2
-
---<span style="color:#f1fa8c">-
-</span><span style="color:#f1fa8c">
-</span><span style="color:#f1fa8c">apiVersion: v1</span>
-kind: Service
-metadata:
-  name: appv2
-  namespace: kube-system
-spec:
-  selector:
-    app: appv2
-  ports:
-  - name: http
-    port: <span style="color:#bd93f9">80</span>
-    targetPort: portv2</code></pre></div>
-<p>直接创建上面两个服务：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl apply -f appv1.yaml
-$ kubectl apply -f appv2.yaml
-<span style="color:#6272a4"># 通过下面的命令可以查看服务是否运行成功</span>
-$ kubectl get pods -l <span style="color:#8be9fd;font-style:italic">use</span><span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">test</span> -n kube-system
-NAME                     READY   STATUS    RESTARTS   AGE
-appv1-684f8cbc7-b9zm9    <span style="color:#bd93f9">1</span>/1     Running   <span style="color:#bd93f9">0</span>          2m27s
-appv2-645d7666b5-qjrjs   <span style="color:#bd93f9">1</span>/1     Running   <span style="color:#bd93f9">0</span>          37s</code></pre></div>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-5376999672787220"
-     data-ad-slot="9165834656"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: apps/v1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: Deployment
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: appv1
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">namespace</span>: kube-system
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">selector</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">matchLabels</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">app</span>: appv1
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">template</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">labels</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">use</span>: test
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">app</span>: appv1
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">containers</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">name</span>: nginx
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">image</span>: nginx
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">ports</span>:
+</span></span><span style="display:flex;"><span>            - <span style="color:#ff79c6">containerPort</span>: <span style="color:#bd93f9">80</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">name</span>: portv1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: v1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: Service
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: appv1
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">namespace</span>: kube-system
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">selector</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">app</span>: appv1
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">ports</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">name</span>: http
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">port</span>: <span style="color:#bd93f9">80</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">targetPort</span>: portv1
+</span></span></code></pre></div><p>appv2 服务的资源清单如下所示：（appv2.yaml）</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: apps/v1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: Deployment
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: appv2
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">namespace</span>: kube-system
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">selector</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">matchLabels</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">app</span>: appv2
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">template</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">labels</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">use</span>: test
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">app</span>: appv2
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">containers</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">name</span>: nginx
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">image</span>: nginx
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">ports</span>:
+</span></span><span style="display:flex;"><span>            - <span style="color:#ff79c6">containerPort</span>: <span style="color:#bd93f9">80</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">name</span>: portv2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: v1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: Service
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: appv2
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">namespace</span>: kube-system
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">selector</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">app</span>: appv2
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">ports</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">name</span>: http
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">port</span>: <span style="color:#bd93f9">80</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">targetPort</span>: portv2
+</span></span></code></pre></div><p>直接创建上面两个服务：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl apply -f appv1.yaml
+</span></span><span style="display:flex;"><span>$ kubectl apply -f appv2.yaml
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 通过下面的命令可以查看服务是否运行成功</span>
+</span></span><span style="display:flex;"><span>$ kubectl get pods -l <span style="color:#8be9fd;font-style:italic">use</span><span style="color:#ff79c6">=</span><span style="color:#8be9fd;font-style:italic">test</span> -n kube-system
+</span></span><span style="display:flex;"><span>NAME                     READY   STATUS    RESTARTS   AGE
+</span></span><span style="display:flex;"><span>appv1-684f8cbc7-b9zm9    1/1     Running   <span style="color:#bd93f9">0</span>          2m27s
+</span></span><span style="display:flex;"><span>appv2-645d7666b5-qjrjs   1/1     Running   <span style="color:#bd93f9">0</span>          37s
+</span></span></code></pre></div><!-- raw HTML omitted -->
 <p>由于 WRR 这个功能目前只支持 <code>File Provider</code>，所以我们需要开启该 Provider 才能使用，这里需要注意的是由于需要开启 <code>File Provider</code>，所以我们需要提供一个文件用于该 Provider 的配置，我们这里是用在 Kubernetes 集群中的，所以可以通过一个 ConfigMap 对象，将配置文件内容挂载到 Traefik 的 Pod 中去，如下所示，我们通过将一个名为 traefik-dynamic-conf 的 ConfigMap 对象挂载到了 <code>/config</code> 目录下面去，然后通过 <code>--providers.file.filename</code>参数指定配置文件开启 <code>File Provider</code>，另外添加 <code>- --providers.file.watch=true</code> 参数可以让 Traefik 动态更新配置：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">......
-      volumes:
-      - name: config
-        configMap:
-          name: traefik-dynamic-conf
-      containers:
-      - image: traefik:v2.<span style="color:#bd93f9">0.2</span>
-        name: traefik-ingress-lb
-        volumeMounts:
-        - name: config
-          mountPath: /config
-        ports:
-        - name: web
-          containerPort: <span style="color:#bd93f9">80</span>
-          hostPort: <span style="color:#bd93f9">80</span>
-        - name: admin
-          containerPort: <span style="color:#bd93f9">8080</span>
-          hostPort: <span style="color:#bd93f9">8080</span>
-        args:
-        - --entrypoints.web.Address=:<span style="color:#bd93f9">80</span>
-        - --api.insecure=<span style="color:#ff79c6">true</span>
-        - --providers.file.watch=<span style="color:#ff79c6">true</span>
-        - --providers.file.filename=/config/traefik-dynamic.toml
-        - --api
-        - --api.debug=<span style="color:#ff79c6">true</span>
-        - --api.dashboard=<span style="color:#ff79c6">true</span>
-        - --accesslog</code></pre></div>
-<blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>......
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">volumes</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ff79c6">name</span>: config
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">configMap</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">name</span>: traefik-dynamic-conf
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">containers</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ff79c6">image</span>: traefik:v2.0.2
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">name</span>: traefik-ingress-lb
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">volumeMounts</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">name</span>: config
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">mountPath</span>: /config
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">ports</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">name</span>: web
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">containerPort</span>: <span style="color:#bd93f9">80</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">hostPort</span>: <span style="color:#bd93f9">80</span>
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">name</span>: admin
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">containerPort</span>: <span style="color:#bd93f9">8080</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">hostPort</span>: <span style="color:#bd93f9">8080</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">args</span>:
+</span></span><span style="display:flex;"><span>        - --entrypoints.web.Address=:80
+</span></span><span style="display:flex;"><span>        - --api.insecure=true
+</span></span><span style="display:flex;"><span>        - --providers.file.watch=true
+</span></span><span style="display:flex;"><span>        - --providers.file.filename=/config/traefik-dynamic.toml
+</span></span><span style="display:flex;"><span>        - --api
+</span></span><span style="display:flex;"><span>        - --api.debug=true
+</span></span><span style="display:flex;"><span>        - --api.dashboard=true
+</span></span><span style="display:flex;"><span>        - --accesslog
+</span></span></code></pre></div><blockquote>
 <p>完整的 YAML 文件可以前往 <a href="https://github.com/cnych/kubeapp/tree/master/traefik2/canary">https://github.com/cnych/kubeapp/tree/master/traefik2/canary</a> 获取。</p>
 </blockquote>
-
 <p>上面是开启 <code>File Provider</code> 的配置，接下来需要创建对应的 ConfigMap 对象，首先创建一个名为 <code>traefik-dynamic.toml</code> 的文件，内容如下所示：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-toml" data-lang="toml">[http]
-  [http.routers]
-    [http.routers.Router0]
-      entryPoints = [<span style="color:#f1fa8c">&#34;web&#34;</span>]
-      service = <span style="color:#f1fa8c">&#34;app&#34;</span>
-      rule = <span style="color:#f1fa8c">&#34;Host(`nginx.qikqiak.com`)&#34;</span>
-
-  [http.services]
-    [http.services.app]
-
-      [[http.services.app.weighted.services]]
-        name = <span style="color:#f1fa8c">&#34;appv1&#34;</span>
-        weight = <span style="color:#bd93f9">3</span>
-
-      [[http.services.app.weighted.services]]
-        name = <span style="color:#f1fa8c">&#34;appv2&#34;</span>
-        weight = <span style="color:#bd93f9">1</span>
-
-    [http.services.appv1]
-      [http.services.appv1.loadBalancer]
-        [[http.services.appv1.loadBalancer.servers]]
-          url = <span style="color:#f1fa8c">&#34;http://appv1/&#34;</span>
-
-    [http.services.appv2]
-      [http.services.appv2.loadBalancer]
-        [[http.services.appv2.loadBalancer.servers]]
-          url = <span style="color:#f1fa8c">&#34;http://appv2/&#34;</span></code></pre></div>
-<p>上面这个配置文件就是我们需要配置的灰度发布的规则，创建一个名为 <code>Router0</code> 的路由，在 <code>web</code> 这个入口点上面监听 <code>Host=nginx.qikqiak.com</code> 这样的请求，将请求路由给名为 <code>app</code> 的服务，而该服务则将请求路由给了 <code>appv1</code> 这个服务，权重为 3，另外一部分请求路由给了 <code>appv2</code> 这个服务，权重为 1，也就是有 <sup>3</sup>&frasl;<sub>4</sub> 的请求会被路由到 <code>http://appv1/</code> 这个真实的服务上，这个地址也就是我们 Kubernetes 集群中的 appv1 这个 Service 对象的 FQDN 地址，当然我们也可以用全路径（<code>http://appv1.kube-system.svc.cluster.local:80</code>）表示，因为都在 <code>kube-system</code> 这个命名空间下面，所以直接用服务名也是可以的，同样的另外的 <sup>1</sup>&frasl;<sub>4</sub> 请求会被路由到 <code>http://appv2/</code> 这个真实的服务上。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-toml" data-lang="toml"><span style="display:flex;"><span>[http]
+</span></span><span style="display:flex;"><span>  [http.routers]
+</span></span><span style="display:flex;"><span>    [http.routers.Router0]
+</span></span><span style="display:flex;"><span>      entryPoints = [<span style="color:#f1fa8c">&#34;web&#34;</span>]
+</span></span><span style="display:flex;"><span>      service = <span style="color:#f1fa8c">&#34;app&#34;</span>
+</span></span><span style="display:flex;"><span>      rule = <span style="color:#f1fa8c">&#34;Host(`nginx.qikqiak.com`)&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  [http.services]
+</span></span><span style="display:flex;"><span>    [http.services.app]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      [[http.services.app.weighted.services]]
+</span></span><span style="display:flex;"><span>        name = <span style="color:#f1fa8c">&#34;appv1&#34;</span>
+</span></span><span style="display:flex;"><span>        weight = <span style="color:#bd93f9">3</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      [[http.services.app.weighted.services]]
+</span></span><span style="display:flex;"><span>        name = <span style="color:#f1fa8c">&#34;appv2&#34;</span>
+</span></span><span style="display:flex;"><span>        weight = <span style="color:#bd93f9">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    [http.services.appv1]
+</span></span><span style="display:flex;"><span>      [http.services.appv1.loadBalancer]
+</span></span><span style="display:flex;"><span>        [[http.services.appv1.loadBalancer.servers]]
+</span></span><span style="display:flex;"><span>          url = <span style="color:#f1fa8c">&#34;http://appv1/&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    [http.services.appv2]
+</span></span><span style="display:flex;"><span>      [http.services.appv2.loadBalancer]
+</span></span><span style="display:flex;"><span>        [[http.services.appv2.loadBalancer.servers]]
+</span></span><span style="display:flex;"><span>          url = <span style="color:#f1fa8c">&#34;http://appv2/&#34;</span>
+</span></span></code></pre></div><p>上面这个配置文件就是我们需要配置的灰度发布的规则，创建一个名为 <code>Router0</code> 的路由，在 <code>web</code> 这个入口点上面监听 <code>Host=nginx.qikqiak.com</code> 这样的请求，将请求路由给名为 <code>app</code> 的服务，而该服务则将请求路由给了 <code>appv1</code> 这个服务，权重为 3，另外一部分请求路由给了 <code>appv2</code> 这个服务，权重为 1，也就是有 3/4 的请求会被路由到 <code>http://appv1/</code> 这个真实的服务上，这个地址也就是我们 Kubernetes 集群中的 appv1 这个 Service 对象的 FQDN 地址，当然我们也可以用全路径（<code>http://appv1.kube-system.svc.cluster.local:80</code>）表示，因为都在 <code>kube-system</code> 这个命名空间下面，所以直接用服务名也是可以的，同样的另外的 1/4 请求会被路由到 <code>http://appv2/</code> 这个真实的服务上。</p>
 <p>现在通过上面的配置文件来创建对应的 ConfigMap 对象：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl create configmap traefik-dynamic-conf --from-file<span style="color:#ff79c6">=</span>traefik-dynamic.toml -n kube-system</code></pre></div>
-<p>创建完成后，再更新 Traefik2.0，就可以将配置文件通过 ConfigMap 挂载到 Traefik Pod 的 <code>/config/traefik-dynamic.toml</code> 路径下面去了。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl create configmap traefik-dynamic-conf --from-file<span style="color:#ff79c6">=</span>traefik-dynamic.toml -n kube-system
+</span></span></code></pre></div><p>创建完成后，再更新 Traefik2.0，就可以将配置文件通过 ConfigMap 挂载到 Traefik Pod 的 <code>/config/traefik-dynamic.toml</code> 路径下面去了。</p>
 <p>然后将域名 <code>nginx.qikqiak.com</code> 解析到 Traefik 所在的 Pod，这个时候我们打开两个终端，分别去观察 appv1 和 appv2 两个应用的日志。</p>
-
 <p>在浏览器中连续访问 <code>nginx.qikqiak.com</code> 4 次，我们可以观察到 appv1 这应用会收到 3 次请求，而 appv2 这个应用只收到 1 次请求，符合上面我们的 <code>3:1</code> 的权重配置。</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/traefik2-wrr-demo.png" alt="traefik2 wrr demo"><figcaption>traefik2 wrr demo</figcaption></figure>
-
+<p><img src="https://picdn.youdianzhishi.com/images/traefik2-wrr-demo.png" alt="traefik2 wrr demo"></p>
 <blockquote>
 <p>不知道是否是 Traefik 的 BUG，同时将 KubernetesCRD Provider 和 File Provider 开启的时候，识别不了 File Provider 中的配置，该问题还有待验证。</p>
 </blockquote>
-
-<p><a href="https://youdianzhishi.com/web/course/1030" title="从 Docker 到 Kubernetes 进阶课程"><img src="https://sdn.youdianzhishi.com/images/2019/10/24/65f2cfb229184268a18745fe202b281b.jpg?imageView2/2/format/webp" alt="Kubernetes进阶训练营"></a></p>
-
+<!-- raw HTML omitted -->
 
           <h2>微信公众号</h2>
-<p>扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的 kubernetes 讨论群里面共同学习。</p>
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/qrcode.png" alt="wechat-account-qrcode">
+<p>
+  扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的
+  kubernetes 讨论群里面共同学习。
+</p>
+<img
+  src="https://picdn.youdianzhishi.com/images/qrcode.png"
+  alt="wechat-account-qrcode"
+/>
 
   
           
@@ -718,7 +687,7 @@ appv2-645d7666b5-qjrjs   <span style="color:#bd93f9">1</span>/1     Running   <s
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -730,7 +699,7 @@ appv2-645d7666b5-qjrjs   <span style="color:#bd93f9">1</span>/1     Running   <s
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -747,7 +716,7 @@ appv2-645d7666b5-qjrjs   <span style="color:#bd93f9">1</span>/1     Running   <s
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -756,7 +725,7 @@ appv2-645d7666b5-qjrjs   <span style="color:#bd93f9">1</span>/1     Running   <s
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

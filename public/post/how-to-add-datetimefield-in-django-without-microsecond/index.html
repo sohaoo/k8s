@@ -14,16 +14,15 @@
   <meta property="og:description" content="Django 中关于 DateTimeField 属性的一个大坑">
   <meta name="twitter:description" content="Django 中关于 DateTimeField 属性的一个大坑">
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/post/how-to-add-datetimefield-in-django-without-microsecond/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/post/how-to-add-datetimefield-in-django-without-microsecond/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -32,7 +31,7 @@
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -83,7 +82,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -226,7 +225,7 @@ autocomplete('#aa-search-input',
 
 
   
-    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/th4t4.jpg" data-img-desc-1="C H A O S"></div>
+    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://picdn.youdianzhishi.com/images/th4t4.jpg" data-img-desc-1="C H A O S"></div>
   
 
   <header class="header-section has-img">
@@ -245,12 +244,8 @@ autocomplete('#aa-search-input',
                   
                   
                     <span class="post-meta">
-  
-    发表于 January 29, 2019
-  
-  
+  发表于 January 29, 2019  
 </span>
-
 
                   
               </div>
@@ -276,12 +271,8 @@ autocomplete('#aa-search-input',
                 
                 
                   <span class="post-meta">
-  
-    发表于 January 29, 2019
-  
-  
+  发表于 January 29, 2019  
 </span>
-
 
                 
             </div>
@@ -334,128 +325,123 @@ autocomplete('#aa-search-input',
           
 
           <p>今天在项目中遇到一个<code>Django</code>的大坑，一个很简单的分页问题，造成了数据重复。最后排查发现是<code>DateTimeField</code> 属性引起的。</p>
-
 <p>下面描述下问题，下面是我需要用到的一个 Task Model 基本定义：</p>
-
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#ff79c6">class</span> <span style="color:#50fa7b">Task</span>(models<span style="color:#ff79c6">.</span>Model):
-    <span style="color:#6272a4"># ...... 省略了其他字段</span>
-    title <span style="color:#ff79c6">=</span> models<span style="color:#ff79c6">.</span>CharField(max_length<span style="color:#ff79c6">=</span><span style="color:#bd93f9">256</span>, verbose_name<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">u</span><span style="color:#f1fa8c">&#39;标题&#39;</span>)
-    created_at <span style="color:#ff79c6">=</span> models<span style="color:#ff79c6">.</span>DateTimeField(auto_now_add<span style="color:#ff79c6">=</span>True, verbose_name<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">u</span><span style="color:#f1fa8c">&#39;创建时间&#39;</span>)</code></pre></div>
-<h3 id="问题描述">问题描述</h3>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff79c6">class</span> <span style="color:#50fa7b">Task</span>(models<span style="color:#ff79c6">.</span>Model):
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># ...... 省略了其他字段</span>
+</span></span><span style="display:flex;"><span>    title <span style="color:#ff79c6">=</span> models<span style="color:#ff79c6">.</span>CharField(max_length<span style="color:#ff79c6">=</span><span style="color:#bd93f9">256</span>, verbose_name<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">u</span><span style="color:#f1fa8c">&#39;标题&#39;</span>)
+</span></span><span style="display:flex;"><span>    created_at <span style="color:#ff79c6">=</span> models<span style="color:#ff79c6">.</span>DateTimeField(auto_now_add<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>, verbose_name<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">u</span><span style="color:#f1fa8c">&#39;创建时间&#39;</span>)
+</span></span></code></pre></div><h3 id="问题描述">问题描述</h3>
 <p>前端这边的分页方式不是常规的 page、page_size 方式，而是使用标志位的方式进行分页，我这里采用的就是通过创建时间的时间戳作为分页标记。比如下面是返回的第一页的数据：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-json" data-lang="json">{
-    <span style="color:#ff79c6">&#34;data&#34;</span>: {
-        <span style="color:#ff79c6">&#34;count&#34;</span>: <span style="color:#bd93f9">5</span>,
-        <span style="color:#ff79c6">&#34;has_next&#34;</span>: <span style="color:#bd93f9">1</span>,
-        <span style="color:#ff79c6">&#34;tasks&#34;</span>: [
-            {
-                <span style="color:#ff79c6">&#34;title&#34;</span>: <span style="color:#f1fa8c">&#34;这是一个作业标题1&#34;</span>,
-                <span style="color:#ff79c6">&#34;ts&#34;</span>: <span style="color:#bd93f9">1546829224000</span>,
-                <span style="color:#ff79c6">&#34;id&#34;</span>: <span style="color:#bd93f9">1</span>
-            },
-            {
-                <span style="color:#ff79c6">&#34;title&#34;</span>: <span style="color:#f1fa8c">&#34;这是一个作业标题2&#34;</span>,
-                <span style="color:#ff79c6">&#34;ts&#34;</span>: <span style="color:#bd93f9">1546829641000</span>,
-                <span style="color:#ff79c6">&#34;id&#34;</span>: <span style="color:#bd93f9">2</span>
-            }
-        ]
-    },
-    <span style="color:#ff79c6">&#34;result&#34;</span>: <span style="color:#bd93f9">1</span>
-}</code></pre></div>
-<p>要请求第2页的数据只需要在请求的 API 中传递上一页最后一条数据的时间戳即可，这里我们就传递 1546829641000，这样当我后台接收到这个值过后就直接过滤大于该时间戳的数据，再取一页数据返回前端即可，逻辑上很简单。过滤核心代码如下：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">ts <span style="color:#ff79c6">=</span> string_utils<span style="color:#ff79c6">.</span>get_num(request<span style="color:#ff79c6">.</span>GET<span style="color:#ff79c6">.</span>get(<span style="color:#f1fa8c">&#39;ts&#39;</span>, <span style="color:#bd93f9">0</span>), <span style="color:#bd93f9">0</span>)
-alltask <span style="color:#ff79c6">=</span> Task<span style="color:#ff79c6">.</span>objects<span style="color:#ff79c6">.</span><span style="color:#8be9fd;font-style:italic">filter</span>(created_at__gt<span style="color:#ff79c6">=</span>date_utils<span style="color:#ff79c6">.</span>timestamp2datetime(ts))</code></pre></div>
-<p>这段代码很简单，主要就是将前台传递过来的时间戳转换成 DateTime 类型的数据，然后利用<code>created_at__gt</code>来过滤，就是大于这个时间点的就可以。然后问题来了，查询出来的数据始终包含了上一页最后一条数据，感觉很奇怪，我这里明明用的是<code>gt</code>而不是<code>gte</code>，怎么会重复这条数据呢。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">&#34;data&#34;</span>: {
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&#34;count&#34;</span>: <span style="color:#bd93f9">5</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&#34;has_next&#34;</span>: <span style="color:#bd93f9">1</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">&#34;tasks&#34;</span>: [
+</span></span><span style="display:flex;"><span>      {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&#34;title&#34;</span>: <span style="color:#f1fa8c">&#34;这是一个作业标题1&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&#34;ts&#34;</span>: <span style="color:#bd93f9">1546829224000</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&#34;id&#34;</span>: <span style="color:#bd93f9">1</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      {
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&#34;title&#34;</span>: <span style="color:#f1fa8c">&#34;这是一个作业标题2&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&#34;ts&#34;</span>: <span style="color:#bd93f9">1546829641000</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">&#34;id&#34;</span>: <span style="color:#bd93f9">2</span>
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    ]
+</span></span><span style="display:flex;"><span>  },
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">&#34;result&#34;</span>: <span style="color:#bd93f9">1</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>要请求第 2 页的数据只需要在请求的 API 中传递上一页最后一条数据的时间戳即可，这里我们就传递 1546829641000，这样当我后台接收到这个值过后就直接过滤大于该时间戳的数据，再取一页数据返回前端即可，逻辑上很简单。过滤核心代码如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>ts <span style="color:#ff79c6">=</span> string_utils<span style="color:#ff79c6">.</span>get_num(request<span style="color:#ff79c6">.</span>GET<span style="color:#ff79c6">.</span>get(<span style="color:#f1fa8c">&#39;ts&#39;</span>, <span style="color:#bd93f9">0</span>), <span style="color:#bd93f9">0</span>)
+</span></span><span style="display:flex;"><span>alltask <span style="color:#ff79c6">=</span> Task<span style="color:#ff79c6">.</span>objects<span style="color:#ff79c6">.</span>filter(created_at__gt<span style="color:#ff79c6">=</span>date_utils<span style="color:#ff79c6">.</span>timestamp2datetime(ts))
+</span></span></code></pre></div><p>这段代码很简单，主要就是将前台传递过来的时间戳转换成 DateTime 类型的数据，然后利用<code>created_at__gt</code>来过滤，就是大于这个时间点的就可以。然后问题来了，查询出来的数据始终包含了上一页最后一条数据，感觉很奇怪，我这里明明用的是<code>gt</code>而不是<code>gte</code>，怎么会重复这条数据呢。</p>
 <p>于是，我们把上一页最后一条数据的 created_at 字段打印出来和传递过来的时间戳进行对比下：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">&gt;&gt;&gt; <span style="color:#8be9fd;font-style:italic">task</span> <span style="color:#ff79c6">=</span> Task.objects.get<span style="color:#ff79c6">(</span><span style="color:#8be9fd;font-style:italic">pk</span><span style="color:#ff79c6">=</span><span style="color:#bd93f9">2</span><span style="color:#ff79c6">)</span>
-&gt;&gt;&gt; task.created_at
-datetime.datetime<span style="color:#ff79c6">(</span><span style="color:#bd93f9">2019</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">7</span>, <span style="color:#bd93f9">10</span>, <span style="color:#bd93f9">54</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">343136</span><span style="color:#ff79c6">)</span></code></pre></div>
-<p>然后将时间戳转换成 DateTime 类型的数据：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">&gt;&gt;&gt; <span style="color:#8be9fd;font-style:italic">ts</span> <span style="color:#ff79c6">=</span> int<span style="color:#ff79c6">(</span><span style="color:#bd93f9">1546829641000</span>/1000<span style="color:#ff79c6">)</span>
-&gt;&gt;&gt; date_utils.timestamp2datetime<span style="color:#ff79c6">(</span>ts<span style="color:#ff79c6">)</span>
-datetime.datetime<span style="color:#ff79c6">(</span><span style="color:#bd93f9">2019</span>, <span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">7</span>, <span style="color:#bd93f9">10</span>, <span style="color:#bd93f9">54</span>, <span style="color:#bd93f9">1</span><span style="color:#ff79c6">)</span></code></pre></div>
-<p>现在看到区别没有，从数据库中查询出来的 created_at 字段的值包含了一个微秒，就是后面的 343136，而时间戳转换成 DateTime 类型的值是不包含这个微秒值的，所以我们上面查询的使用<code>created_at__gt</code>来进行过滤很显然 created_at 的值是大于下面的值的，因为多了一个微秒，所以就造成了数据重复了，终于破案了。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>&gt;&gt;&gt; <span style="color:#8be9fd;font-style:italic">task</span> <span style="color:#ff79c6">=</span> Task.objects.get<span style="color:#ff79c6">(</span><span style="color:#8be9fd;font-style:italic">pk</span><span style="color:#ff79c6">=</span>2<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>&gt;&gt;&gt; task.created_at
+</span></span><span style="display:flex;"><span>datetime.datetime<span style="color:#ff79c6">(</span>2019, 1, 7, 10, 54, 1, 343136<span style="color:#ff79c6">)</span>
+</span></span></code></pre></div><p>然后将时间戳转换成 DateTime 类型的数据：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>&gt;&gt;&gt; <span style="color:#8be9fd;font-style:italic">ts</span> <span style="color:#ff79c6">=</span> int<span style="color:#ff79c6">(</span>1546829641000/1000<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>&gt;&gt;&gt; date_utils.timestamp2datetime<span style="color:#ff79c6">(</span>ts<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>datetime.datetime<span style="color:#ff79c6">(</span>2019, 1, 7, 10, 54, 1<span style="color:#ff79c6">)</span>
+</span></span></code></pre></div><p>现在看到区别没有，从数据库中查询出来的 created_at 字段的值包含了一个微秒，就是后面的 343136，而时间戳转换成 DateTime 类型的值是不包含这个微秒值的，所以我们上面查询的使用<code>created_at__gt</code>来进行过滤很显然 created_at 的值是大于下面的值的，因为多了一个微秒，所以就造成了数据重复了，终于破案了。</p>
 <h3 id="解决方法">解决方法</h3>
-
 <p>那么要怎么解决这个问题呢？当然我们可以直接在数据库中就保存一个时间戳的字段，用这个字段直接来进行查询过滤，肯定是可以解决这个问题的。</p>
-
 <p>如果就用现在的 created_at 这个 DateTimeField 类型呢？如果保存的数据没有这个微秒是不是也可以解决这个问题啊？</p>
-
 <p>我们可以去查看下源码为什么 DateTimeField 类型的数据会包含微秒，下面是<code>django/db/backends/mysql/base.py</code>文件中的部分代码说明：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#ff79c6">class</span> <span style="color:#50fa7b">DatabaseWrapper</span>(BaseDatabaseWrapper):
-    vendor <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;mysql&#39;</span>
-    <span style="color:#6272a4"># This dictionary maps Field objects to their associated MySQL column</span>
-    <span style="color:#6272a4"># types, as strings. Column-type strings can contain format strings; they&#39;ll</span>
-    <span style="color:#6272a4"># be interpolated against the values of Field.__dict__ before being output.</span>
-    <span style="color:#6272a4"># If a column type is set to None, it won&#39;t be included in the output.</span>
-    _data_types <span style="color:#ff79c6">=</span> {
-        <span style="color:#f1fa8c">&#39;AutoField&#39;</span>: <span style="color:#f1fa8c">&#39;integer AUTO_INCREMENT&#39;</span>,
-        <span style="color:#f1fa8c">&#39;BinaryField&#39;</span>: <span style="color:#f1fa8c">&#39;longblob&#39;</span>,
-        <span style="color:#f1fa8c">&#39;BooleanField&#39;</span>: <span style="color:#f1fa8c">&#39;bool&#39;</span>,
-        <span style="color:#f1fa8c">&#39;CharField&#39;</span>: <span style="color:#f1fa8c">&#39;varchar(</span><span style="color:#f1fa8c">%(max_length)s</span><span style="color:#f1fa8c">)&#39;</span>,
-        <span style="color:#f1fa8c">&#39;CommaSeparatedIntegerField&#39;</span>: <span style="color:#f1fa8c">&#39;varchar(</span><span style="color:#f1fa8c">%(max_length)s</span><span style="color:#f1fa8c">)&#39;</span>,
-        <span style="color:#f1fa8c">&#39;DateField&#39;</span>: <span style="color:#f1fa8c">&#39;date&#39;</span>,
-        <span style="color:#f1fa8c">&#39;DateTimeField&#39;</span>: <span style="color:#f1fa8c">&#39;datetime&#39;</span>,
-        <span style="color:#f1fa8c">&#39;DecimalField&#39;</span>: <span style="color:#f1fa8c">&#39;numeric(</span><span style="color:#f1fa8c">%(max_digits)s</span><span style="color:#f1fa8c">, </span><span style="color:#f1fa8c">%(decimal_places)s</span><span style="color:#f1fa8c">)&#39;</span>,
-        <span style="color:#f1fa8c">&#39;DurationField&#39;</span>: <span style="color:#f1fa8c">&#39;bigint&#39;</span>,
-        <span style="color:#f1fa8c">&#39;FileField&#39;</span>: <span style="color:#f1fa8c">&#39;varchar(</span><span style="color:#f1fa8c">%(max_length)s</span><span style="color:#f1fa8c">)&#39;</span>,
-        <span style="color:#f1fa8c">&#39;FilePathField&#39;</span>: <span style="color:#f1fa8c">&#39;varchar(</span><span style="color:#f1fa8c">%(max_length)s</span><span style="color:#f1fa8c">)&#39;</span>,
-        <span style="color:#f1fa8c">&#39;FloatField&#39;</span>: <span style="color:#f1fa8c">&#39;double precision&#39;</span>,
-        <span style="color:#f1fa8c">&#39;IntegerField&#39;</span>: <span style="color:#f1fa8c">&#39;integer&#39;</span>,
-        <span style="color:#f1fa8c">&#39;BigIntegerField&#39;</span>: <span style="color:#f1fa8c">&#39;bigint&#39;</span>,
-        <span style="color:#f1fa8c">&#39;IPAddressField&#39;</span>: <span style="color:#f1fa8c">&#39;char(15)&#39;</span>,
-        <span style="color:#f1fa8c">&#39;GenericIPAddressField&#39;</span>: <span style="color:#f1fa8c">&#39;char(39)&#39;</span>,
-        <span style="color:#f1fa8c">&#39;NullBooleanField&#39;</span>: <span style="color:#f1fa8c">&#39;bool&#39;</span>,
-        <span style="color:#f1fa8c">&#39;OneToOneField&#39;</span>: <span style="color:#f1fa8c">&#39;integer&#39;</span>,
-        <span style="color:#f1fa8c">&#39;PositiveIntegerField&#39;</span>: <span style="color:#f1fa8c">&#39;integer UNSIGNED&#39;</span>,
-        <span style="color:#f1fa8c">&#39;PositiveSmallIntegerField&#39;</span>: <span style="color:#f1fa8c">&#39;smallint UNSIGNED&#39;</span>,
-        <span style="color:#f1fa8c">&#39;SlugField&#39;</span>: <span style="color:#f1fa8c">&#39;varchar(</span><span style="color:#f1fa8c">%(max_length)s</span><span style="color:#f1fa8c">)&#39;</span>,
-        <span style="color:#f1fa8c">&#39;SmallIntegerField&#39;</span>: <span style="color:#f1fa8c">&#39;smallint&#39;</span>,
-        <span style="color:#f1fa8c">&#39;TextField&#39;</span>: <span style="color:#f1fa8c">&#39;longtext&#39;</span>,
-        <span style="color:#f1fa8c">&#39;TimeField&#39;</span>: <span style="color:#f1fa8c">&#39;time&#39;</span>,
-        <span style="color:#f1fa8c">&#39;UUIDField&#39;</span>: <span style="color:#f1fa8c">&#39;char(32)&#39;</span>,
-    }
-
-    @cached_property
-    <span style="color:#ff79c6">def</span> <span style="color:#50fa7b">data_types</span>(self):
-        <span style="color:#ff79c6">if</span> self<span style="color:#ff79c6">.</span>features<span style="color:#ff79c6">.</span>supports_microsecond_precision:
-            <span style="color:#ff79c6">return</span> <span style="color:#8be9fd;font-style:italic">dict</span>(self<span style="color:#ff79c6">.</span>_data_types, DateTimeField<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;datetime(6)&#39;</span>, TimeField<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;time(6)&#39;</span>)
-        <span style="color:#ff79c6">else</span>:
-            <span style="color:#ff79c6">return</span> self<span style="color:#ff79c6">.</span>_data_types
-
-    <span style="color:#6272a4"># ... further class methods</span></code></pre></div>
-<p>上面的 data_types 方法中在进行 MySQL 版本检查，属性<code>supports_microsecond_precision</code>来自于文件<code>django/db/backends/mysql/features.py</code>:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#ff79c6">class</span> <span style="color:#50fa7b">DatabaseFeatures</span>(BaseDatabaseFeatures):
-    <span style="color:#6272a4"># ... properties and methods</span>
-
-    <span style="color:#ff79c6">def</span> <span style="color:#50fa7b">supports_microsecond_precision</span>(self):
-        <span style="color:#6272a4"># See https://github.com/farcepest/MySQLdb1/issues/24 for the reason</span>
-        <span style="color:#6272a4"># about requiring MySQLdb 1.2.5</span>
-        <span style="color:#ff79c6">return</span> self<span style="color:#ff79c6">.</span>connection<span style="color:#ff79c6">.</span>mysql_version <span style="color:#ff79c6">&gt;=</span> (<span style="color:#bd93f9">5</span>, <span style="color:#bd93f9">6</span>, <span style="color:#bd93f9">4</span>) <span style="color:#ff79c6">and</span> Database<span style="color:#ff79c6">.</span>version_info <span style="color:#ff79c6">&gt;=</span> (<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">5</span>)</code></pre></div>
-<p>从上面代码可以看出如果使用的 MySQL 大于等于 5.6.4 版本，属性<code>DateTimeField</code>会被映射成为数据库中的<code>datetime(6)</code>，所以保存的数据就包含了微秒。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff79c6">class</span> <span style="color:#50fa7b">DatabaseWrapper</span>(BaseDatabaseWrapper):
+</span></span><span style="display:flex;"><span>    vendor <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;mysql&#39;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># This dictionary maps Field objects to their associated MySQL column</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># types, as strings. Column-type strings can contain format strings; they&#39;ll</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># be interpolated against the values of Field.__dict__ before being output.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># If a column type is set to None, it won&#39;t be included in the output.</span>
+</span></span><span style="display:flex;"><span>    _data_types <span style="color:#ff79c6">=</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#f1fa8c">&#39;AutoField&#39;</span>: <span style="color:#f1fa8c">&#39;integer AUTO_INCREMENT&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f1fa8c">&#39;BinaryField&#39;</span>: <span style="color:#f1fa8c">&#39;longblob&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f1fa8c">&#39;BooleanField&#39;</span>: <span style="color:#f1fa8c">&#39;bool&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f1fa8c">&#39;CharField&#39;</span>: <span style="color:#f1fa8c">&#39;varchar(</span><span style="color:#f1fa8c">%(max_length)s</span><span style="color:#f1fa8c">)&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f1fa8c">&#39;CommaSeparatedIntegerField&#39;</span>: <span style="color:#f1fa8c">&#39;varchar(</span><span style="color:#f1fa8c">%(max_length)s</span><span style="color:#f1fa8c">)&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f1fa8c">&#39;DateField&#39;</span>: <span style="color:#f1fa8c">&#39;date&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f1fa8c">&#39;DateTimeField&#39;</span>: <span style="color:#f1fa8c">&#39;datetime&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f1fa8c">&#39;DecimalField&#39;</span>: <span style="color:#f1fa8c">&#39;numeric(</span><span style="color:#f1fa8c">%(max_digits)s</span><span style="color:#f1fa8c">, </span><span style="color:#f1fa8c">%(decimal_places)s</span><span style="color:#f1fa8c">)&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f1fa8c">&#39;DurationField&#39;</span>: <span style="color:#f1fa8c">&#39;bigint&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f1fa8c">&#39;FileField&#39;</span>: <span style="color:#f1fa8c">&#39;varchar(</span><span style="color:#f1fa8c">%(max_length)s</span><span style="color:#f1fa8c">)&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f1fa8c">&#39;FilePathField&#39;</span>: <span style="color:#f1fa8c">&#39;varchar(</span><span style="color:#f1fa8c">%(max_length)s</span><span style="color:#f1fa8c">)&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f1fa8c">&#39;FloatField&#39;</span>: <span style="color:#f1fa8c">&#39;double precision&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f1fa8c">&#39;IntegerField&#39;</span>: <span style="color:#f1fa8c">&#39;integer&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f1fa8c">&#39;BigIntegerField&#39;</span>: <span style="color:#f1fa8c">&#39;bigint&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f1fa8c">&#39;IPAddressField&#39;</span>: <span style="color:#f1fa8c">&#39;char(15)&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f1fa8c">&#39;GenericIPAddressField&#39;</span>: <span style="color:#f1fa8c">&#39;char(39)&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f1fa8c">&#39;NullBooleanField&#39;</span>: <span style="color:#f1fa8c">&#39;bool&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f1fa8c">&#39;OneToOneField&#39;</span>: <span style="color:#f1fa8c">&#39;integer&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f1fa8c">&#39;PositiveIntegerField&#39;</span>: <span style="color:#f1fa8c">&#39;integer UNSIGNED&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f1fa8c">&#39;PositiveSmallIntegerField&#39;</span>: <span style="color:#f1fa8c">&#39;smallint UNSIGNED&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f1fa8c">&#39;SlugField&#39;</span>: <span style="color:#f1fa8c">&#39;varchar(</span><span style="color:#f1fa8c">%(max_length)s</span><span style="color:#f1fa8c">)&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f1fa8c">&#39;SmallIntegerField&#39;</span>: <span style="color:#f1fa8c">&#39;smallint&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f1fa8c">&#39;TextField&#39;</span>: <span style="color:#f1fa8c">&#39;longtext&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f1fa8c">&#39;TimeField&#39;</span>: <span style="color:#f1fa8c">&#39;time&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f1fa8c">&#39;UUIDField&#39;</span>: <span style="color:#f1fa8c">&#39;char(32)&#39;</span>,
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    @cached_property
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">def</span> <span style="color:#50fa7b">data_types</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">if</span> self<span style="color:#ff79c6">.</span>features<span style="color:#ff79c6">.</span>supports_microsecond_precision:
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> <span style="color:#8be9fd;font-style:italic">dict</span>(self<span style="color:#ff79c6">.</span>_data_types, DateTimeField<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;datetime(6)&#39;</span>, TimeField<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;time(6)&#39;</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">else</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">return</span> self<span style="color:#ff79c6">.</span>_data_types
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># ... further class methods</span>
+</span></span></code></pre></div><p>上面的 data_types 方法中在进行 MySQL 版本检查，属性<code>supports_microsecond_precision</code>来自于文件<code>django/db/backends/mysql/features.py</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff79c6">class</span> <span style="color:#50fa7b">DatabaseFeatures</span>(BaseDatabaseFeatures):
+</span></span><span style="display:flex;"><span>    <span style="color:#6272a4"># ... properties and methods</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">def</span> <span style="color:#50fa7b">supports_microsecond_precision</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># See https://github.com/farcepest/MySQLdb1/issues/24 for the reason</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#6272a4"># about requiring MySQLdb 1.2.5</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> self<span style="color:#ff79c6">.</span>connection<span style="color:#ff79c6">.</span>mysql_version <span style="color:#ff79c6">&gt;=</span> (<span style="color:#bd93f9">5</span>, <span style="color:#bd93f9">6</span>, <span style="color:#bd93f9">4</span>) <span style="color:#ff79c6">and</span> Database<span style="color:#ff79c6">.</span>version_info <span style="color:#ff79c6">&gt;=</span> (<span style="color:#bd93f9">1</span>, <span style="color:#bd93f9">2</span>, <span style="color:#bd93f9">5</span>)
+</span></span></code></pre></div><p>从上面代码可以看出如果使用的 MySQL 大于等于 5.6.4 版本，属性<code>DateTimeField</code>会被映射成为数据库中的<code>datetime(6)</code>，所以保存的数据就包含了微秒。</p>
 <p>在 Django 中暂时没有发现可以针对改配置进行设置的方法，所以我们要想保存的数据不包含微秒，我们这里则可以将上面的<code>data_types</code>属性进行覆盖即可：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#ff79c6">from</span> django.db.backends.mysql.base <span style="color:#ff79c6">import</span> DatabaseWrapper
-
-DatabaseWrapper<span style="color:#ff79c6">.</span>data_types <span style="color:#ff79c6">=</span> DatabaseWrapper<span style="color:#ff79c6">.</span>_data_types</code></pre></div>
-<p>将上面的代码放置在合适的地方，比如<code>models.py</code>或者<code>__init__.py</code>或者其他地方，当我们运行 migrations 命令来创建 DateTimeField 列的时候对应在数据库中的字段就被隐射成为了<code>datetime</code>，而不是<code>datetime(6)</code>，即使你用的是 5.6.4 版本以上的数据库。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff79c6">from</span> django.db.backends.mysql.base <span style="color:#ff79c6">import</span> DatabaseWrapper
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>DatabaseWrapper<span style="color:#ff79c6">.</span>data_types <span style="color:#ff79c6">=</span> DatabaseWrapper<span style="color:#ff79c6">.</span>_data_types
+</span></span></code></pre></div><p>将上面的代码放置在合适的地方，比如<code>models.py</code>或者<code>__init__.py</code>或者其他地方，当我们运行 migrations 命令来创建 DateTimeField 列的时候对应在数据库中的字段就被隐射成为了<code>datetime</code>，而不是<code>datetime(6)</code>，即使你用的是 5.6.4 版本以上的数据库。</p>
 <p>当然要立即解决当前的问题，只需要更改下数据库中的 created_at 字段的类型即可：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mysql&gt; ALTER TABLE <span style="color:#f1fa8c">`</span>task<span style="color:#f1fa8c">`</span> CHANGE COLUMN <span style="color:#f1fa8c">`</span>created_at<span style="color:#f1fa8c">`</span> <span style="color:#f1fa8c">`</span>created_at<span style="color:#f1fa8c">`</span> datetime NOT NULL;
-Query OK, <span style="color:#bd93f9">156</span> rows affected <span style="color:#ff79c6">(</span><span style="color:#bd93f9">0</span>.14 sec<span style="color:#ff79c6">)</span>
-Records: <span style="color:#bd93f9">156</span>  Duplicates: <span style="color:#bd93f9">0</span>  Warnings: <span style="color:#bd93f9">0</span></code></pre></div>
-<p>这样数据重复的 BUG 就解决了。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>mysql&gt; ALTER TABLE <span style="color:#f1fa8c">`</span>task<span style="color:#f1fa8c">`</span> CHANGE COLUMN <span style="color:#f1fa8c">`</span>created_at<span style="color:#f1fa8c">`</span> <span style="color:#f1fa8c">`</span>created_at<span style="color:#f1fa8c">`</span> datetime NOT NULL;
+</span></span><span style="display:flex;"><span>Query OK, <span style="color:#bd93f9">156</span> rows affected <span style="color:#ff79c6">(</span>0.14 sec<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>Records: <span style="color:#bd93f9">156</span>  Duplicates: <span style="color:#bd93f9">0</span>  Warnings: <span style="color:#bd93f9">0</span>
+</span></span></code></pre></div><p>这样数据重复的 BUG 就解决了。</p>
 <blockquote>
 <p>参考链接：<a href="https://stackoverflow.com/questions/46539755/how-to-add-datetimefield-in-django-without-microsecond">https://stackoverflow.com/questions/46539755/how-to-add-datetimefield-in-django-without-microsecond</a></p>
 </blockquote>
 
           <h2>微信公众号</h2>
-<p>扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的 kubernetes 讨论群里面共同学习。</p>
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/qrcode.png" alt="wechat-account-qrcode">
+<p>
+  扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的
+  kubernetes 讨论群里面共同学习。
+</p>
+<img
+  src="https://picdn.youdianzhishi.com/images/qrcode.png"
+  alt="wechat-account-qrcode"
+/>
 
   
           
@@ -652,7 +638,7 @@ Records: <span style="color:#bd93f9">156</span>  Duplicates: <span style="color:
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -664,7 +650,7 @@ Records: <span style="color:#bd93f9">156</span>  Duplicates: <span style="color:
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -681,7 +667,7 @@ Records: <span style="color:#bd93f9">156</span>  Duplicates: <span style="color:
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -690,7 +676,7 @@ Records: <span style="color:#bd93f9">156</span>  Duplicates: <span style="color:
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

@@ -14,16 +14,15 @@
   <meta property="og:description" content="有的时候我们可能希望从 Prometheus 中删除一些不需要的数据指标，或者只是单纯的想要释放一些磁盘空间。Prometheus 中的时间序列只能通过 HTTP API 来进行管理。">
   <meta name="twitter:description" content="有的时候我们可能希望从 Prometheus 中删除一些不需要的数据指标，或者只是单纯的想要释放一些磁盘空间。Prometheus 中的时间序列只能通过 HTTP API 来进行管理。">
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/post/prometheus-delete-metrics/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/post/prometheus-delete-metrics/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -32,7 +31,7 @@
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -83,7 +82,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -226,7 +225,7 @@ autocomplete('#aa-search-input',
 
 
   
-    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/opd8s.jpg" data-img-desc-1="kiss"></div>
+    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://picdn.youdianzhishi.com/images/opd8s.jpg" data-img-desc-1="kiss"></div>
   
 
   <header class="header-section has-img">
@@ -241,12 +240,8 @@ autocomplete('#aa-search-input',
                   
                   
                     <span class="post-meta">
-  
-    发表于 December 29, 2018
-  
-  
+  发表于 December 29, 2018  
 </span>
-
 
                   
               </div>
@@ -268,12 +263,8 @@ autocomplete('#aa-search-input',
                 
                 
                   <span class="post-meta">
-  
-    发表于 December 29, 2018
-  
-  
+  发表于 December 29, 2018  
 </span>
-
 
                 
             </div>
@@ -324,45 +315,43 @@ autocomplete('#aa-search-input',
           
 
           <p>有的时候我们可能希望从 Prometheus 中删除一些不需要的数据指标，或者只是单纯的想要释放一些磁盘空间。Prometheus 中的时间序列只能通过 HTTP API 来进行管理。</p>
-
 <p>默认情况下，管理时间序列的 API 是被禁用的，要启用它，我们需要在 Prometheus 的启动参数中添加<code>--web.enable-admin-api</code>这个参数，比如我们前面的文章中通过 Kubernetes Pod 来部署的，则同样需要添加上这个参数：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">command:
-- <span style="color:#f1fa8c">&#34;/bin/prometheus&#34;</span>
-args:
-- <span style="color:#f1fa8c">&#34;--config.file=/etc/prometheus/prometheus.yml&#34;</span>
-- <span style="color:#f1fa8c">&#34;--storage.tsdb.path=/prometheus&#34;</span>
-- <span style="color:#f1fa8c">&#34;--storage.tsdb.retention=24h&#34;</span>
-- <span style="color:#f1fa8c">&#34;--web.enable-admin-api&#34;</span>  <span style="color:#6272a4"># 控制对admin HTTP API的访问，其中包括删除时间序列等功能</span>
-- <span style="color:#f1fa8c">&#34;--web.enable-lifecycle&#34;</span>  <span style="color:#6272a4"># 支持热更新，直接执行localhost:9090/-/reload立即生效</span></code></pre></div>
-<blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">command</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#f1fa8c">&#34;/bin/prometheus&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">args</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#f1fa8c">&#34;--config.file=/etc/prometheus/prometheus.yml&#34;</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#f1fa8c">&#34;--storage.tsdb.path=/prometheus&#34;</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#f1fa8c">&#34;--storage.tsdb.retention=24h&#34;</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#f1fa8c">&#34;--web.enable-admin-api&#34;</span> <span style="color:#6272a4"># 控制对admin HTTP API的访问，其中包括删除时间序列等功能</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#f1fa8c">&#34;--web.enable-lifecycle&#34;</span> <span style="color:#6272a4"># 支持热更新，直接执行localhost:9090/-/reload立即生效</span>
+</span></span></code></pre></div><blockquote>
 <p>如果你使用的是 Prometheus Operator 部署的话，貌似官方没有给出这个参数的配置，可以通过编辑对应的 Staefulset 资源对象来添加该参数。</p>
 </blockquote>
-
 <h2 id="删除时间序列指标">删除时间序列指标</h2>
-
 <p>控制管理 API 启用后，可以使用下面的语法来删除与某个标签匹配的所有时间序列指标：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ curl -X POST -g <span style="color:#f1fa8c">&#39;http://localhost:9090/api/v1/admin/tsdb/delete_series?match[]={kubernetes_name=&#34;redis&#34;}&#39;</span></code></pre></div>
-<blockquote>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ curl -X POST -g <span style="color:#f1fa8c">&#39;http://localhost:9090/api/v1/admin/tsdb/delete_series?match[]={kubernetes_name=&#34;redis&#34;}&#39;</span>
+</span></span></code></pre></div><blockquote>
 <p>将 localhost 替换成你自己的 Prometheus 的访问地址即可。</p>
 </blockquote>
-
 <p>上面命令就可以用于删除具有标签<code>kubernetes_name=&quot;redis&quot;</code>的时间序列指标。</p>
-
 <p>如果要删除一些 job 任务或者 instance 的数据指标，则可以使用下面的命令：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ curl -X POST -g <span style="color:#f1fa8c">&#39;http://localhost:9090/api/v1/admin/tsdb/delete_series?match[]={job=&#34;kubernetes-service-endpoints&#34;}&#39;</span>
-$ curl -X POST -g <span style="color:#f1fa8c">&#39;http://localhost:9090/api/v1/admin/tsdb/delete_series?match[]={instance=&#34;10.244.2.158:9090&#34;}&#39;</span></code></pre></div>
-<p>要从 Prometheus 中删除所有的数据，可以使用如下命令：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ curl -X POST -g <span style="color:#f1fa8c">&#39;http://localhost:9090/api/v1/admin/tsdb/delete_series?match[]={__name__=~&#34;.+&#34;}&#39;</span></code></pre></div>
-<p>不过需要注意的是上面的 API 调用并不会立即删除数据，实际数据任然还存在磁盘上，会在后面进行数据清理。</p>
-
-<p>要确定何时删除旧数据，可以使用<code>--storage.tsdb.retention</code>参数进行配置（默认情况下，Prometheus 会将数据保留15天）。</p>
-
-<p><a href="https://youdianzhishi.com/web/course/1030" title="从 Docker 到 Kubernetes 进阶课程"><img src="https://sdn.youdianzhishi.com/images/2019/10/24/65f2cfb229184268a18745fe202b281b.jpg?imageView2/2/format/webp" alt="Kubernetes进阶训练营"></a></p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ curl -X POST -g <span style="color:#f1fa8c">&#39;http://localhost:9090/api/v1/admin/tsdb/delete_series?match[]={job=&#34;kubernetes-service-endpoints&#34;}&#39;</span>
+</span></span><span style="display:flex;"><span>$ curl -X POST -g <span style="color:#f1fa8c">&#39;http://localhost:9090/api/v1/admin/tsdb/delete_series?match[]={instance=&#34;10.244.2.158:9090&#34;}&#39;</span>
+</span></span></code></pre></div><p>要从 Prometheus 中删除所有的数据，可以使用如下命令：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ curl -X POST -g <span style="color:#f1fa8c">&#39;http://localhost:9090/api/v1/admin/tsdb/delete_series?match[]={__name__=~&#34;.+&#34;}&#39;</span>
+</span></span></code></pre></div><p>不过需要注意的是上面的 API 调用并不会立即删除数据，实际数据任然还存在磁盘上，会在后面进行数据清理。</p>
+<p>要确定何时删除旧数据，可以使用<code>--storage.tsdb.retention</code>参数进行配置（默认情况下，Prometheus 会将数据保留 15 天）。</p>
+<!-- raw HTML omitted -->
 
           <h2>微信公众号</h2>
-<p>扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的 kubernetes 讨论群里面共同学习。</p>
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/qrcode.png" alt="wechat-account-qrcode">
+<p>
+  扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的
+  kubernetes 讨论群里面共同学习。
+</p>
+<img
+  src="https://picdn.youdianzhishi.com/images/qrcode.png"
+  alt="wechat-account-qrcode"
+/>
 
   
           
@@ -538,7 +527,7 @@ $ curl -X POST -g <span style="color:#f1fa8c">&#39;http://localhost:9090/api/v1/
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -550,7 +539,7 @@ $ curl -X POST -g <span style="color:#f1fa8c">&#39;http://localhost:9090/api/v1/
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -567,7 +556,7 @@ $ curl -X POST -g <span style="color:#f1fa8c">&#39;http://localhost:9090/api/v1/
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -576,7 +565,7 @@ $ curl -X POST -g <span style="color:#f1fa8c">&#39;http://localhost:9090/api/v1/
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

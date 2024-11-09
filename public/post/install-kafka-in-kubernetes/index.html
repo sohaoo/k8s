@@ -14,16 +14,15 @@
   <meta property="og:description" content="最近在测试日志采集的时候，发现日志数据量稍微大一点，Elasticsearch 就有点抗不住了，对于 ES 的优化可能不是一朝一夕能够完成的，所以打算加一个中间层，将日志输出到 Kafka，然后通过 Logstash 从 Kafka 里面去消费日志存入 Elasticsearch。在测试环境现在并没有一套 Kafka 集群，所以我们来先在测试环境搭建一套 Kafka 集群。">
   <meta name="twitter:description" content="最近在测试日志采集的时候，发现日志数据量稍微大一点，Elasticsearch 就有点抗不住了，对于 ES 的优化可能不是一朝一夕能够完成的，所以打算加一个中间层，将日志输出到 Kafka，然后通过 Logstash 从 Kafka 里面去消费日志存入 Elasticsearch。在测试环境现在并没有一套 Kafka 集群，所以我们来先在测试环境搭建一套 Kafka 集群。">
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/post/install-kafka-in-kubernetes/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/post/install-kafka-in-kubernetes/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -32,7 +31,7 @@
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -83,7 +82,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -226,7 +225,7 @@ autocomplete('#aa-search-input',
 
 
   
-    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200317190406.png" data-img-desc-1="person standing on a mountain overlooking the ocean"></div>
+    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://picdn.youdianzhishi.com/images/20200317190406.png" data-img-desc-1="person standing on a mountain overlooking the ocean"></div>
   
 
   <header class="header-section has-img">
@@ -241,12 +240,8 @@ autocomplete('#aa-search-input',
                   
                   
                     <span class="post-meta">
-  
-    发表于 March 17, 2020
-  
-  
+  发表于 March 17, 2020  
 </span>
-
 
                   
               </div>
@@ -268,12 +263,8 @@ autocomplete('#aa-search-input',
                 
                 
                   <span class="post-meta">
-  
-    发表于 March 17, 2020
-  
-  
+  发表于 March 17, 2020  
 </span>
-
 
                 
             </div>
@@ -326,177 +317,169 @@ autocomplete('#aa-search-input',
           
 
           <p>最近在测试日志采集的时候，发现日志数据量稍微大一点，Elasticsearch 就有点抗不住了，对于 ES 的优化可能不是一朝一夕能够完成的，所以打算加一个中间层，将日志输出到 Kafka，然后通过 Logstash 从 Kafka 里面去消费日志存入 Elasticsearch。在测试环境现在并没有一套 Kafka 集群，所以我们来先在测试环境搭建一套 Kafka 集群。</p>
-
 <p>本文使用到的相关环境版本如下：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl version
-Client Version: version.Info<span style="color:#ff79c6">{</span>Major:<span style="color:#f1fa8c">&#34;1&#34;</span>, Minor:<span style="color:#f1fa8c">&#34;14&#34;</span>, GitVersion:<span style="color:#f1fa8c">&#34;v1.14.2&#34;</span>, GitCommit:<span style="color:#f1fa8c">&#34;66049e3b21efe110454d67df4fa62b08ea79a19b&#34;</span>, GitTreeState:<span style="color:#f1fa8c">&#34;clean&#34;</span>, BuildDate:<span style="color:#f1fa8c">&#34;2019-05-16T18:55:03Z&#34;</span>, GoVersion:<span style="color:#f1fa8c">&#34;go1.12.5&#34;</span>, Compiler:<span style="color:#f1fa8c">&#34;gc&#34;</span>, Platform:<span style="color:#f1fa8c">&#34;darwin/amd64&#34;</span><span style="color:#ff79c6">}</span>
-Server Version: version.Info<span style="color:#ff79c6">{</span>Major:<span style="color:#f1fa8c">&#34;1&#34;</span>, Minor:<span style="color:#f1fa8c">&#34;16&#34;</span>, GitVersion:<span style="color:#f1fa8c">&#34;v1.16.2&#34;</span>, GitCommit:<span style="color:#f1fa8c">&#34;c97fe5036ef3df2967d086711e6c0c405941e14b&#34;</span>, GitTreeState:<span style="color:#f1fa8c">&#34;clean&#34;</span>, BuildDate:<span style="color:#f1fa8c">&#34;2019-10-15T19:09:08Z&#34;</span>, GoVersion:<span style="color:#f1fa8c">&#34;go1.12.10&#34;</span>, Compiler:<span style="color:#f1fa8c">&#34;gc&#34;</span>, Platform:<span style="color:#f1fa8c">&#34;linux/amd64&#34;</span><span style="color:#ff79c6">}</span>
-$ helm version
-version.BuildInfo<span style="color:#ff79c6">{</span>Version:<span style="color:#f1fa8c">&#34;v3.0.1&#34;</span>, GitCommit:<span style="color:#f1fa8c">&#34;7c22ef9ce89e0ebeb7125ba2ebf7d421f3e82ffa&#34;</span>, GitTreeState:<span style="color:#f1fa8c">&#34;clean&#34;</span>, GoVersion:<span style="color:#f1fa8c">&#34;go1.13.4&#34;</span><span style="color:#ff79c6">}</span>
-$ <span style="color:#6272a4"># kafka helm chart 包版本为：kafka-0.20.8.tgz</span></code></pre></div>
-<p>同样为了简单起见，我们这里使用 Helm3 来安装 Kafka，首先我们需要添加一个 <code>incubator</code> 的仓库地址，因为 stable 的仓库里面并没有合适的 Kafka 的 Chart 包：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ helm repo add incubator http://mirror.azure.cn/kubernetes/charts-incubator/
-$ helm repo update
-Hang tight <span style="color:#ff79c6">while</span> we grab the latest from your chart repositories...
-...Successfully got an update from the <span style="color:#f1fa8c">&#34;incubator&#34;</span> chart repository
-...Successfully got an update from the <span style="color:#f1fa8c">&#34;stable&#34;</span> chart repository
-Update Complete. ⎈ Happy Helming!⎈ </code></pre></div>
-<p>将 Kafka 的 Helm Chart 包下载到本地，这有助于我们了解 Chart 包的使用方法，当然也可以省去这一步：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ helm fetch incubator/kafka
-$ ls kafka-0.20.8.tgz 
-$ tar -xvf kafka-0.20.8.tgz</code></pre></div>
-<p>然后新建一个名为 kafka-test.yaml 的文件，内容如下所示：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">resources:
-  limits:
-    cpu: 200m
-    memory: 1536Mi
-  requests:
-    cpu: 100m
-    memory: 1024Mi
-
-livenessProbe:
-  initialDelaySeconds: <span style="color:#bd93f9">60</span>
-
-persistence:
-  storageClass: <span style="color:#f1fa8c">&#34;rook-ceph-block&#34;</span></code></pre></div>
-<p>由于 kafka 初次启动的时候比较慢，所以尽量将健康检查的初始化时间设置长一点，我们这里设置成 <code>livenessProbe.initialDelaySeconds=60</code>，资源声明可以根据我们集群的实际情况进行声明，最后如果需要持久化 kafka 的数据，还需要提供一个 StorageClass，我们也知道 kafka 对磁盘的 IO 要求本身也是非常高的，所以最好是用 Local PV，我们这里使用的是 ceph rbd 的一个 StorageClass 资源对象：（storageclass.yaml）</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-   name: rook-ceph-block
-provisioner: rook-ceph.rbd.csi.ceph.com
-parameters:
-    <span style="color:#6272a4"># clusterID 是 rook 集群运行的命名空间</span>
-    clusterID: rook-ceph
-    <span style="color:#6272a4"># 指定存储池</span>
-    pool: k8s-test-pool
-    <span style="color:#6272a4"># RBD image (实际的存储介质) 格式. 默认为 &#34;2&#34;.</span>
-    imageFormat: <span style="color:#f1fa8c">&#34;2&#34;</span>
-    <span style="color:#6272a4"># RBD image 特性. CSI RBD 现在只支持 `layering` .</span>
-    imageFeatures: layering
-    <span style="color:#6272a4"># Ceph 管理员认证信息，这些都是在 clusterID 命名空间下面自动生成的</span>
-    csi.storage.k8s.io/provisioner-secret-name: rook-csi-rbd-provisioner
-    csi.storage.k8s.io/provisioner-secret-namespace: rook-ceph
-    csi.storage.k8s.io/node-stage-secret-name: rook-csi-rbd-node
-    csi.storage.k8s.io/node-stage-secret-namespace: rook-ceph
-    <span style="color:#6272a4"># 指定 volume 的文件系统格式，如果不指定, csi-provisioner 会默认设置为 `ext4`</span>
-    csi.storage.k8s.io/fstype: ext4
-reclaimPolicy: Retain</code></pre></div>
-<p>具体的存储方案需要根据我们自己的实际情况进行选择，我这里使用的 Rook 搭建的 Ceph，使用相对简单很多，感兴趣的也可以查看前面的文章 <a href="https://www.qikqiak.com/post/deploy-ceph-cluster-with-rook/">使用 Rook 快速搭建 Ceph 集群</a> 了解相关信息。
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-5376999672787220"
-     data-ad-slot="9165834656"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-
-定制的 values 文件准备好过后就可以直接使用 Helm 来进行安装了：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl create ns kafka
-$ helm install -f kafka.yaml kfk incubator/kafka --namespace kafka
-NAME: kfk
-LAST DEPLOYED: Tue Mar <span style="color:#bd93f9">17</span> <span style="color:#bd93f9">11</span>:49:51 <span style="color:#bd93f9">2020</span>
-NAMESPACE: kafka
-STATUS: deployed
-REVISION: <span style="color:#bd93f9">1</span>
-NOTES:
-<span style="color:#6272a4">### Connecting to Kafka from inside Kubernetes</span>
-
-You can connect to Kafka by running a simple pod in the K8s cluster like this with a configuration like this:
-
-  apiVersion: v1
-  kind: Pod
-  metadata:
-    name: testclient
-    namespace: kafka
-  spec:
-    containers:
-    - name: kafka
-      image: confluentinc/cp-kafka:5.0.1
-      command:
-        - sh
-        - -c
-        - <span style="color:#f1fa8c">&#34;exec tail -f /dev/null&#34;</span>
-
-Once you have the testclient pod above running, you can list all kafka
-topics with:
-
-  kubectl -n kafka <span style="color:#8be9fd;font-style:italic">exec</span> testclient -- kafka-topics --zookeeper kfk-zookeeper:2181 --list
-
-To create a new topic:
-
-  kubectl -n kafka <span style="color:#8be9fd;font-style:italic">exec</span> testclient -- kafka-topics --zookeeper kfk-zookeeper:2181 --topic test1 --create --partitions <span style="color:#bd93f9">1</span> --replication-factor <span style="color:#bd93f9">1</span>
-
-To listen <span style="color:#ff79c6">for</span> messages on a topic:
-
-  kubectl -n kafka <span style="color:#8be9fd;font-style:italic">exec</span> -ti testclient -- kafka-console-consumer --bootstrap-server kfk-kafka:9092 --topic test1 --from-beginning
-
-To stop the listener session above press: Ctrl+C
-
-To start an interactive message producer session:
-  kubectl -n kafka <span style="color:#8be9fd;font-style:italic">exec</span> -ti testclient -- kafka-console-producer --broker-list kfk-kafka-headless:9092 --topic test1
-
-To create a message in the above session, simply <span style="color:#8be9fd;font-style:italic">type</span> the message and press <span style="color:#f1fa8c">&#34;enter&#34;</span>
-To end the producer session try: Ctrl+C
-
-If you specify <span style="color:#f1fa8c">&#34;zookeeper.connect&#34;</span> in configurationOverrides, please replace <span style="color:#f1fa8c">&#34;kfk-zookeeper:2181&#34;</span> with the value of <span style="color:#f1fa8c">&#34;zookeeper.connect&#34;</span>, or you will get error.</code></pre></div>
-<p>安装成功后可以查看下 Release 的状态：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ helm ls -n kafka
-NAME    NAMESPACE       REVISION        UPDATED                                 STATUS          CHART           APP VERSION
-kfk     kafka           <span style="color:#bd93f9">1</span>               <span style="color:#bd93f9">2020</span>-03-17 <span style="color:#bd93f9">14</span>:50:41.595746 +0800 CST    deployed        kafka-0.20.8    <span style="color:#bd93f9">5</span>.0.1  </code></pre></div>
-<p>正常情况下隔一会儿就会部署上3个实例的 kafka 和 zookeeper 的集群：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl get pods -n kafka
-NAME              READY   STATUS    RESTARTS   AGE
-kfk-kafka-0       <span style="color:#bd93f9">1</span>/1     Running   <span style="color:#bd93f9">0</span>          3h52m
-kfk-kafka-1       <span style="color:#bd93f9">1</span>/1     Running   <span style="color:#bd93f9">0</span>          3h50m
-kfk-kafka-2       <span style="color:#bd93f9">1</span>/1     Running   <span style="color:#bd93f9">0</span>          3h48m
-kfk-zookeeper-0   <span style="color:#bd93f9">1</span>/1     Running   <span style="color:#bd93f9">0</span>          3h55m
-kfk-zookeeper-1   <span style="color:#bd93f9">1</span>/1     Running   <span style="color:#bd93f9">0</span>          3h54m
-kfk-zookeeper-2   <span style="color:#bd93f9">1</span>/1     Running   <span style="color:#bd93f9">0</span>          3h54m</code></pre></div>
-<p>部署完成后创建一个测试的客户端来测试下 kafka 集群是否正常了：(testclient.yaml)</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: v1
-  kind: Pod
-  metadata:
-    name: testclient
-    namespace: kafka
-  spec:
-    containers:
-    - name: kafka
-      image: confluentinc/cp-kafka:<span style="color:#bd93f9">5.0</span>.<span style="color:#bd93f9">1</span>
-      command:
-        - sh
-        - -c
-        - <span style="color:#f1fa8c">&#34;exec tail -f /dev/null&#34;</span></code></pre></div>
-<p>同样直接部署上面的资源对象即可：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl apply -f testclient.yaml
-$ kubectl get pods -n kafka
-NAME              READY   STATUS    RESTARTS   AGE
-testclient        <span style="color:#bd93f9">1</span>/1     Running   <span style="color:#bd93f9">0</span>          3h44m
-......</code></pre></div>
-<p>测试的客户端创建完成后，通过如下命令创建一个新的 topic:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl -n kafka <span style="color:#8be9fd;font-style:italic">exec</span> testclient -- kafka-topics --zookeeper kfk-zookeeper:2181 --topic test1 --create --partitions <span style="color:#bd93f9">1</span> --replication-factor <span style="color:#bd93f9">1</span>
-Created topic <span style="color:#f1fa8c">&#34;test1&#34;</span>.</code></pre></div>
-<p>可以看到 <code>test1</code> 这个 topic 创建成功了。然后可以运行如下命令来监听 <code>test1</code> 这个 topic 的消息：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl -n kafka <span style="color:#8be9fd;font-style:italic">exec</span> -ti testclient -- kafka-console-consumer --bootstrap-server kfk-kafka:9092 --topic test1 --from-beginning</code></pre></div>
-<p>然后开启一个新的命令行终端生成一条消息：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl -n kafka <span style="color:#8be9fd;font-style:italic">exec</span> -ti testclient -- kafka-console-producer --broker-list kfk-kafka-headless:9092 --topic test1
-&gt;Hello kafka on k8s
-&gt;</code></pre></div>
-<p>这个时候在 <code>test1</code> 这个 topic 这边的监听器里面可以看到对应的消息记录了：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl -n kafka <span style="color:#8be9fd;font-style:italic">exec</span> -ti testclient -- kafka-console-consumer --bootstrap-server kfk-kafka:9092 --topic test1 --from-beginning
-Hello kafka on k8s</code></pre></div>
-<p>到这里就表明我们部署的 kafka 已经成功运行在了 Kubernetes 集群上面。当然我们这里只是在测试环境上使用，对于在生产环境上是否可以将 kafka 部署在 Kubernetes 集群上需要考虑的情况就非常多了，对于有状态的应用都更加推荐使用 Operator 去使用，比如 <a href="https://www.confluent.io/confluent-operator/">Confluent 的 Kafka Operator</a>，总之，你能 hold 住就无所谓，随便用🤣</p>
-
-<p><a href="https://youdianzhishi.com/web/course/1030" title="从 Docker 到 Kubernetes 进阶课程"><img src="https://sdn.youdianzhishi.com/images/2019/10/24/65f2cfb229184268a18745fe202b281b.jpg?imageView2/2/format/webp" alt="Kubernetes进阶训练营"></a></p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl version
+</span></span><span style="display:flex;"><span>Client Version: version.Info<span style="color:#ff79c6">{</span>Major:<span style="color:#f1fa8c">&#34;1&#34;</span>, Minor:<span style="color:#f1fa8c">&#34;14&#34;</span>, GitVersion:<span style="color:#f1fa8c">&#34;v1.14.2&#34;</span>, GitCommit:<span style="color:#f1fa8c">&#34;66049e3b21efe110454d67df4fa62b08ea79a19b&#34;</span>, GitTreeState:<span style="color:#f1fa8c">&#34;clean&#34;</span>, BuildDate:<span style="color:#f1fa8c">&#34;2019-05-16T18:55:03Z&#34;</span>, GoVersion:<span style="color:#f1fa8c">&#34;go1.12.5&#34;</span>, Compiler:<span style="color:#f1fa8c">&#34;gc&#34;</span>, Platform:<span style="color:#f1fa8c">&#34;darwin/amd64&#34;</span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>Server Version: version.Info<span style="color:#ff79c6">{</span>Major:<span style="color:#f1fa8c">&#34;1&#34;</span>, Minor:<span style="color:#f1fa8c">&#34;16&#34;</span>, GitVersion:<span style="color:#f1fa8c">&#34;v1.16.2&#34;</span>, GitCommit:<span style="color:#f1fa8c">&#34;c97fe5036ef3df2967d086711e6c0c405941e14b&#34;</span>, GitTreeState:<span style="color:#f1fa8c">&#34;clean&#34;</span>, BuildDate:<span style="color:#f1fa8c">&#34;2019-10-15T19:09:08Z&#34;</span>, GoVersion:<span style="color:#f1fa8c">&#34;go1.12.10&#34;</span>, Compiler:<span style="color:#f1fa8c">&#34;gc&#34;</span>, Platform:<span style="color:#f1fa8c">&#34;linux/amd64&#34;</span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>$ helm version
+</span></span><span style="display:flex;"><span>version.BuildInfo<span style="color:#ff79c6">{</span>Version:<span style="color:#f1fa8c">&#34;v3.0.1&#34;</span>, GitCommit:<span style="color:#f1fa8c">&#34;7c22ef9ce89e0ebeb7125ba2ebf7d421f3e82ffa&#34;</span>, GitTreeState:<span style="color:#f1fa8c">&#34;clean&#34;</span>, GoVersion:<span style="color:#f1fa8c">&#34;go1.13.4&#34;</span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>$ <span style="color:#6272a4"># kafka helm chart 包版本为：kafka-0.20.8.tgz</span>
+</span></span></code></pre></div><p>同样为了简单起见，我们这里使用 Helm3 来安装 Kafka，首先我们需要添加一个 <code>incubator</code> 的仓库地址，因为 stable 的仓库里面并没有合适的 Kafka 的 Chart 包：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ helm repo add incubator http://mirror.azure.cn/kubernetes/charts-incubator/
+</span></span><span style="display:flex;"><span>$ helm repo update
+</span></span><span style="display:flex;"><span>Hang tight <span style="color:#ff79c6">while</span> we grab the latest from your chart repositories...
+</span></span><span style="display:flex;"><span>...Successfully got an update from the <span style="color:#f1fa8c">&#34;incubator&#34;</span> chart repository
+</span></span><span style="display:flex;"><span>...Successfully got an update from the <span style="color:#f1fa8c">&#34;stable&#34;</span> chart repository
+</span></span><span style="display:flex;"><span>Update Complete. ⎈ Happy Helming!⎈
+</span></span></code></pre></div><p>将 Kafka 的 Helm Chart 包下载到本地，这有助于我们了解 Chart 包的使用方法，当然也可以省去这一步：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ helm fetch incubator/kafka
+</span></span><span style="display:flex;"><span>$ ls kafka-0.20.8.tgz
+</span></span><span style="display:flex;"><span>$ tar -xvf kafka-0.20.8.tgz
+</span></span></code></pre></div><p>然后新建一个名为 kafka-test.yaml 的文件，内容如下所示：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">resources</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">limits</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">cpu</span>: 200m
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">memory</span>: 1536Mi
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">requests</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">cpu</span>: 100m
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">memory</span>: 1024Mi
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">livenessProbe</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">initialDelaySeconds</span>: <span style="color:#bd93f9">60</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">persistence</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">storageClass</span>: <span style="color:#f1fa8c">&#34;rook-ceph-block&#34;</span>
+</span></span></code></pre></div><p>由于 kafka 初次启动的时候比较慢，所以尽量将健康检查的初始化时间设置长一点，我们这里设置成 <code>livenessProbe.initialDelaySeconds=60</code>，资源声明可以根据我们集群的实际情况进行声明，最后如果需要持久化 kafka 的数据，还需要提供一个 StorageClass，我们也知道 kafka 对磁盘的 IO 要求本身也是非常高的，所以最好是用 Local PV，我们这里使用的是 ceph rbd 的一个 StorageClass 资源对象：（storageclass.yaml）</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: storage.k8s.io/v1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: StorageClass
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: rook-ceph-block
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">provisioner</span>: rook-ceph.rbd.csi.ceph.com
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">parameters</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4"># clusterID 是 rook 集群运行的命名空间</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">clusterID</span>: rook-ceph
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4"># 指定存储池</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">pool</span>: k8s-test-pool
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4"># RBD image (实际的存储介质) 格式. 默认为 &#34;2&#34;.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">imageFormat</span>: <span style="color:#f1fa8c">&#34;2&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4"># RBD image 特性. CSI RBD 现在只支持 `layering` .</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">imageFeatures</span>: layering
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4"># Ceph 管理员认证信息，这些都是在 clusterID 命名空间下面自动生成的</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">csi.storage.k8s.io/provisioner-secret-name</span>: rook-csi-rbd-provisioner
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">csi.storage.k8s.io/provisioner-secret-namespace</span>: rook-ceph
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">csi.storage.k8s.io/node-stage-secret-name</span>: rook-csi-rbd-node
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">csi.storage.k8s.io/node-stage-secret-namespace</span>: rook-ceph
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4"># 指定 volume 的文件系统格式，如果不指定, csi-provisioner 会默认设置为 `ext4`</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">csi.storage.k8s.io/fstype</span>: ext4
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">reclaimPolicy</span>: Retain
+</span></span></code></pre></div><p>具体的存储方案需要根据我们自己的实际情况进行选择，我这里使用的 Rook 搭建的 Ceph，使用相对简单很多，感兴趣的也可以查看前面的文章 <a href="https://www.qikqiak.com/post/deploy-ceph-cluster-with-rook/">使用 Rook 快速搭建 Ceph 集群</a> 了解相关信息。</p>
+<!-- raw HTML omitted -->
+<p>定制的 values 文件准备好过后就可以直接使用 Helm 来进行安装了：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl create ns kafka
+</span></span><span style="display:flex;"><span>$ helm install -f kafka.yaml kfk incubator/kafka --namespace kafka
+</span></span><span style="display:flex;"><span>NAME: kfk
+</span></span><span style="display:flex;"><span>LAST DEPLOYED: Tue Mar <span style="color:#bd93f9">17</span> 11:49:51 <span style="color:#bd93f9">2020</span>
+</span></span><span style="display:flex;"><span>NAMESPACE: kafka
+</span></span><span style="display:flex;"><span>STATUS: deployed
+</span></span><span style="display:flex;"><span>REVISION: <span style="color:#bd93f9">1</span>
+</span></span><span style="display:flex;"><span>NOTES:
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">### Connecting to Kafka from inside Kubernetes</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>You can connect to Kafka by running a simple pod in the K8s cluster like this with a configuration like this:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  apiVersion: v1
+</span></span><span style="display:flex;"><span>  kind: Pod
+</span></span><span style="display:flex;"><span>  metadata:
+</span></span><span style="display:flex;"><span>    name: testclient
+</span></span><span style="display:flex;"><span>    namespace: kafka
+</span></span><span style="display:flex;"><span>  spec:
+</span></span><span style="display:flex;"><span>    containers:
+</span></span><span style="display:flex;"><span>    - name: kafka
+</span></span><span style="display:flex;"><span>      image: confluentinc/cp-kafka:5.0.1
+</span></span><span style="display:flex;"><span>      command:
+</span></span><span style="display:flex;"><span>        - sh
+</span></span><span style="display:flex;"><span>        - -c
+</span></span><span style="display:flex;"><span>        - <span style="color:#f1fa8c">&#34;exec tail -f /dev/null&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Once you have the testclient pod above running, you can list all kafka
+</span></span><span style="display:flex;"><span>topics with:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  kubectl -n kafka <span style="color:#8be9fd;font-style:italic">exec</span> testclient -- kafka-topics --zookeeper kfk-zookeeper:2181 --list
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>To create a new topic:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  kubectl -n kafka <span style="color:#8be9fd;font-style:italic">exec</span> testclient -- kafka-topics --zookeeper kfk-zookeeper:2181 --topic test1 --create --partitions <span style="color:#bd93f9">1</span> --replication-factor <span style="color:#bd93f9">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>To listen <span style="color:#ff79c6">for</span> messages on a topic:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  kubectl -n kafka <span style="color:#8be9fd;font-style:italic">exec</span> -ti testclient -- kafka-console-consumer --bootstrap-server kfk-kafka:9092 --topic test1 --from-beginning
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>To stop the listener session above press: Ctrl+C
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>To start an interactive message producer session:
+</span></span><span style="display:flex;"><span>  kubectl -n kafka <span style="color:#8be9fd;font-style:italic">exec</span> -ti testclient -- kafka-console-producer --broker-list kfk-kafka-headless:9092 --topic test1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>To create a message in the above session, simply <span style="color:#8be9fd;font-style:italic">type</span> the message and press <span style="color:#f1fa8c">&#34;enter&#34;</span>
+</span></span><span style="display:flex;"><span>To end the producer session try: Ctrl+C
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>If you specify <span style="color:#f1fa8c">&#34;zookeeper.connect&#34;</span> in configurationOverrides, please replace <span style="color:#f1fa8c">&#34;kfk-zookeeper:2181&#34;</span> with the value of <span style="color:#f1fa8c">&#34;zookeeper.connect&#34;</span>, or you will get error.
+</span></span></code></pre></div><p>安装成功后可以查看下 Release 的状态：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ helm ls -n kafka
+</span></span><span style="display:flex;"><span>NAME    NAMESPACE       REVISION        UPDATED                                 STATUS          CHART           APP VERSION
+</span></span><span style="display:flex;"><span>kfk     kafka           <span style="color:#bd93f9">1</span>               2020-03-17 14:50:41.595746 +0800 CST    deployed        kafka-0.20.8    5.0.1
+</span></span></code></pre></div><p>正常情况下隔一会儿就会部署上 3 个实例的 kafka 和 zookeeper 的集群：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl get pods -n kafka
+</span></span><span style="display:flex;"><span>NAME              READY   STATUS    RESTARTS   AGE
+</span></span><span style="display:flex;"><span>kfk-kafka-0       1/1     Running   <span style="color:#bd93f9">0</span>          3h52m
+</span></span><span style="display:flex;"><span>kfk-kafka-1       1/1     Running   <span style="color:#bd93f9">0</span>          3h50m
+</span></span><span style="display:flex;"><span>kfk-kafka-2       1/1     Running   <span style="color:#bd93f9">0</span>          3h48m
+</span></span><span style="display:flex;"><span>kfk-zookeeper-0   1/1     Running   <span style="color:#bd93f9">0</span>          3h55m
+</span></span><span style="display:flex;"><span>kfk-zookeeper-1   1/1     Running   <span style="color:#bd93f9">0</span>          3h54m
+</span></span><span style="display:flex;"><span>kfk-zookeeper-2   1/1     Running   <span style="color:#bd93f9">0</span>          3h54m
+</span></span></code></pre></div><p>部署完成后创建一个测试的客户端来测试下 kafka 集群是否正常了：(testclient.yaml)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: v1
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">kind</span>: Pod
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">name</span>: testclient
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">namespace</span>: kafka
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">containers</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">name</span>: kafka
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">image</span>: confluentinc/cp-kafka:5.0.1
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">command</span>:
+</span></span><span style="display:flex;"><span>        - sh
+</span></span><span style="display:flex;"><span>        - -c
+</span></span><span style="display:flex;"><span>        - <span style="color:#f1fa8c">&#34;exec tail -f /dev/null&#34;</span>
+</span></span></code></pre></div><p>同样直接部署上面的资源对象即可：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl apply -f testclient.yaml
+</span></span><span style="display:flex;"><span>$ kubectl get pods -n kafka
+</span></span><span style="display:flex;"><span>NAME              READY   STATUS    RESTARTS   AGE
+</span></span><span style="display:flex;"><span>testclient        1/1     Running   <span style="color:#bd93f9">0</span>          3h44m
+</span></span><span style="display:flex;"><span>......
+</span></span></code></pre></div><p>测试的客户端创建完成后，通过如下命令创建一个新的 topic:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl -n kafka <span style="color:#8be9fd;font-style:italic">exec</span> testclient -- kafka-topics --zookeeper kfk-zookeeper:2181 --topic test1 --create --partitions <span style="color:#bd93f9">1</span> --replication-factor <span style="color:#bd93f9">1</span>
+</span></span><span style="display:flex;"><span>Created topic <span style="color:#f1fa8c">&#34;test1&#34;</span>.
+</span></span></code></pre></div><p>可以看到 <code>test1</code> 这个 topic 创建成功了。然后可以运行如下命令来监听 <code>test1</code> 这个 topic 的消息：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl -n kafka <span style="color:#8be9fd;font-style:italic">exec</span> -ti testclient -- kafka-console-consumer --bootstrap-server kfk-kafka:9092 --topic test1 --from-beginning
+</span></span></code></pre></div><p>然后开启一个新的命令行终端生成一条消息：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl -n kafka <span style="color:#8be9fd;font-style:italic">exec</span> -ti testclient -- kafka-console-producer --broker-list kfk-kafka-headless:9092 --topic test1
+</span></span><span style="display:flex;"><span>&gt;Hello kafka on k8s
+</span></span><span style="display:flex;"><span>&gt;
+</span></span></code></pre></div><p>这个时候在 <code>test1</code> 这个 topic 这边的监听器里面可以看到对应的消息记录了：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl -n kafka <span style="color:#8be9fd;font-style:italic">exec</span> -ti testclient -- kafka-console-consumer --bootstrap-server kfk-kafka:9092 --topic test1 --from-beginning
+</span></span><span style="display:flex;"><span>Hello kafka on k8s
+</span></span></code></pre></div><p>到这里就表明我们部署的 kafka 已经成功运行在了 Kubernetes 集群上面。当然我们这里只是在测试环境上使用，对于在生产环境上是否可以将 kafka 部署在 Kubernetes 集群上需要考虑的情况就非常多了，对于有状态的应用都更加推荐使用 Operator 去使用，比如 <a href="https://www.confluent.io/confluent-operator/">Confluent 的 Kafka Operator</a>，总之，你能 hold 住就无所谓，随便用 🤣</p>
+<!-- raw HTML omitted -->
 
           <h2>微信公众号</h2>
-<p>扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的 kubernetes 讨论群里面共同学习。</p>
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/qrcode.png" alt="wechat-account-qrcode">
+<p>
+  扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的
+  kubernetes 讨论群里面共同学习。
+</p>
+<img
+  src="https://picdn.youdianzhishi.com/images/qrcode.png"
+  alt="wechat-account-qrcode"
+/>
 
   
           
@@ -697,7 +680,7 @@ Hello kafka on k8s</code></pre></div>
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -709,7 +692,7 @@ Hello kafka on k8s</code></pre></div>
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -726,7 +709,7 @@ Hello kafka on k8s</code></pre></div>
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -735,7 +718,7 @@ Hello kafka on k8s</code></pre></div>
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

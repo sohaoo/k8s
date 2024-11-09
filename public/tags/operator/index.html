@@ -11,16 +11,15 @@
   <meta name="twitter:title" content="operator" />
 
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/tags/operator/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/tags/operator/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -29,7 +28,7 @@
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -80,7 +79,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -245,7 +244,7 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 March 27, 2020
+                
               </p>
               <div class="post-entry">
                 
@@ -278,12 +277,11 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 July 1, 2019
+                
               </p>
               <div class="post-entry">
                 
                   <p>随着 <a href="https://www.qikqiak.com/tags/kubernetes/">kubernetes</a> 的快速发展，很多应用都在往 <a href="https://www.qikqiak.com/tags/kubernetes/">kubernetes</a> 上面迁移，现阶段对于无状态应用的迁移是非常容易做到的，但是对于有状态应用的迁移还是有一定门槛的，主要是有状态应用的运行方式各有不同，比如 MySQL、MongoDB、Redis 这些应用运行的方式方法都不太相同，特别是对于线上环境需要高可用的集群模式的时候，则差别就更大了，这就导致了有状态应用向 Kubernetes 的迁移必然进度会很慢。现在比较好的解决方案就是针对有状态应用开发对应的 <a href="https://www.qikqiak.com/tags/operator/">Operator</a> 应用，比如 prometheus-operator、etcd-operator 等等，关于 Operator 的开发，可以查看前面的一篇入门文章：<a href="https://www.qikqiak.com/post/k8s-operator-101/">Kubernetes Operator 快速入门教程</a> 以了解更多信息。</p>
-
 <p>同样的，对于 Elasticsearch 应用，现在官方也推出了基于 Kubernetes Operator 的应用：Elastic Cloud on Kubernetes (ECK)，用户可使用该产品在 Kubernetes 上配置、管理和运行 Elasticsearch 集群。</p>
                   <a href="https://www.qikqiak.com/post/elastic-cloud-on-k8s/" class="post-read-more">[阅读全文]</a>
                 
@@ -317,12 +315,11 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 May 29, 2019
+                
               </p>
               <div class="post-entry">
                 
                   <p>在 Kubernetes 的监控方案中我们经常会使用到一个<a href="https://www.qikqiak.com/tags/operator/">Promethues Operator</a>的项目，该项目可以让我们更加方便的去使用 Prometheus，而不需要直接去使用最原始的一些资源对象，比如 Pod、Deployment，随着 Prometheus Operator 项目的成功，CoreOS 公司开源了一个比较厉害的工具：<a href="https://github.com/operator-framework">Operator Framework</a>，该工具可以让开发人员更加容易的开发 Operator 应用。</p>
-
 <p>在本篇文章中我们会为大家介绍一个简单示例来演示如何使用 Operator Framework 框架来开发一个 Operator 应用。</p>
                   <a href="https://www.qikqiak.com/post/k8s-operator-101/" class="post-read-more">[阅读全文]</a>
                 
@@ -354,11 +351,11 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 December 20, 2018
+                
               </p>
               <div class="post-entry">
                 
-                  <p><a href="https://mp.weixin.qq.com/s/M47g8E3BHzb6IhLiI1P5oA"><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/goc2kc.jpg" alt="Prometheus Operator 高级配置" /></a>
+                  <p><a href="https://mp.weixin.qq.com/s/M47g8E3BHzb6IhLiI1P5oA"><img src="https://picdn.youdianzhishi.com/images/goc2kc.jpg" alt="Prometheus Operator 高级配置"></a>
 <a href="https://www.qikqiak.com/post/prometheus-operator-monitor-etcd">上节课我们一起学习了如何在 Prometheus Operator 下面自定义一个监控选项</a>，以及<a href="https://www.qikqiak.com/post/prometheus-operator-custom-alert">自定义报警规则</a>的使用。那么我们还能够直接使用前面课程中的自动发现功能吗？如果在我们的 Kubernetes 集群中有了很多的 Service/Pod，那么我们都需要一个一个的去建立一个对应的 ServiceMonitor 对象来进行监控吗？这样岂不是又变得麻烦起来了？</p>
                   <a href="https://www.qikqiak.com/post/prometheus-operator-advance/" class="post-read-more">[阅读全文]</a>
                 
@@ -388,7 +385,7 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 December 19, 2018
+                
               </p>
               <div class="post-entry">
                 
@@ -421,14 +418,12 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 December 18, 2018
+                
               </p>
               <div class="post-entry">
                 
                   <p><a href="https://www.qikqiak.com/post/first-use-prometheus-operator/">上节课和大家讲解了 Prometheus Operator 的安装和基本使用方法</a>，这节课给大家介绍如何在 Prometheus Operator 中添加一个自定义的监控项。</p>
-
 <p>除了 Kubernetes 集群中的一些资源对象、节点以及组件需要监控，有的时候我们可能还需要根据实际的业务需求去添加自定义的监控项，添加一个自定义监控的步骤也是非常简单的。</p>
-
 <ul>
 <li>第一步建立一个 ServiceMonitor 对象，用于 Prometheus 添加监控项</li>
 <li>第二步为 ServiceMonitor 对象关联 metrics 数据接口的一个 Service 对象</li>
@@ -462,7 +457,7 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 December 11, 2018
+                
               </p>
               <div class="post-entry">
                 
@@ -549,7 +544,7 @@ autocomplete('#aa-search-input',
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -561,7 +556,7 @@ autocomplete('#aa-search-input',
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -578,7 +573,7 @@ autocomplete('#aa-search-input',
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -587,7 +582,7 @@ autocomplete('#aa-search-input',
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

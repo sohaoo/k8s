@@ -14,16 +14,15 @@
   <meta property="og:description" content="由于 nginx 的优秀性能表现，所以很多企业在 Kubernetes 中选择 Ingress Controller 的时候依然会选择基于 nginx 的 ingress-nginx，前面文章中我们更多的是介绍更加云原生配置更加灵活的 Traefik，特别是 Traefik 2.0 版本新增中间件概念以后，在配置上就更加方便了，各种需求都可以通过中间件来实现，对于 ingress-nginx 来说配置就稍微麻烦一点，一些复杂的需求需要通过 Ingress 的 annotation 来实现，比如我们现在需要实现一个 url rewrite 的功能，简单来说就是我们之前的应用在 todo.qikqiak.com 下面，现在我们需要通过 todo.qikqiak.com/app/ 来进行访问。">
   <meta name="twitter:description" content="由于 nginx 的优秀性能表现，所以很多企业在 Kubernetes 中选择 Ingress Controller 的时候依然会选择基于 nginx 的 ingress-nginx，前面文章中我们更多的是介绍更加云原生配置更加灵活的 Traefik，特别是 Traefik 2.0 版本新增中间件概念以后，在配置上就更加方便了，各种需求都可以通过中间件来实现，对于 ingress-nginx 来说 …">
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/post/url-rewrite-on-ingress-nginx/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/post/url-rewrite-on-ingress-nginx/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -32,7 +31,7 @@
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -83,7 +82,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -226,7 +225,7 @@ autocomplete('#aa-search-input',
 
 
   
-    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/photo-1574827014593-d03294304a70.jpeg" data-img-desc-1="rainy mournings "></div>
+    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://picdn.youdianzhishi.com/images/photo-1574827014593-d03294304a70.jpeg" data-img-desc-1="rainy mournings "></div>
   
 
   <header class="header-section has-img">
@@ -241,12 +240,8 @@ autocomplete('#aa-search-input',
                   
                   
                     <span class="post-meta">
-  
-    发表于 November 28, 2019
-  
-  
+  发表于 November 28, 2019  
 </span>
-
 
                   
               </div>
@@ -268,12 +263,8 @@ autocomplete('#aa-search-input',
                 
                 
                   <span class="post-meta">
-  
-    发表于 November 28, 2019
-  
-  
+  发表于 November 28, 2019  
 </span>
-
 
                 
             </div>
@@ -330,157 +321,135 @@ autocomplete('#aa-search-input',
           
 
           <p>由于 nginx 的优秀性能表现，所以很多企业在 <a href="https://www.qikqiak.com/tags/kubernetes/">Kubernetes</a> 中选择 Ingress Controller 的时候依然会选择基于 nginx 的 <a href="https://kubernetes.github.io/ingress-nginx">ingress-nginx</a>，前面文章中我们更多的是介绍更加云原生配置更加灵活的 <a href="https://www.qikqiak.com/tags/traefik/">Traefik</a>，特别是 Traefik 2.0 版本新增中间件概念以后，在配置上就更加方便了，各种需求都可以通过中间件来实现，对于 <code>ingress-nginx</code> 来说配置就稍微麻烦一点，一些复杂的需求需要通过 <code>Ingress</code> 的 <code>annotation</code> 来实现，比如我们现在需要实现一个 url rewrite 的功能，简单来说就是我们之前的应用在 <code>todo.qikqiak.com</code> 下面，现在我们需要通过 <code>todo.qikqiak.com/app/</code> 来进行访问。</p>
-
 <blockquote>
 <p>本次测试使用的集群为 Kubernetes v1.16.2，ingess-nginx 镜像版本为 <code>0.26.1</code></p>
 </blockquote>
-
 <p>最原始的 Ingress 对象如下所示：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: fe
-  namespace: default
-  annotations:
-    kubernetes.io/ingress.class: <span style="color:#f1fa8c">&#34;nginx&#34;</span>
-spec:
-  rules:
-  - host: todo.qikqiak.com
-    http:
-      paths:
-      - backend:
-          serviceName: fe
-          servicePort: <span style="color:#bd93f9">3000</span>
-        path: /</code></pre></div>
-<p>就是一个很常规的 <code>Ingress</code> 对象，部署该对象后，将域名解析后就可以正常访问到应用：</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/oam-rudr-demo.png" alt="ingress nginx demo"><figcaption>ingress nginx demo</figcaption></figure>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: extensions/v1beta1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: Ingress
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: fe
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">namespace</span>: default
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">annotations</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">kubernetes.io/ingress.class</span>: <span style="color:#f1fa8c">&#34;nginx&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">rules</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">host</span>: todo.qikqiak.com
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">http</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">paths</span>:
+</span></span><span style="display:flex;"><span>          - <span style="color:#ff79c6">backend</span>:
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">serviceName</span>: fe
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">servicePort</span>: <span style="color:#bd93f9">3000</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">path</span>: /
+</span></span></code></pre></div><p>就是一个很常规的 <code>Ingress</code> 对象，部署该对象后，将域名解析后就可以正常访问到应用：</p>
+<p><img src="https://picdn.youdianzhishi.com/images/oam-rudr-demo.png" alt="ingress nginx demo"></p>
 <p>按照需求我们需要对访问的 URL 路径做一个 Rewrite，在 <a href="https://kubernetes.github.io/ingress-nginx/examples/rewrite/">ingress-nginx 官方文档</a>中也给出了说明:</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/ingress-nginx-rewrite-list.png" alt="ingress nginx rewrite"><figcaption>ingress nginx rewrite</figcaption></figure>
-
+<p><img src="https://picdn.youdianzhishi.com/images/ingress-nginx-rewrite-list.png" alt="ingress nginx rewrite"></p>
 <p>按照要求我们需要在 <code>path</code> 中匹配前缀 <code>app</code>，然后通过 <code>rewrite-target</code> 指定目标，修改后的 Ingress 对象如下所示：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: fe
-  namespace: default
-  annotations:
-    kubernetes.io/ingress.class: <span style="color:#f1fa8c">&#34;nginx&#34;</span>
-    nginx.ingress.kubernetes.io/rewrite-target: /$<span style="color:#bd93f9">2</span>
-spec:
-  rules:
-  - host: todo.qikqiak.com
-    http:
-      paths:
-      - backend:
-          serviceName: fe
-          servicePort: <span style="color:#bd93f9">3000</span>
-        path: /app(/|$)(.<span style="color:#ff79c6">*)</span></code></pre></div>
-<p>更新后，我们可以遇见到直接访问域名肯定是不行了，因为我们没有匹配 <code>/</code> 的 path 路径：</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/ingress-nginx-rewrite-404.png" alt="ingress nginx rewrite 404"><figcaption>ingress nginx rewrite 404</figcaption></figure>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: extensions/v1beta1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: Ingress
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: fe
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">namespace</span>: default
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">annotations</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">kubernetes.io/ingress.class</span>: <span style="color:#f1fa8c">&#34;nginx&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">nginx.ingress.kubernetes.io/rewrite-target</span>: /$2
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">rules</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">host</span>: todo.qikqiak.com
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">http</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">paths</span>:
+</span></span><span style="display:flex;"><span>          - <span style="color:#ff79c6">backend</span>:
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">serviceName</span>: fe
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">servicePort</span>: <span style="color:#bd93f9">3000</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">path</span>: /app(/|$)(.*)
+</span></span></code></pre></div><p>更新后，我们可以遇见到直接访问域名肯定是不行了，因为我们没有匹配 <code>/</code> 的 path 路径：</p>
+<p><img src="https://picdn.youdianzhishi.com/images/ingress-nginx-rewrite-404.png" alt="ingress nginx rewrite 404"></p>
 <p>但是我们带上 <code>app</code> 的前缀再去访问:</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/ingress-nginx-rewrite-1.png" alt="ingress nginx rewrite 1"><figcaption>ingress nginx rewrite 1</figcaption></figure>
-
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-5376999672787220"
-     data-ad-slot="9165834656"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-
-
+<p><img src="https://picdn.youdianzhishi.com/images/ingress-nginx-rewrite-1.png" alt="ingress nginx rewrite 1"></p>
+<!-- raw HTML omitted -->
 <p>我们可以看到已经可以访问到页面内容了，这是因为我们在 <code>path</code> 中通过正则表达式 <code>/app(/|$)(.*)</code> 将匹配的路径设置成了 <code>rewrite-target</code> 的目标路径了，所以我们访问 <code>todo.qikqiak.com/app</code> 的时候实际上相当于访问的就是后端服务的 <code>/</code> 路径，但是我们也可以发现现在页面的样式没有了：</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/ingress-nginx-rewrite-2.png" alt="ingress nginx rewrite 2"><figcaption>ingress nginx rewrite 2</figcaption></figure>
-
+<p><img src="https://picdn.youdianzhishi.com/images/ingress-nginx-rewrite-2.png" alt="ingress nginx rewrite 2"></p>
 <p>这是因为应用的静态资源路径是在 <code>/stylesheets</code> 路径下面的，现在我们做了 url rewrite 过后，要正常访问也需要带上前缀才可以：<code>http://todo.qikqiak.com/stylesheets/screen.css</code>，对于图片或者其他静态资源也是如此，当然我们去更改页面引入静态资源的方式为相对路径也是可以的，但是毕竟要修改代码，这个时候我们可以借助 <code>ingress-nginx</code> 中的 <code>configuration-snippet</code> 来对静态资源做一次跳转，如下所示：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: fe
-  namespace: default
-  annotations:
-    kubernetes.io/ingress.class: <span style="color:#f1fa8c">&#34;nginx&#34;</span>
-    nginx.ingress.kubernetes.io/rewrite-target: /$<span style="color:#bd93f9">2</span>
-    nginx.ingress.kubernetes.io/configuration-snippet: <span style="color:#f1fa8c">|
-</span><span style="color:#f1fa8c">      rewrite ^/stylesheets/(.*)$ /app/stylesheets/$1 redirect;  # 添加 /app 前缀</span>
-      rewrite ^/images/(.<span style="color:#ff79c6">*)$</span> /app/images/$<span style="color:#bd93f9">1</span> redirect;  <span style="color:#6272a4"># 添加 /app 前缀</span>
-spec:
-  rules:
-  - host: todo.qikqiak.com
-    http:
-      paths:
-      - backend:
-          serviceName: fe
-          servicePort: <span style="color:#bd93f9">3000</span>
-        path: /app(/|$)(.<span style="color:#ff79c6">*)</span></code></pre></div>
-<p>更新 Ingress 对象后，这个时候我们刷新页面可以看到已经正常了：</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/ingress-nginx-rewrite-3.png" alt="ingress nginx rewrite 3"><figcaption>ingress nginx rewrite 3</figcaption></figure>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: extensions/v1beta1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: Ingress
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: fe
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">namespace</span>: default
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">annotations</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">kubernetes.io/ingress.class</span>: <span style="color:#f1fa8c">&#34;nginx&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">nginx.ingress.kubernetes.io/rewrite-target</span>: /$2
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">nginx.ingress.kubernetes.io/configuration-snippet</span>: |<span style="color:#f1fa8c">
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">      rewrite ^/stylesheets/(.*)$ /app/stylesheets/$1 redirect;  # 添加 /app 前缀
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">      rewrite ^/images/(.*)$ /app/images/$1 redirect;  # 添加 /app 前缀</span>      
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">rules</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">host</span>: todo.qikqiak.com
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">http</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">paths</span>:
+</span></span><span style="display:flex;"><span>          - <span style="color:#ff79c6">backend</span>:
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">serviceName</span>: fe
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">servicePort</span>: <span style="color:#bd93f9">3000</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">path</span>: /app(/|$)(.*)
+</span></span></code></pre></div><p>更新 Ingress 对象后，这个时候我们刷新页面可以看到已经正常了：</p>
+<p><img src="https://picdn.youdianzhishi.com/images/ingress-nginx-rewrite-3.png" alt="ingress nginx rewrite 3"></p>
 <p>要解决我们访问主域名出现 404 的问题，我们可以给应用设置一个 <code>app-root</code> 的注解，这样当我们访问主域名的时候会自动跳转到我们指定的 <code>app-root</code> 目录下面，如下所示：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: fe
-  namespace: default
-  annotations:
-    kubernetes.io/ingress.class: <span style="color:#f1fa8c">&#34;nginx&#34;</span>
-    nginx.ingress.kubernetes.io/app-root: /app/
-    nginx.ingress.kubernetes.io/rewrite-target: /$<span style="color:#bd93f9">2</span>
-    nginx.ingress.kubernetes.io/configuration-snippet: <span style="color:#f1fa8c">|
-</span><span style="color:#f1fa8c">      rewrite ^/stylesheets/(.*)$ /app/stylesheets/$1 redirect;  # 添加 /app 前缀</span>
-      rewrite ^/images/(.<span style="color:#ff79c6">*)$</span> /app/images/$<span style="color:#bd93f9">1</span> redirect;  <span style="color:#6272a4"># 添加 /app 前缀</span>
-spec:
-  rules:
-  - host: todo.qikqiak.com
-    http:
-      paths:
-      - backend:
-          serviceName: fe
-          servicePort: <span style="color:#bd93f9">3000</span>
-        path: /app(/|$)(.<span style="color:#ff79c6">*)</span></code></pre></div>
-<p>这个时候我们更新应用后访问主域名 <code>http://todo.qikqiak.com</code> 就会自动跳转到 <code>http://todo.qikqiak.com/app/</code> 路径下面去了。但是还有一个问题是我们的 path 路径其实也匹配了 <code>/app</code> 这样的路径，可能我们更加希望我们的应用在最后添加一个 <code>/</code> 这样的 slash，同样我们可以通过 <code>configuration-snippet</code> 配置来完成，如下 Ingress 对象：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: extensions/v1beta1
-kind: Ingress
-metadata:
-  name: fe
-  namespace: default
-  annotations:
-    kubernetes.io/ingress.class: <span style="color:#f1fa8c">&#34;nginx&#34;</span>
-    nginx.ingress.kubernetes.io/app-root: /app/
-    nginx.ingress.kubernetes.io/rewrite-target: /$<span style="color:#bd93f9">2</span>
-    nginx.ingress.kubernetes.io/configuration-snippet: <span style="color:#f1fa8c">|
-</span><span style="color:#f1fa8c">      rewrite ^(/app)$ $1/ redirect;</span>
-      rewrite ^/stylesheets/(.<span style="color:#ff79c6">*)$</span> /app/stylesheets/$<span style="color:#bd93f9">1</span> redirect;
-      rewrite ^/images/(.<span style="color:#ff79c6">*)$</span> /app/images/$<span style="color:#bd93f9">1</span> redirect;
-spec:
-  rules:
-  - host: todo.qikqiak.com
-    http:
-      paths:
-      - backend:
-          serviceName: fe
-          servicePort: <span style="color:#bd93f9">3000</span>
-        path: /app(/|$)(.<span style="color:#ff79c6">*)</span></code></pre></div>
-<p>更新后我们的应用就都会以 <code>/</code> 这样的 slash 结尾了。这样就完成了我们的需求，如果你原本对 nginx 的配置就非常熟悉的话应该可以很快就能理解这种配置方式了，当然如果你还是喜欢更加简单明了的方式的话可以推荐使用 <a href="https://www.qikqiak.com/tags/traefik/">Traefik</a> 。</p>
-
-<p><a href="https://youdianzhishi.com/web/course/1030" title="从 Docker 到 Kubernetes 进阶课程"><img src="https://sdn.youdianzhishi.com/images/2019/10/24/65f2cfb229184268a18745fe202b281b.jpg?imageView2/2/format/webp" alt="Kubernetes进阶训练营"></a></p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: extensions/v1beta1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: Ingress
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: fe
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">namespace</span>: default
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">annotations</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">kubernetes.io/ingress.class</span>: <span style="color:#f1fa8c">&#34;nginx&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">nginx.ingress.kubernetes.io/app-root</span>: /app/
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">nginx.ingress.kubernetes.io/rewrite-target</span>: /$2
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">nginx.ingress.kubernetes.io/configuration-snippet</span>: |<span style="color:#f1fa8c">
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">      rewrite ^/stylesheets/(.*)$ /app/stylesheets/$1 redirect;  # 添加 /app 前缀
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">      rewrite ^/images/(.*)$ /app/images/$1 redirect;  # 添加 /app 前缀</span>      
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">rules</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">host</span>: todo.qikqiak.com
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">http</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">paths</span>:
+</span></span><span style="display:flex;"><span>          - <span style="color:#ff79c6">backend</span>:
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">serviceName</span>: fe
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">servicePort</span>: <span style="color:#bd93f9">3000</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">path</span>: /app(/|$)(.*)
+</span></span></code></pre></div><p>这个时候我们更新应用后访问主域名 <code>http://todo.qikqiak.com</code> 就会自动跳转到 <code>http://todo.qikqiak.com/app/</code> 路径下面去了。但是还有一个问题是我们的 path 路径其实也匹配了 <code>/app</code> 这样的路径，可能我们更加希望我们的应用在最后添加一个 <code>/</code> 这样的 slash，同样我们可以通过 <code>configuration-snippet</code> 配置来完成，如下 Ingress 对象：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: extensions/v1beta1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: Ingress
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: fe
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">namespace</span>: default
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">annotations</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">kubernetes.io/ingress.class</span>: <span style="color:#f1fa8c">&#34;nginx&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">nginx.ingress.kubernetes.io/app-root</span>: /app/
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">nginx.ingress.kubernetes.io/rewrite-target</span>: /$2
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">nginx.ingress.kubernetes.io/configuration-snippet</span>: |<span style="color:#f1fa8c">
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">      rewrite ^(/app)$ $1/ redirect;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">      rewrite ^/stylesheets/(.*)$ /app/stylesheets/$1 redirect;
+</span></span></span><span style="display:flex;"><span><span style="color:#f1fa8c">      rewrite ^/images/(.*)$ /app/images/$1 redirect;</span>      
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">rules</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">host</span>: todo.qikqiak.com
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">http</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">paths</span>:
+</span></span><span style="display:flex;"><span>          - <span style="color:#ff79c6">backend</span>:
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">serviceName</span>: fe
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">servicePort</span>: <span style="color:#bd93f9">3000</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">path</span>: /app(/|$)(.*)
+</span></span></code></pre></div><p>更新后我们的应用就都会以 <code>/</code> 这样的 slash 结尾了。这样就完成了我们的需求，如果你原本对 nginx 的配置就非常熟悉的话应该可以很快就能理解这种配置方式了，当然如果你还是喜欢更加简单明了的方式的话可以推荐使用 <a href="https://www.qikqiak.com/tags/traefik/">Traefik</a> 。</p>
+<!-- raw HTML omitted -->
 
           <h2>微信公众号</h2>
-<p>扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的 kubernetes 讨论群里面共同学习。</p>
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/qrcode.png" alt="wechat-account-qrcode">
+<p>
+  扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的
+  kubernetes 讨论群里面共同学习。
+</p>
+<img
+  src="https://picdn.youdianzhishi.com/images/qrcode.png"
+  alt="wechat-account-qrcode"
+/>
 
   
           
@@ -681,7 +650,7 @@ spec:
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -693,7 +662,7 @@ spec:
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -710,7 +679,7 @@ spec:
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -719,7 +688,7 @@ spec:
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

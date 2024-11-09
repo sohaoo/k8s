@@ -11,16 +11,15 @@
   <meta name="twitter:title" content="kubernetes" />
 
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/tags/kubernetes/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/tags/kubernetes/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -29,7 +28,7 @@
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -80,7 +79,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -238,6 +237,95 @@ autocomplete('#aa-search-input',
         <div class="posts-list">
           
             <article class="post-preview">
+              <a href="https://www.qikqiak.com/post/use-yaml-create-kubernetes-deployment/">
+                <h2 class="post-title">使用YAML 文件创建 Kubernetes Deployment</h2>
+
+                
+              </a>
+
+              <p class="post-meta">
+                
+              </p>
+              <div class="post-entry">
+                
+                  <p>在之前的文章中，我们一直在讨论如何使用<code>kubernetes</code>，很多时候我们知道怎么使用<code>kubectl</code>命令行工具来启动一个<code>POD</code>，也看到我们在安装kubernetes 过程中使用了一些 YAML 文件来创建，但是发现很多朋友对 YAML 文件来创建一个 POD 还是非常陌生。所以我们来简单看看 YAML 文件是如何工作的，并使用 YAML 文件来定义一个 kubernetes pod，然后再来定义一个 kubernetes deployment吧。</p>
+                  <a href="https://www.qikqiak.com/post/use-yaml-create-kubernetes-deployment/" class="post-read-more">[阅读全文]</a>
+                
+              </div>
+
+              
+                <span class="post-meta">
+                  
+                    #<a href="https://www.qikqiak.com/tags/kubernetes/">kubernetes</a>&nbsp;
+                  
+                    #<a href="https://www.qikqiak.com/tags/yaml/">yaml</a>&nbsp;
+                  
+                    #<a href="https://www.qikqiak.com/tags/deployment/">Deployment</a>&nbsp;
+                  
+                </span>
+              
+
+            </article>
+          
+            <article class="post-preview">
+              <a href="https://www.qikqiak.com/post/first-use-helm-on-kubernetes/">
+                <h2 class="post-title">Kubernetes Helm 初体验</h2>
+
+                
+              </a>
+
+              <p class="post-meta">
+                
+              </p>
+              <div class="post-entry">
+                
+                  <p><code>Helm</code>这个东西其实早有耳闻，但是一直没有用在生产环境，而且现在对这货的评价也是褒贬不一。正好最近需要再次部署一套测试环境，对于单体服务，部署一套测试环境我相信还是非常快的，但是对于微服务架构的应用，要部署一套新的环境，就有点折磨人了，微服务越多、你就会越绝望的。虽然我们线上和测试环境已经都迁移到了<code>kubernetes</code>环境，但是每个微服务也得维护一套<code>yaml</code>文件，而且每个环境下的配置文件也不太一样，部署一套新的环境成本是真的很高。如果我们能使用类似于<code>yum</code>的工具来安装我们的应用的话是不是就很爽歪歪了啊？<code>Helm</code>就相当于<code>kubernetes</code>环境下的<code>yum</code>包管理工具。</p>
+                  <a href="https://www.qikqiak.com/post/first-use-helm-on-kubernetes/" class="post-read-more">[阅读全文]</a>
+                
+              </div>
+
+              
+                <span class="post-meta">
+                  
+                    #<a href="https://www.qikqiak.com/tags/kubernetes/">kubernetes</a>&nbsp;
+                  
+                    #<a href="https://www.qikqiak.com/tags/helm/">helm</a>&nbsp;
+                  
+                </span>
+              
+
+            </article>
+          
+            <article class="post-preview">
+              <a href="https://www.qikqiak.com/post/how-to-use-podpreset-in-kubernetes/">
+                <h2 class="post-title">kubernetes PodPreset 的使用</h2>
+
+                
+              </a>
+
+              <p class="post-meta">
+                
+              </p>
+              <div class="post-entry">
+                
+                  <p>最近在<code>kubernetes</code>上安装 <a href="https://github.com/cnych/k8s-repo/tree/master/sentry">sentry</a> 的时候，我将<code>sentry</code>需要运行的3个服务放到同一个<strong>POD</strong>中的，WEB、Celery Worker、Crontab 分别用一个独立的容器来运行的，但是这三个容器需要用到环境变量基本上都是一样的，比如数据库的配置、消息队列的配置，这样就造成一个问题是我需要把完全一模一样的环境配置复制3份，因为3个容器都需要使用，这样如果需要更改的话也要改3个地方。幸好<code>kubernetes</code>给我们提供了一种新的特性：<strong>PodPreset</strong>，该对象用来在 Pod 创建的时候向 Pod 中注入某些特定信息，可以包括 secret、volume、volume mount 和环境变量等。</p>
+                  <a href="https://www.qikqiak.com/post/how-to-use-podpreset-in-kubernetes/" class="post-read-more">[阅读全文]</a>
+                
+              </div>
+
+              
+                <span class="post-meta">
+                  
+                    #<a href="https://www.qikqiak.com/tags/kubernetes/">kubernetes</a>&nbsp;
+                  
+                    #<a href="https://www.qikqiak.com/tags/podpreset/">PodPreset</a>&nbsp;
+                  
+                </span>
+              
+
+            </article>
+          
+            <article class="post-preview">
               <a href="https://www.qikqiak.com/post/add-authorization-for-kubernetes-dashboard/">
                 <h2 class="post-title">为kubernetes dashboard访问用户添加权限控制</h2>
 
@@ -245,7 +333,7 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 January 18, 2018
+                
               </p>
               <div class="post-entry">
                 
@@ -276,7 +364,7 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 January 13, 2018
+                
               </p>
               <div class="post-entry">
                 
@@ -315,7 +403,7 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 December 28, 2017
+                
               </p>
               <div class="post-entry">
                 
@@ -354,7 +442,7 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 December 27, 2017
+                
               </p>
               <div class="post-entry">
                 
@@ -378,41 +466,6 @@ autocomplete('#aa-search-input',
             </article>
           
             <article class="post-preview">
-              <a href="https://www.qikqiak.com/post/update-prometheus-2-in-kubernetes/">
-                <h2 class="post-title">Kubernetes 下升级Prometheus2.0</h2>
-
-                
-              </a>
-
-              <p class="post-meta">
-                发表于 November 22, 2017
-              </p>
-              <div class="post-entry">
-                
-                  <p><code>prometheus</code>2.0正式版已经发布了，新增了很多特性，特别是底层存储性能提升了不少：<a href="https://prometheus.io/blog/2017/11/08/announcing-prometheus-2-0/">https://prometheus.io/blog/2017/11/08/announcing-prometheus-2-0/</a>。</p>
-
-<p>在将之前监控平台升级到2.0 的过程中还是有一些坑的，因为有很多参数已经更改了，还不清除怎么在<code>kubernetes</code>上搭建<code>prometheus</code>监控平台的，可以查看前面的文章<a href="https://www.qikqiak.com/post/kubernetes-monitor-prometheus-grafana/">Kubernetes使用Prometheus搭建监控平台</a></p>
-
-<p>本文章中涉及到的<code>yaml</code>文件可以在<a href="https://github.com/cnych/k8s-repo/tree/master/prometheus">github</a>中查看。</p>
-                  <a href="https://www.qikqiak.com/post/update-prometheus-2-in-kubernetes/" class="post-read-more">[阅读全文]</a>
-                
-              </div>
-
-              
-                <span class="post-meta">
-                  
-                    #<a href="https://www.qikqiak.com/tags/kubernetes/">kubernetes</a>&nbsp;
-                  
-                    #<a href="https://www.qikqiak.com/tags/prometheus/">prometheus</a>&nbsp;
-                  
-                    #<a href="https://www.qikqiak.com/tags/grafana/">grafana</a>&nbsp;
-                  
-                </span>
-              
-
-            </article>
-          
-            <article class="post-preview">
               <a href="https://www.qikqiak.com/post/kubernetes-logs-collect/">
                 <h2 class="post-title">kubernetes 日志收集方案</h2>
 
@@ -420,12 +473,11 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 November 22, 2017
+                
               </p>
               <div class="post-entry">
                 
                   <p>完善的日志系统是保证系统持续稳定运行的基石，帮助提升运维、运营效率，建立大数据时代的海量日志处理等能力都需要日志系统的支持，所以搭建一套行之有效的日志系统至关重要。</p>
-
 <p>本文将介绍两种kubernetes 集群下日志收集的方案：阿里云日志服务或者<code>EFK</code>方案</p>
                   <a href="https://www.qikqiak.com/post/kubernetes-logs-collect/" class="post-read-more">[阅读全文]</a>
                 
@@ -446,6 +498,39 @@ autocomplete('#aa-search-input',
             </article>
           
             <article class="post-preview">
+              <a href="https://www.qikqiak.com/post/update-prometheus-2-in-kubernetes/">
+                <h2 class="post-title">Kubernetes 下升级Prometheus2.0</h2>
+
+                
+              </a>
+
+              <p class="post-meta">
+                
+              </p>
+              <div class="post-entry">
+                
+                  <p><code>prometheus</code>2.0正式版已经发布了，新增了很多特性，特别是底层存储性能提升了不少：<a href="https://prometheus.io/blog/2017/11/08/announcing-prometheus-2-0/">https://prometheus.io/blog/2017/11/08/announcing-prometheus-2-0/</a>。</p>
+<p>在将之前监控平台升级到2.0 的过程中还是有一些坑的，因为有很多参数已经更改了，还不清除怎么在<code>kubernetes</code>上搭建<code>prometheus</code>监控平台的，可以查看前面的文章<a href="https://www.qikqiak.com/post/kubernetes-monitor-prometheus-grafana/">Kubernetes使用Prometheus搭建监控平台</a></p>
+<p>本文章中涉及到的<code>yaml</code>文件可以在<a href="https://github.com/cnych/k8s-repo/tree/master/prometheus">github</a>中查看。</p>
+                  <a href="https://www.qikqiak.com/post/update-prometheus-2-in-kubernetes/" class="post-read-more">[阅读全文]</a>
+                
+              </div>
+
+              
+                <span class="post-meta">
+                  
+                    #<a href="https://www.qikqiak.com/tags/kubernetes/">kubernetes</a>&nbsp;
+                  
+                    #<a href="https://www.qikqiak.com/tags/prometheus/">prometheus</a>&nbsp;
+                  
+                    #<a href="https://www.qikqiak.com/tags/grafana/">grafana</a>&nbsp;
+                  
+                </span>
+              
+
+            </article>
+          
+            <article class="post-preview">
               <a href="https://www.qikqiak.com/post/socketio-multiple-nodes-in-kubernetes/">
                 <h2 class="post-title">kubernetes 下实现socket.io 的集群模式</h2>
 
@@ -453,14 +538,12 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 November 21, 2017
+                
               </p>
               <div class="post-entry">
                 
                   <p><code>socket.io</code> 单节点模式是很容易部署的，但是往往在生产环境一个节点不能满足业务需求，况且还要保证节点挂掉的情况仍能正常提供服务，所以多节点模式就成为了生成环境的一种必须的部署模式。</p>
-
 <p>本文将介绍如何在kubernetes 集群上部署多节点的<code>socket.io</code>服务。</p>
-
 <p>文章中涉及到的代码可以前往<a href="https://github.com/cnych/k8s-socketio-cluster-demo">https://github.com/cnych/k8s-socketio-cluster-demo</a>查看。</p>
                   <a href="https://www.qikqiak.com/post/socketio-multiple-nodes-in-kubernetes/" class="post-read-more">[阅读全文]</a>
                 
@@ -488,12 +571,11 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 November 20, 2017
+                
               </p>
               <div class="post-entry">
                 
                   <p><code>Harbor</code>是一个用于存储和分发Docker 镜像的企业级Registry 服务器，通过添加一些企业必需的功能特性，例如安全、标识和管理等，扩展了开源Docker Distribution。作为一个企业级私有Registry 服务器，Harbor 提供了更好的性能和安全。提升用户使用Registry构建和运行环境传输镜像的效率。Harbor 支持安装在多个Registry节点的镜像资源复制，镜像全部保存在私有Registry 中， 确保数据和知识产权在公司内部网络中管控。另外，Harbor也提供了高级的安全特性，诸如用户管理，访问控制和活动审计等。</p>
-
 <p>本文将介绍如何在kubernetes 集群上搭建一个高可用的Harbor 服务。</p>
                   <a href="https://www.qikqiak.com/post/install-docker-registry-harbor-in-kubernetes/" class="post-read-more">[阅读全文]</a>
                 
@@ -521,7 +603,7 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 November 13, 2017
+                
               </p>
               <div class="post-entry">
                 
@@ -544,105 +626,6 @@ autocomplete('#aa-search-input',
 
             </article>
           
-            <article class="post-preview">
-              <a href="https://www.qikqiak.com/post/manual-install-high-available-kubernetes-cluster/">
-                <h2 class="post-title">手动搭建高可用的kubernetes 集群</h2>
-
-                
-              </a>
-
-              <p class="post-meta">
-                发表于 November 6, 2017
-              </p>
-              <div class="post-entry">
-                
-                  <p>之前按照<a href="https://github.com/opsnull/follow-me-install-kubernetes-cluster">和我一步步部署 kubernetes 集群</a>的步骤一步一步的成功的使用二进制的方式安装了<code>kubernetes</code>集群，在该文档的基础上重新部署了最新的<code>v1.8.2</code>版本，实现了<code>kube-apiserver</code>的高可用、<code>traefik ingress</code> 的部署、在<code>kubernetes</code>上安装<code>docker</code>的私有仓库<code>harbor</code>、容器化<code>kubernetes</code>部分组建、使用阿里云日志服务收集日志。</p>
-
-<p>部署完成后，你将理解系统各组件的交互原理，进而能快速解决实际问题，所以本文档主要适合于那些有一定<code>kubernetes</code>基础，想通过一步步部署的方式来学习和了解系统配置、运行原理的人。</p>
-
-<p>本系列系文档适用于 <code>CentOS 7</code>、<code>Ubuntu 16.04</code> 及以上版本系统，由于启用了 <code>TLS</code> 双向认证、<code>RBAC</code> 授权等严格的安全机制，建议<strong>从头开始部署</strong>，否则可能会认证、授权等失败！</p>
-                  <a href="https://www.qikqiak.com/post/manual-install-high-available-kubernetes-cluster/" class="post-read-more">[阅读全文]</a>
-                
-              </div>
-
-              
-                <span class="post-meta">
-                  
-                    #<a href="https://www.qikqiak.com/tags/kubernetes/">kubernetes</a>&nbsp;
-                  
-                    #<a href="https://www.qikqiak.com/tags/%E9%AB%98%E5%8F%AF%E7%94%A8/">高可用</a>&nbsp;
-                  
-                    #<a href="https://www.qikqiak.com/tags/%E9%9B%86%E7%BE%A4/">集群</a>&nbsp;
-                  
-                    #<a href="https://www.qikqiak.com/tags/docker/">docker</a>&nbsp;
-                  
-                </span>
-              
-
-            </article>
-          
-            <article class="post-preview">
-              <a href="https://www.qikqiak.com/post/kubernetes-rollout-update/">
-                <h2 class="post-title">Kubernetes Deployment滚动升级</h2>
-
-                
-              </a>
-
-              <p class="post-meta">
-                发表于 October 18, 2017
-              </p>
-              <div class="post-entry">
-                
-                  <p>我们<code>k8s</code>集群使用的是1.7.7版本的，该版本中官方已经推荐使用<code>Deployment</code>代替<code>Replication Controller</code>(rc)了，<code>Deployment</code>继承了rc的全部功能外，还可以查看升级详细进度和状态，当升级出现问题的时候，可以使用回滚操作回滚到指定的版本，每一次对Deployment的操作，都会保存下来，变能方便的进行回滚操作了，另外对于每一次升级都可以随时暂停和启动，拥有多种升级方案：<code>Recreate</code>删除现在的<code>Pod</code>，重新创建；<code>RollingUpdate</code>滚动升级，逐步替换现有<code>Pod</code>，对于生产环境的服务升级，显然这是一种最好的方式。</p>
-                  <a href="https://www.qikqiak.com/post/kubernetes-rollout-update/" class="post-read-more">[阅读全文]</a>
-                
-              </div>
-
-              
-                <span class="post-meta">
-                  
-                    #<a href="https://www.qikqiak.com/tags/kubernetes/">kubernetes</a>&nbsp;
-                  
-                    #<a href="https://www.qikqiak.com/tags/deployment/">deployment</a>&nbsp;
-                  
-                </span>
-              
-
-            </article>
-          
-            <article class="post-preview">
-              <a href="https://www.qikqiak.com/post/kubernetes-monitor-prometheus-grafana/">
-                <h2 class="post-title">Kubernetes使用Prometheus搭建监控平台</h2>
-
-                
-              </a>
-
-              <p class="post-meta">
-                发表于 October 17, 2017
-              </p>
-              <div class="post-entry">
-                
-                  <p>最近在测试环境搭建了<code>Kubernetes</code>集群环境，迁移了部分测试环境的应用，由于测试集群性能不是很好，有时会遇到集群资源不够的情况，一般情况下我们是直接通过Dashboard的资源统计图标进行观察的，但是很显然如果要上到生产环境，就需要更自动化的方式来对集群、Pod甚至容器进行监控了。<code>Kubernetes</code>内置了一套监控方案：influxdb+grafana+heapster。但由于之前我们的应用的业务监控使用的是<code>Prometheus</code>，所以这里准备使用<code>Prometheus</code>来完成k8s的集群监控。</p>
-                  <a href="https://www.qikqiak.com/post/kubernetes-monitor-prometheus-grafana/" class="post-read-more">[阅读全文]</a>
-                
-              </div>
-
-              
-                <span class="post-meta">
-                  
-                    #<a href="https://www.qikqiak.com/tags/kubernetes/">kubernetes</a>&nbsp;
-                  
-                    #<a href="https://www.qikqiak.com/tags/prometheus/">prometheus</a>&nbsp;
-                  
-                    #<a href="https://www.qikqiak.com/tags/grafana/">grafana</a>&nbsp;
-                  
-                    #<a href="https://www.qikqiak.com/tags/influxdb/">influxdb</a>&nbsp;
-                  
-                </span>
-              
-
-            </article>
-          
         </div>
         
           <ul class="pager main-pager">
@@ -651,6 +634,10 @@ autocomplete('#aa-search-input',
                 <a href="https://www.qikqiak.com/tags/kubernetes/page/14">&larr; 上一页</a>
               </li>
             
+            
+              <li class="next">
+                <a href="https://www.qikqiak.com/tags/kubernetes/page/16">下一页 &rarr;</a>
+              </li>
             
           </ul>
         
@@ -716,7 +703,7 @@ autocomplete('#aa-search-input',
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -728,7 +715,7 @@ autocomplete('#aa-search-input',
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -745,7 +732,7 @@ autocomplete('#aa-search-input',
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -754,7 +741,7 @@ autocomplete('#aa-search-input',
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

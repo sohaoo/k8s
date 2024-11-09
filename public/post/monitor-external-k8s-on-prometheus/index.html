@@ -14,16 +14,15 @@
   <meta property="og:description" content="前面我们的文章中都是将 Prometheus 安装在 Kubernetes 集群中来采集数据，但是在实际环境中很多企业是将 Prometheus 单独部署在集群外部的，甚至直接监控多个 Kubernetes 集群，虽然不推荐这样去做，因为 Prometheus 采集的数据量太大，或大量消耗资源，比较推荐的做法是用不同的 Prometheus 实例监控不同的集群，然后用联邦的方式进行汇总。但是使用 Prometheus 监控外部的 Kubernetes 集群这个需求还是非常有必要的。">
   <meta name="twitter:description" content="前面我们的文章中都是将 Prometheus 安装在 Kubernetes 集群中来采集数据，但是在实际环境中很多企业是将 Prometheus 单独部署在集群外部的，甚至直接监控多个 Kubernetes 集群，虽然不推荐这样去做，因为 Prometheus 采集的数据量太大，或大量消耗资源，比较推荐的做法是用不同的 Prometheus 实例监控不同的集群，然后用联邦的方式进行汇总。 …">
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/post/monitor-external-k8s-on-prometheus/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/post/monitor-external-k8s-on-prometheus/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -32,7 +31,7 @@
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -83,7 +82,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -226,7 +225,7 @@ autocomplete('#aa-search-input',
 
 
   
-    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200629153428.png" data-img-desc-1="https://unsplash.com/photos/IbumA7v22ZI"></div>
+    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://picdn.youdianzhishi.com/images/20200629153428.png" data-img-desc-1="https://unsplash.com/photos/IbumA7v22ZI"></div>
   
 
   <header class="header-section has-img">
@@ -241,12 +240,8 @@ autocomplete('#aa-search-input',
                   
                   
                     <span class="post-meta">
-  
-    发表于 June 29, 2020
-  
-  
+  发表于 June 29, 2020  
 </span>
-
 
                   
               </div>
@@ -268,12 +263,8 @@ autocomplete('#aa-search-input',
                 
                 
                   <span class="post-meta">
-  
-    发表于 June 29, 2020
-  
-  
+  发表于 June 29, 2020  
 </span>
-
 
                 
             </div>
@@ -326,143 +317,139 @@ autocomplete('#aa-search-input',
           
 
           <p>前面我们的文章中都是将 Prometheus 安装在 Kubernetes 集群中来采集数据，但是在实际环境中很多企业是将 Prometheus 单独部署在集群外部的，甚至直接监控多个 Kubernetes 集群，虽然不推荐这样去做，因为 Prometheus 采集的数据量太大，或大量消耗资源，比较推荐的做法是用不同的 Prometheus 实例监控不同的集群，然后用联邦的方式进行汇总。但是使用 Prometheus 监控外部的 Kubernetes 集群这个需求还是非常有必要的。</p>
-
 <p>比如现在我们要去采集 Kubernetes 集群 cAdvisor 的监控数据，我们就可以利用 APIServer 通过 kubelet 去获取到对应的数据。如果我们对集群内部的 Prometheus 自动发现 Kubernetes 的数据比较熟悉的话，那么监控外部集群的原理也是一样的，只是访问 APIServer 的形式有 inCluster 模式变成了 KubeConfig 的模式，inCluster 模式下在 Pod 中就已经自动注入了访问集群的 token 和 ca.crt 文件，所以非常方便，那么在集群外的话就需要我们手动提供这两个文件，才能够做到自动发现了。</p>
-
 <p>接下来就首先构造 Prometheus 连接 APIServer 的信息，在通过 <code>kubernetes_sd_configs</code> 做服务发现的时候只需要填入 Kubernetes 集群的 <code>api_server</code>、<code>ca_file</code>、<code>bearer_token_file</code> 信息即可，要想获得这几个文件信息也比较简单。</p>
-
 <p>创建用于 Prometheus 访问 Kubernetes 资源对象的 RBAC 对象：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#6272a4"># prom.rbac.yaml</span>
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: prometheus
-  namespace: kube-mon
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: ClusterRole
-metadata:
-  name: prometheus
-rules:
-- apiGroups:
-  - <span style="color:#f1fa8c">&#34;&#34;</span>
-  resources:
-  - nodes
-  - services
-  - endpoints
-  - pods
-  - nodes/proxy
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - <span style="color:#f1fa8c">&#34;extensions&#34;</span>
-  resources:
-    - ingresses
-  verbs:
-  - get
-  - list
-  - watch
-- apiGroups:
-  - <span style="color:#f1fa8c">&#34;&#34;</span>
-  resources:
-  - configmaps
-  - nodes/metrics
-  verbs:
-  - get
-- nonResourceURLs:
-  - /metrics
-  verbs:
-  - get
----
-apiVersion: rbac.authorization.k8s.io/v1beta1
-kind: ClusterRoleBinding
-metadata:
-  name: prometheus
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: prometheus
-subjects:
-- kind: ServiceAccount
-  name: prometheus
-  namespace: kube-mon</code></pre></div>
-<p>在 Kubernetes 集群中创建上面的资源对象：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl apply -f prom.rbac.yaml</code></pre></div>
-<p>然后获取上面的 Prometheus 对应的 Secret 的信息：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl get sa prometheus -n kube-mon -o yaml
-......
-secrets:
-- name: prometheus-token-wj7fb
-$ kubectl describe secret prometheus-token-wj7fb -n kube-mon
-Name:         prometheus-token-wj7fb
-Namespace:    kube-mon
-......
-
-<span style="color:#8be9fd;font-style:italic">Data</span>
-<span style="color:#ff79c6">====</span>
-namespace:  <span style="color:#bd93f9">8</span> bytes
-token:      &lt;token string&gt;
-ca.crt:     <span style="color:#bd93f9">1025</span> bytes</code></pre></div>
-<p>上面的 token 和 ca.crt 信息就是我们用于访问 APIServer 的数据，可以将 token 信息保存到一个名为 k8s.token 的文本文件中。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#6272a4"># prom.rbac.yaml</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: v1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: ServiceAccount
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: prometheus
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">namespace</span>: kube-mon
+</span></span><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: rbac.authorization.k8s.io/v1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: ClusterRole
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: prometheus
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">rules</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ff79c6">apiGroups</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#f1fa8c">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">resources</span>:
+</span></span><span style="display:flex;"><span>      - nodes
+</span></span><span style="display:flex;"><span>      - services
+</span></span><span style="display:flex;"><span>      - endpoints
+</span></span><span style="display:flex;"><span>      - pods
+</span></span><span style="display:flex;"><span>      - nodes/proxy
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">verbs</span>:
+</span></span><span style="display:flex;"><span>      - get
+</span></span><span style="display:flex;"><span>      - list
+</span></span><span style="display:flex;"><span>      - watch
+</span></span><span style="display:flex;"><span>  - <span style="color:#ff79c6">apiGroups</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#f1fa8c">&#34;extensions&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">resources</span>:
+</span></span><span style="display:flex;"><span>      - ingresses
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">verbs</span>:
+</span></span><span style="display:flex;"><span>      - get
+</span></span><span style="display:flex;"><span>      - list
+</span></span><span style="display:flex;"><span>      - watch
+</span></span><span style="display:flex;"><span>  - <span style="color:#ff79c6">apiGroups</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#f1fa8c">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">resources</span>:
+</span></span><span style="display:flex;"><span>      - configmaps
+</span></span><span style="display:flex;"><span>      - nodes/metrics
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">verbs</span>:
+</span></span><span style="display:flex;"><span>      - get
+</span></span><span style="display:flex;"><span>  - <span style="color:#ff79c6">nonResourceURLs</span>:
+</span></span><span style="display:flex;"><span>      - /metrics
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">verbs</span>:
+</span></span><span style="display:flex;"><span>      - get
+</span></span><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: rbac.authorization.k8s.io/v1beta1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: ClusterRoleBinding
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: prometheus
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">roleRef</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">apiGroup</span>: rbac.authorization.k8s.io
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">kind</span>: ClusterRole
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: prometheus
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">subjects</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ff79c6">kind</span>: ServiceAccount
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">name</span>: prometheus
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">namespace</span>: kube-mon
+</span></span></code></pre></div><p>在 Kubernetes 集群中创建上面的资源对象：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl apply -f prom.rbac.yaml
+</span></span></code></pre></div><p>然后获取上面的 Prometheus 对应的 Secret 的信息：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl get sa prometheus -n kube-mon -o yaml
+</span></span><span style="display:flex;"><span>......
+</span></span><span style="display:flex;"><span>secrets:
+</span></span><span style="display:flex;"><span>- name: prometheus-token-wj7fb
+</span></span><span style="display:flex;"><span>$ kubectl describe secret prometheus-token-wj7fb -n kube-mon
+</span></span><span style="display:flex;"><span>Name:         prometheus-token-wj7fb
+</span></span><span style="display:flex;"><span>Namespace:    kube-mon
+</span></span><span style="display:flex;"><span>......
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">Data</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">====</span>
+</span></span><span style="display:flex;"><span>namespace:  <span style="color:#bd93f9">8</span> bytes
+</span></span><span style="display:flex;"><span>token:      &lt;token string&gt;
+</span></span><span style="display:flex;"><span>ca.crt:     <span style="color:#bd93f9">1025</span> bytes
+</span></span></code></pre></div><p>上面的 token 和 ca.crt 信息就是我们用于访问 APIServer 的数据，可以将 token 信息保存到一个名为 k8s.token 的文本文件中。</p>
 <p>现在我们添加一个 Prometheus 监控外部 Kubernetes 集群数据的任务，如下所示：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml"><span style="color:#6272a4"># prometheus.yml</span>
-global:
-  scrape_interval: 15s
-  scrape_timeout: 15s
-scrape_configs:
-- job_name: k8s-cadvisor
-  honor_timestamps: <span style="color:#ff79c6">true</span>
-  metrics_path: /metrics
-  scheme: https
-  kubernetes_sd_configs:  <span style="color:#6272a4"># kubernetes 自动发现</span>
-  - api_server: https://<span style="color:#bd93f9">10.151</span>.<span style="color:#bd93f9">30.11</span>:<span style="color:#bd93f9">6443</span>  <span style="color:#6272a4"># apiserver 地址</span>
-    role: node  <span style="color:#6272a4"># node 类型的自动发现</span>
-    bearer_token_file: k8s.token
-    tls_config:
-      insecure_skip_verify: <span style="color:#ff79c6">true</span>
-  bearer_token_file: k8s.token
-  tls_config:
-    insecure_skip_verify: <span style="color:#ff79c6">true</span>
-  relabel_configs:
-  - action: labelmap
-    regex: __meta_kubernetes_node_label_(.+)
-  - separator: ;
-    regex: (.<span style="color:#ff79c6">*)</span>
-    target_label: __address__
-    replacement: <span style="color:#bd93f9">10.151</span>.<span style="color:#bd93f9">30.11</span>:<span style="color:#bd93f9">6443</span>
-    action: replace
-  - source_labels: [__meta_kubernetes_node_name]
-    separator: ;
-    regex: (.+)
-    target_label: __metrics_path__
-    replacement: /api/v1/nodes/${<span style="color:#bd93f9">1</span>}/proxy/metrics/cadvisor
-    action: replace</code></pre></div>
-<p>这里 <code>bearer_token_file</code> 就是上面生成的 k8s.token 文件，当然我们也可以直接用 <code>bearer_token</code> 直接将对应的字符串放置在这里，另外要记得将 <code>api_server</code> 替换成你 Prometheus 所在的节点能访问到的 APIServer 地址。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#6272a4"># prometheus.yml</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">global</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">scrape_interval</span>: 15s
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">scrape_timeout</span>: 15s
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">scrape_configs</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ff79c6">job_name</span>: k8s-cadvisor
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">honor_timestamps</span>: <span style="color:#ff79c6">true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">metrics_path</span>: /metrics
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">scheme</span>: https
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">kubernetes_sd_configs</span>: <span style="color:#6272a4"># kubernetes 自动发现</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ff79c6">api_server</span>: https://10.151.30.11:6443 <span style="color:#6272a4"># apiserver 地址</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">role</span>: node <span style="color:#6272a4"># node 类型的自动发现</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">bearer_token_file</span>: k8s.token
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">tls_config</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">insecure_skip_verify</span>: <span style="color:#ff79c6">true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">bearer_token_file</span>: k8s.token
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">tls_config</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">insecure_skip_verify</span>: <span style="color:#ff79c6">true</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">relabel_configs</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ff79c6">action</span>: labelmap
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">regex</span>: __meta_kubernetes_node_label_(.+)
+</span></span><span style="display:flex;"><span>      - <span style="color:#ff79c6">separator</span>: ;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">regex</span>: (.*)
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">target_label</span>: __address__
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">replacement</span>: <span style="color:#bd93f9">10.151.30.11</span>:<span style="color:#bd93f9">6443</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">action</span>: replace
+</span></span><span style="display:flex;"><span>      - <span style="color:#ff79c6">source_labels</span>: [__meta_kubernetes_node_name]
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">separator</span>: ;
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">regex</span>: (.+)
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">target_label</span>: __metrics_path__
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">replacement</span>: /api/v1/nodes/${1}/proxy/metrics/cadvisor
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">action</span>: replace
+</span></span></code></pre></div><p>这里 <code>bearer_token_file</code> 就是上面生成的 k8s.token 文件，当然我们也可以直接用 <code>bearer_token</code> 直接将对应的字符串放置在这里，另外要记得将 <code>api_server</code> 替换成你 Prometheus 所在的节点能访问到的 APIServer 地址。</p>
 <p>我们这里监控 cAdvisor，同样可以通过 <code>relabel_configs</code> 来配置，将 <code>__metrics_path__</code> 转换为 <code>/api/v1/nodes/${1}/proxy/metrics/cadvisor</code>，相当于通过 APIServer 代理到 Kubelet 上获取数据，当然如果你的 Prometheus 能够直接访问到 kubelet，也可以配置成直接请求，这样就相当于服务发现使用 APIServer，采集直接走 Kubelet。</p>
-
 <p>配置完成后，直接启动 Prometheus 即可生效：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ ./prometheus --config.file<span style="color:#ff79c6">=</span>prometheus.yaml
-.......
-<span style="color:#8be9fd;font-style:italic">level</span><span style="color:#ff79c6">=</span>info <span style="color:#8be9fd;font-style:italic">ts</span><span style="color:#ff79c6">=</span><span style="color:#bd93f9">2020</span>-06-29T07:31:44.438Z <span style="color:#8be9fd;font-style:italic">caller</span><span style="color:#ff79c6">=</span>main.go:695 <span style="color:#8be9fd;font-style:italic">msg</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;TSDB started&#34;</span>
-<span style="color:#8be9fd;font-style:italic">level</span><span style="color:#ff79c6">=</span>info <span style="color:#8be9fd;font-style:italic">ts</span><span style="color:#ff79c6">=</span><span style="color:#bd93f9">2020</span>-06-29T07:31:44.438Z <span style="color:#8be9fd;font-style:italic">caller</span><span style="color:#ff79c6">=</span>main.go:799 <span style="color:#8be9fd;font-style:italic">msg</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;Loading configuration file&#34;</span> <span style="color:#8be9fd;font-style:italic">filename</span><span style="color:#ff79c6">=</span>prometheus.yaml
-<span style="color:#8be9fd;font-style:italic">level</span><span style="color:#ff79c6">=</span>info <span style="color:#8be9fd;font-style:italic">ts</span><span style="color:#ff79c6">=</span><span style="color:#bd93f9">2020</span>-06-29T07:31:44.448Z <span style="color:#8be9fd;font-style:italic">caller</span><span style="color:#ff79c6">=</span>main.go:827 <span style="color:#8be9fd;font-style:italic">msg</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;Completed loading of configuration file&#34;</span> <span style="color:#8be9fd;font-style:italic">filename</span><span style="color:#ff79c6">=</span>prometheus.yaml
-<span style="color:#8be9fd;font-style:italic">level</span><span style="color:#ff79c6">=</span>info <span style="color:#8be9fd;font-style:italic">ts</span><span style="color:#ff79c6">=</span><span style="color:#bd93f9">2020</span>-06-29T07:31:44.448Z <span style="color:#8be9fd;font-style:italic">caller</span><span style="color:#ff79c6">=</span>main.go:646 <span style="color:#8be9fd;font-style:italic">msg</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;Server is ready to receive web requests.&#34;</span></code></pre></div>
-<p>现在去 Prometheus 页面就可以看到采集的外部 Kubernetes 集群的数据了：</p>
-
-<p><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200629153253.png" alt="" /></p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ ./prometheus --config.file<span style="color:#ff79c6">=</span>prometheus.yaml
+</span></span><span style="display:flex;"><span>.......
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">level</span><span style="color:#ff79c6">=</span>info <span style="color:#8be9fd;font-style:italic">ts</span><span style="color:#ff79c6">=</span>2020-06-29T07:31:44.438Z <span style="color:#8be9fd;font-style:italic">caller</span><span style="color:#ff79c6">=</span>main.go:695 <span style="color:#8be9fd;font-style:italic">msg</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;TSDB started&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">level</span><span style="color:#ff79c6">=</span>info <span style="color:#8be9fd;font-style:italic">ts</span><span style="color:#ff79c6">=</span>2020-06-29T07:31:44.438Z <span style="color:#8be9fd;font-style:italic">caller</span><span style="color:#ff79c6">=</span>main.go:799 <span style="color:#8be9fd;font-style:italic">msg</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;Loading configuration file&#34;</span> <span style="color:#8be9fd;font-style:italic">filename</span><span style="color:#ff79c6">=</span>prometheus.yaml
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">level</span><span style="color:#ff79c6">=</span>info <span style="color:#8be9fd;font-style:italic">ts</span><span style="color:#ff79c6">=</span>2020-06-29T07:31:44.448Z <span style="color:#8be9fd;font-style:italic">caller</span><span style="color:#ff79c6">=</span>main.go:827 <span style="color:#8be9fd;font-style:italic">msg</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;Completed loading of configuration file&#34;</span> <span style="color:#8be9fd;font-style:italic">filename</span><span style="color:#ff79c6">=</span>prometheus.yaml
+</span></span><span style="display:flex;"><span><span style="color:#8be9fd;font-style:italic">level</span><span style="color:#ff79c6">=</span>info <span style="color:#8be9fd;font-style:italic">ts</span><span style="color:#ff79c6">=</span>2020-06-29T07:31:44.448Z <span style="color:#8be9fd;font-style:italic">caller</span><span style="color:#ff79c6">=</span>main.go:646 <span style="color:#8be9fd;font-style:italic">msg</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;Server is ready to receive web requests.&#34;</span>
+</span></span></code></pre></div><p>现在去 Prometheus 页面就可以看到采集的外部 Kubernetes 集群的数据了：</p>
+<p><img src="https://picdn.youdianzhishi.com/images/20200629153253.png" alt=""></p>
 <p>如果你要采集 node-exporter 或者自动发现 Endpoints、Pods 都是一样的原理。</p>
-
-<p><a href="https://youdianzhishi.com/web/course/1030" title="从 Docker 到 Kubernetes 进阶课程"><img src="https://sdn.youdianzhishi.com/images/2019/10/24/65f2cfb229184268a18745fe202b281b.jpg?imageView2/2/format/webp" alt="Kubernetes进阶训练营"></a></p>
-
+<!-- raw HTML omitted -->
 
           <h2>微信公众号</h2>
-<p>扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的 kubernetes 讨论群里面共同学习。</p>
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/qrcode.png" alt="wechat-account-qrcode">
+<p>
+  扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的
+  kubernetes 讨论群里面共同学习。
+</p>
+<img
+  src="https://picdn.youdianzhishi.com/images/qrcode.png"
+  alt="wechat-account-qrcode"
+/>
 
   
           
@@ -663,7 +650,7 @@ scrape_configs:
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -675,7 +662,7 @@ scrape_configs:
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -692,7 +679,7 @@ scrape_configs:
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -701,7 +688,7 @@ scrape_configs:
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

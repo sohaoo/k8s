@@ -14,16 +14,15 @@
   <meta property="og:description" content="前面我们介绍了在 ingress-nginx 中 URL Rewrite 的使用，其中重写路径大部分还是和传统的 nginx 方式差不多，如果我们使用的是比较云原生的 Traefik 来作为我们的网关的话，在遇到有 URL Rewrite 需求的时候又改怎么做呢？前面我们用一篇文章 一文搞懂 Traefik2.1 的使用 介绍了 Traefik2.1 的基本的功能，唯独没有提到 URL Rewrite 这一点，在 Traefik2.1 中我们依然可以很方便的用中间件的方式来完成这个功能。">
   <meta name="twitter:description" content="前面我们介绍了在 ingress-nginx 中 URL Rewrite 的使用，其中重写路径大部分还是和传统的 nginx 方式差不多，如果我们使用的是比较云原生的 Traefik 来作为我们的网关的话，在遇到有 URL Rewrite 需求的时候又改怎么做呢？前面我们用一篇文章 一文搞懂 Traefik2.1 的使用 介绍了 Traefik2.1 的基本的功能，唯独没有提到 URL …">
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/post/url-rewrite-on-traefik2.x/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/post/url-rewrite-on-traefik2.x/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -32,7 +31,7 @@
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -83,7 +82,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -226,7 +225,7 @@ autocomplete('#aa-search-input',
 
 
   
-    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/photo-1578612818852-d6b85c0c0ef6.jpeg" data-img-desc-1="https://unsplash.com/photos/U1WVDMEjwGE"></div>
+    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://picdn.youdianzhishi.com/images/photo-1578612818852-d6b85c0c0ef6.jpeg" data-img-desc-1="https://unsplash.com/photos/U1WVDMEjwGE"></div>
   
 
   <header class="header-section has-img">
@@ -241,12 +240,8 @@ autocomplete('#aa-search-input',
                   
                   
                     <span class="post-meta">
-  
-    发表于 January 10, 2020
-  
-  
+  发表于 January 10, 2020  
 </span>
-
 
                   
               </div>
@@ -268,12 +263,8 @@ autocomplete('#aa-search-input',
                 
                 
                   <span class="post-meta">
-  
-    发表于 January 10, 2020
-  
-  
+  发表于 January 10, 2020  
 </span>
-
 
                 
             </div>
@@ -328,185 +319,167 @@ autocomplete('#aa-search-input',
           
 
           <p>前面我们介绍了在 <a href="https://www.qikqiak.com/post/url-rewrite-on-ingress-nginx/">ingress-nginx 中 URL Rewrite 的使用</a>，其中重写路径大部分还是和传统的 nginx 方式差不多，如果我们使用的是比较云原生的 Traefik 来作为我们的网关的话，在遇到有 URL Rewrite 需求的时候又改怎么做呢？前面我们用一篇文章 <a href="https://www.qikqiak.com/post/traefik-2.1-101/">一文搞懂 Traefik2.1 的使用</a> 介绍了 Traefik2.1 的基本的功能，唯独没有提到 URL Rewrite 这一点，在 Traefik2.1 中我们依然可以很方便的用中间件的方式来完成这个功能。</p>
-
 <p>比如我们现在在 Kubernetes 集群中部署了一个 Nexus 应用，和其他应用一样，我们通过 IngressRoute 来暴露服务，对应的资源清单如下所示：(nexus.yaml)</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: nexus
-  labels:
-    app: nexus
-spec:
-  selector:
-    matchLabels:
-      app: nexus
-  template:
-    metadata:
-      labels:
-        app: nexus
-    spec:
-      containers:
-      - image: cnych/nexus:<span style="color:#bd93f9">3.20</span>.<span style="color:#bd93f9">1</span>
-        imagePullPolicy: IfNotPresent
-        name: nexus
-        ports:
-        - containerPort: <span style="color:#bd93f9">8081</span>
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: nexus
-  name: nexus
-spec:
-  ports:
-  - name: nexusport
-    port: <span style="color:#bd93f9">8081</span>
-    targetPort: <span style="color:#bd93f9">8081</span>
-  selector:
-    app: nexus
-
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: nexus
-spec:
-  entryPoints:
-  - web
-  routes:
-  - kind: Rule
-    match: Host(`nexus.qikqiak.com`)
-    services:
-    - kind: Service
-      name: nexus
-      port: <span style="color:#bd93f9">8081</span></code></pre></div>
-<p>当然前提条件是需要先在集群中部署上 Traefik2.1 这个 Ingress Controller，还没有部署的可以参考前面的 <a href="https://www.qikqiak.com/post/traefik-2.1-101/">一文搞懂 Traefik2.1 的使用</a> 这篇文章，直接部署上面的应用即可:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl apply -f nexus.yaml
-$ kubectl get ingressroute
-NAME                AGE
-nexus               19h
-$ kubectl get pods
-NAME                                      READY   STATUS    RESTARTS   AGE
-nexus-f9f8c77b5-vvvvw                     <span style="color:#bd93f9">1</span>/1     Running   <span style="color:#bd93f9">0</span>          20h
-$ kubectl get svc
-NAME            TYPE        CLUSTER-IP       EXTERNAL-IP   PORT<span style="color:#ff79c6">(</span>S<span style="color:#ff79c6">)</span>          AGE
-kubernetes      ClusterIP   <span style="color:#bd93f9">10</span>.96.0.1        &lt;none&gt;        <span style="color:#bd93f9">443</span>/TCP          62d
-nexus           NodePort    <span style="color:#bd93f9">10</span>.96.175.87     &lt;none&gt;        <span style="color:#bd93f9">8081</span>:30776/TCP   20h</code></pre></div>
-<p>部署完成后，我们根据 <code>IngressRoute</code> 对象中的配置，只需要将域名 <code>nexus.qikqiak.com</code> 解析到 Traefik 的节点即可访问：</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/nexus-normal-url.png" alt="nexus url"><figcaption>nexus url</figcaption></figure>
-
-<p>到这里我们都可以很简单的来完成，同样的现在我们有一个需求是目前我们只有一个域名可以使用，但是我们有很多不同的应用需要暴露，这个时候我们就只能通过 PATH 路径来进行区分了，比如我们现在希望当我们访问 <code>http:/nexus.qikqiak.com/foo</code> 的时候就是访问的我们的 Nexus 这个应用，当路径是 <code>/bar</code> 开头的时候是其他应用，这种需求是很正常的，这个时候我们就需要来做 URL Rewrite 了。
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-5376999672787220"
-     data-ad-slot="9165834656"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-
-首先我们使用 <a href="https://www.qikqiak.com/traefik-book/middlewares/stripprefix/">StripPrefix</a> 这个中间件，这个中间件的功能是<strong>在转发请求之前从路径中删除前缀</strong>，在使用中间件的时候我们只需要理解中间件操作的都是我们直接的请求即可，并不是真实的应用接收到请求过后来进行修改。</p>
-
-<figure><img src="https://www.qikqiak.com/traefik-book/assets/img/middleware/overview.png" alt="traefik2 middleware"><figcaption>traefik2 middleware</figcaption></figure>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: apps/v1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: Deployment
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: nexus
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">labels</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">app</span>: nexus
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">selector</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">matchLabels</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">app</span>: nexus
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">template</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">labels</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">app</span>: nexus
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">containers</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">image</span>: cnych/nexus:3.20.1
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">imagePullPolicy</span>: IfNotPresent
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">name</span>: nexus
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">ports</span>:
+</span></span><span style="display:flex;"><span>            - <span style="color:#ff79c6">containerPort</span>: <span style="color:#bd93f9">8081</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: v1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: Service
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">labels</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">app</span>: nexus
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: nexus
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">ports</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">name</span>: nexusport
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">port</span>: <span style="color:#bd93f9">8081</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">targetPort</span>: <span style="color:#bd93f9">8081</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">selector</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">app</span>: nexus
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: traefik.containo.us/v1alpha1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: IngressRoute
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: nexus
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">entryPoints</span>:
+</span></span><span style="display:flex;"><span>    - web
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">routes</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">kind</span>: Rule
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">match</span>: Host(`nexus.qikqiak.com`)
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">services</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">kind</span>: Service
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">name</span>: nexus
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">port</span>: <span style="color:#bd93f9">8081</span>
+</span></span></code></pre></div><p>当然前提条件是需要先在集群中部署上 Traefik2.1 这个 Ingress Controller，还没有部署的可以参考前面的 <a href="https://www.qikqiak.com/post/traefik-2.1-101/">一文搞懂 Traefik2.1 的使用</a> 这篇文章，直接部署上面的应用即可:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl apply -f nexus.yaml
+</span></span><span style="display:flex;"><span>$ kubectl get ingressroute
+</span></span><span style="display:flex;"><span>NAME                AGE
+</span></span><span style="display:flex;"><span>nexus               19h
+</span></span><span style="display:flex;"><span>$ kubectl get pods
+</span></span><span style="display:flex;"><span>NAME                                      READY   STATUS    RESTARTS   AGE
+</span></span><span style="display:flex;"><span>nexus-f9f8c77b5-vvvvw                     1/1     Running   <span style="color:#bd93f9">0</span>          20h
+</span></span><span style="display:flex;"><span>$ kubectl get svc
+</span></span><span style="display:flex;"><span>NAME            TYPE        CLUSTER-IP       EXTERNAL-IP   PORT<span style="color:#ff79c6">(</span>S<span style="color:#ff79c6">)</span>          AGE
+</span></span><span style="display:flex;"><span>kubernetes      ClusterIP   10.96.0.1        &lt;none&gt;        443/TCP          62d
+</span></span><span style="display:flex;"><span>nexus           NodePort    10.96.175.87     &lt;none&gt;        8081:30776/TCP   20h
+</span></span></code></pre></div><p>部署完成后，我们根据 <code>IngressRoute</code> 对象中的配置，只需要将域名 <code>nexus.qikqiak.com</code> 解析到 Traefik 的节点即可访问：</p>
+<p><img src="https://picdn.youdianzhishi.com/images/nexus-normal-url.png" alt="nexus url"></p>
+<p>到这里我们都可以很简单的来完成，同样的现在我们有一个需求是目前我们只有一个域名可以使用，但是我们有很多不同的应用需要暴露，这个时候我们就只能通过 PATH 路径来进行区分了，比如我们现在希望当我们访问 <code>http:/nexus.qikqiak.com/foo</code> 的时候就是访问的我们的 Nexus 这个应用，当路径是 <code>/bar</code> 开头的时候是其他应用，这种需求是很正常的，这个时候我们就需要来做 URL Rewrite 了。</p>
+<!-- raw HTML omitted -->
+<p>首先我们使用 <a href="https://www.qikqiak.com/traefik-book/middlewares/stripprefix/">StripPrefix</a> 这个中间件，这个中间件的功能是<strong>在转发请求之前从路径中删除前缀</strong>，在使用中间件的时候我们只需要理解中间件操作的都是我们直接的请求即可，并不是真实的应用接收到请求过后来进行修改。</p>
+<p><img src="https://www.qikqiak.com/traefik-book/assets/img/middleware/overview.png" alt="traefik2 middleware"></p>
 <p>现在我们添加一个如下的中间件：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: traefik.containo.us/v1alpha1
-kind: Middleware
-metadata:
-  name: strip-foo-path
-spec:
-  stripPrefix:
-    prefixes:
-    - /foo</code></pre></div>
-<p>然后现在我们就需要从 <code>http:/nexus.qikqiak.com/foo</code> 请求中去匹配 <code>/foo</code> 的请求，把这个路径下面的请求应用到上面的中间件中去，因为最终我们的 Nexus 应用接收到的请求是不会带有 <code>/foo</code> 路径的，所以我们需要在请求到达应用之前将这个前缀删除，更新 IngressRoute 对象：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: nexus
-spec:
-  entryPoints:
-  - web
-  routes:
-  - kind: Rule
-    match: Host(`nexus.qikqiak.com`) <span style="color:#ff79c6">&amp;&amp;</span> PathPrefix(`/foo`)  <span style="color:#6272a4"># 匹配 /foo 路径</span>
-    middlewares:
-    - name: strip-foo-path
-    services:
-    - kind: Service
-      name: nexus
-      port: <span style="color:#bd93f9">8081</span></code></pre></div>
-<p>创建中间件更新完成上面的 IngressRoute 对象后，这个时候我们前往浏览器中访问 <code>http:/nexus.qikqiak.com/foo</code>，这个时候发现我们的页面任何样式都没有了：</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/nexus-rewrite-url-error.png" alt="nexus rewrite url error"><figcaption>nexus rewrite url error</figcaption></figure>
-
-<p>我们通过 Chrome 浏览器的 Network 可以查看到 <code>/foo</code> 路径的请求是200状态码，但是其他的静态资源对象确全都是404了，这是为什么呢？我们仔细观察上面我们的 IngressRoute 资源对象，我们现在是不是只匹配了 <code>/foo</code> 的请求，而我们的静态资源是 <code>/static</code> 路径开头的，当然就匹配不到了，所以就出现了404，所以我们只需要加上这个 <code>/static</code> 路径的匹配就可以了，同样更新 IngressRoute 对象：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: nexus
-spec:
-  entryPoints:
-  - web
-  routes:
-  - kind: Rule
-    match: Host(`nexus.qikqiak.com`) <span style="color:#ff79c6">&amp;&amp;</span> PathPrefix(`/foo`)
-    middlewares:
-    - name: strip-foo-path
-    services:
-    - kind: Service
-      name: nexus
-      port: <span style="color:#bd93f9">8081</span>
-  - kind: Rule
-    match: Host(`nexus.qikqiak.com`) <span style="color:#ff79c6">&amp;&amp;</span> PathPrefix(`/static`)  <span style="color:#6272a4"># 匹配 /static 的请求</span>
-    services:
-    - kind: Service
-      name: nexus
-      port: <span style="color:#bd93f9">8081</span></code></pre></div>
-<p>然后更新 IngressRoute 资源对象，这个时候再次去访问应用，可以发现页面样式已经正常了，也可以正常访问应用了：</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/nexus-rewrite-url-error2.png" alt="nexus rewrite url error2"><figcaption>nexus rewrite url error2</figcaption></figure>
-
-<p>但进入应用后发现还是有错误提示信息，通过 Network 分析发现还有一些 <code>/service</code> 开头的请求是404，当然我们再加上这个前缀的路径即可：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: nexus
-spec:
-  entryPoints:
-  - web
-  routes:
-  - kind: Rule
-    match: Host(`nexus.qikqiak.com`) <span style="color:#ff79c6">&amp;&amp;</span> PathPrefix(`/foo`)
-    middlewares:
-    - name: replace-path
-    services:
-    - kind: Service
-      name: nexus
-      port: <span style="color:#bd93f9">8081</span>
-  - kind: Rule
-    match: Host(`nexus.qikqiak.com`) <span style="color:#ff79c6">&amp;&amp;</span> (PathPrefix(`/static`) || PathPrefix(`/service`))  <span style="color:#6272a4"># 匹配 /static 和 /service 的请求</span>
-    services:
-    - kind: Service
-      name: nexus
-      port: <span style="color:#bd93f9">8081</span></code></pre></div>
-<p>更新后，再次访问应用就已经完全正常了：</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/nexus-rewrite-url-ok.png" alt="nexus rewrite url ok"><figcaption>nexus rewrite url ok</figcaption></figure>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: traefik.containo.us/v1alpha1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: Middleware
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: strip-foo-path
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">stripPrefix</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">prefixes</span>:
+</span></span><span style="display:flex;"><span>      - /foo
+</span></span></code></pre></div><p>然后现在我们就需要从 <code>http:/nexus.qikqiak.com/foo</code> 请求中去匹配 <code>/foo</code> 的请求，把这个路径下面的请求应用到上面的中间件中去，因为最终我们的 Nexus 应用接收到的请求是不会带有 <code>/foo</code> 路径的，所以我们需要在请求到达应用之前将这个前缀删除，更新 IngressRoute 对象：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: traefik.containo.us/v1alpha1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: IngressRoute
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: nexus
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">entryPoints</span>:
+</span></span><span style="display:flex;"><span>    - web
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">routes</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">kind</span>: Rule
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">match</span>: Host(`nexus.qikqiak.com`) &amp;&amp; PathPrefix(`/foo`) <span style="color:#6272a4"># 匹配 /foo 路径</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">middlewares</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">name</span>: strip-foo-path
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">services</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">kind</span>: Service
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">name</span>: nexus
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">port</span>: <span style="color:#bd93f9">8081</span>
+</span></span></code></pre></div><p>创建中间件更新完成上面的 IngressRoute 对象后，这个时候我们前往浏览器中访问 <code>http:/nexus.qikqiak.com/foo</code>，这个时候发现我们的页面任何样式都没有了：</p>
+<p><img src="https://picdn.youdianzhishi.com/images/nexus-rewrite-url-error.png" alt="nexus rewrite url error"></p>
+<p>我们通过 Chrome 浏览器的 Network 可以查看到 <code>/foo</code> 路径的请求是 200 状态码，但是其他的静态资源对象确全都是 404 了，这是为什么呢？我们仔细观察上面我们的 IngressRoute 资源对象，我们现在是不是只匹配了 <code>/foo</code> 的请求，而我们的静态资源是 <code>/static</code> 路径开头的，当然就匹配不到了，所以就出现了 404，所以我们只需要加上这个 <code>/static</code> 路径的匹配就可以了，同样更新 IngressRoute 对象：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: traefik.containo.us/v1alpha1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: IngressRoute
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: nexus
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">entryPoints</span>:
+</span></span><span style="display:flex;"><span>    - web
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">routes</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">kind</span>: Rule
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">match</span>: Host(`nexus.qikqiak.com`) &amp;&amp; PathPrefix(`/foo`)
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">middlewares</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">name</span>: strip-foo-path
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">services</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">kind</span>: Service
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">name</span>: nexus
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">port</span>: <span style="color:#bd93f9">8081</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">kind</span>: Rule
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">match</span>: Host(`nexus.qikqiak.com`) &amp;&amp; PathPrefix(`/static`) <span style="color:#6272a4"># 匹配 /static 的请求</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">services</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">kind</span>: Service
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">name</span>: nexus
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">port</span>: <span style="color:#bd93f9">8081</span>
+</span></span></code></pre></div><p>然后更新 IngressRoute 资源对象，这个时候再次去访问应用，可以发现页面样式已经正常了，也可以正常访问应用了：</p>
+<p><img src="https://picdn.youdianzhishi.com/images/nexus-rewrite-url-error2.png" alt="nexus rewrite url error2"></p>
+<p>但进入应用后发现还是有错误提示信息，通过 Network 分析发现还有一些 <code>/service</code> 开头的请求是 404，当然我们再加上这个前缀的路径即可：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: traefik.containo.us/v1alpha1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: IngressRoute
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: nexus
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">entryPoints</span>:
+</span></span><span style="display:flex;"><span>    - web
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">routes</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">kind</span>: Rule
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">match</span>: Host(`nexus.qikqiak.com`) &amp;&amp; PathPrefix(`/foo`)
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">middlewares</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">name</span>: replace-path
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">services</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">kind</span>: Service
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">name</span>: nexus
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">port</span>: <span style="color:#bd93f9">8081</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">kind</span>: Rule
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">match</span>: Host(`nexus.qikqiak.com`) &amp;&amp; (PathPrefix(`/static`) || PathPrefix(`/service`)) <span style="color:#6272a4"># 匹配 /static 和 /service 的请求</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">services</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">kind</span>: Service
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">name</span>: nexus
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">port</span>: <span style="color:#bd93f9">8081</span>
+</span></span></code></pre></div><p>更新后，再次访问应用就已经完全正常了：</p>
+<p><img src="https://picdn.youdianzhishi.com/images/nexus-rewrite-url-ok.png" alt="nexus rewrite url ok"></p>
 <p>Traefik2.X 版本中的中间件功能非常强大，基本上官方提供的系列中间件可以满足我们大部分需求了，其他中间件的用法，可以参考文档：<a href="https://www.qikqiak.com/traefik-book/middlewares/overview/">https://www.qikqiak.com/traefik-book/middlewares/overview/</a>。</p>
-
-<p><a href="https://youdianzhishi.com/web/course/1030" title="从 Docker 到 Kubernetes 进阶课程"><img src="https://sdn.youdianzhishi.com/images/2019/10/24/65f2cfb229184268a18745fe202b281b.jpg?imageView2/2/format/webp" alt="Kubernetes进阶训练营"></a></p>
-
+<!-- raw HTML omitted -->
 
           <h2>微信公众号</h2>
-<p>扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的 kubernetes 讨论群里面共同学习。</p>
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/qrcode.png" alt="wechat-account-qrcode">
+<p>
+  扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的
+  kubernetes 讨论群里面共同学习。
+</p>
+<img
+  src="https://picdn.youdianzhishi.com/images/qrcode.png"
+  alt="wechat-account-qrcode"
+/>
 
   
           
@@ -707,7 +680,7 @@ spec:
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -719,7 +692,7 @@ spec:
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -736,7 +709,7 @@ spec:
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -745,7 +718,7 @@ spec:
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

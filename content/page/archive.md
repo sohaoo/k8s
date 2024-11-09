@@ -8,8 +8,15 @@ noreadmore: true
 
 > 关注容器、`kubernetes`、devops、python、golang、微服务等技术。
 
+#### ChatGPT
+
+- [保姆级教程 | 手把手叫你如何开通 ChatGPT Plus 试用 GPT-4](https://www.qikqiak.com/post/how-to-subscribe-chatgpt-plus-try-gpt-4)
+
 #### Kubernetes/Docker
 
+- [一文搞懂 VictoriaMetrics 的使用](https://www.qikqiak.com/post/victoriametrics-usage/)
+- [DevOps 工具链管理器 DevStream 还真是神器](https://www.qikqiak.com/post/devops-tools-chain-devstream/)
+- [如何修改 Kubernetes 节点 IP 地址?](https://www.qikqiak.com/post/how-to-change-k8s-node-ip/)
 - [本地集群使用 OpenELB 实现 Load Balancer 负载均衡](https://www.qikqiak.com/post/service-use-openelb/)
 - [Docker 创始人的新产品 Dagger 好用吗？](https://www.qikqiak.com/post/dagger/)
 - [Prometheus 监控 Kubernetes Job 资源误报的坑](https://www.qikqiak.com/post/prometheus-monitor-k8s-job-trap/)
@@ -18,7 +25,7 @@ noreadmore: true
 - [Gitlab CI 在 Kubernetes 中的 Docker 缓存](https://www.qikqiak.com/post/gitlab-ci-docker-layer-cache-for-k8s-executor/)
 - [一文搞懂容器运行时 Containerd](https://www.qikqiak.com/post/containerd-usage/)
 - [使用 kube-vip 搭建高可用 Kubernetes 集群](https://www.qikqiak.com/post/use-kube-vip-ha-k8s-lb/)
-- [你应该了解的10个 Kubernetes 安全上下文设置](https://www.qikqiak.com/post/k8s-10-secruity-context-settings/)
+- [你应该了解的 10 个 Kubernetes 安全上下文设置](https://www.qikqiak.com/post/k8s-10-secruity-context-settings/)
 - [如何收集管理多行日志？](https://www.qikqiak.com/post/collect-multiline-logs/)
 - [通过 Traefik 使用 Kubernetes Service APIs 进行流量路由](https://www.qikqiak.com/post/use-kubernetes-service-apis-with-traefik/)
 - [Kubernetes Service APIs 简介](https://www.qikqiak.com/post/kubernetes-service-apis-intro/)

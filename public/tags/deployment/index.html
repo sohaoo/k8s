@@ -11,16 +11,15 @@
   <meta name="twitter:title" content="deployment" />
 
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/tags/deployment/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/tags/deployment/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -29,7 +28,7 @@
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -80,7 +79,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -245,24 +244,19 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 December 10, 2019
+                
               </p>
               <div class="post-entry">
                 
                   <p>本文翻译自 <a href="https://learnk8s.io/troubleshooting-deployments">A visual guide on troubleshooting Kubernetes deployments</a>。</p>
-
-<p>下面示意图可以帮助你调试 Kubernetes Deployment（你可以在此处<a href="https://learnk8s.io/a/troubleshooting-kubernetes.pdf">【下载它的 PDF 版本】</a>），另外在微信群里面也看到有朋友分享了一个对应的中文版（你可以在此处<a href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/trouble-deploy-cn.png">【下载它的中文版本】</a>）：</p>
-
-<p><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/trouble-deploy.png" alt="troubleshooting deployments" /></p>
-
+<p>下面示意图可以帮助你调试 Kubernetes Deployment（你可以在此处<a href="https://learnk8s.io/a/troubleshooting-kubernetes.pdf">【下载它的 PDF 版本】</a>），另外在微信群里面也看到有朋友分享了一个对应的中文版（你可以在此处<a href="https://picdn.youdianzhishi.com/images/trouble-deploy-cn.png">【下载它的中文版本】</a>）：</p>
+<p><img src="https://picdn.youdianzhishi.com/images/trouble-deploy.png" alt="troubleshooting deployments"></p>
 <p>当你希望在 Kubernetes 中部署应用程序时，你通常会定义三个组件：</p>
-
 <ul>
 <li>Deployment – 用于创建你的应用程序的 Pod 副本的清单；</li>
 <li>Service – 一个内部负载均衡器，用于将流量路由到内部的 Pod 上；</li>
 <li>Ingress – 描述流量如何从集群外部流入到集群内部的服务上。</li>
 </ul>
-
 <p>下面的示意图可以来简单说明：</p>
                   <a href="https://www.qikqiak.com/post/troubleshooting-deployments/" class="post-read-more">[阅读全文]</a>
                 
@@ -288,24 +282,28 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 January 24, 2019
+                
               </p>
               <div class="post-entry">
                 
                   <p>在<code>Kubernetes</code>中有几种不同的方式发布应用，所以为了让应用在升级期间依然平稳提供服务，选择一个正确的发布策略就非常重要了。</p>
-
 <p>选择正确的部署策略是要依赖于我们的业务需求的，下面我们列出了一些可能会使用到的策略：</p>
-
 <ul>
-<li><p>重建(recreate)：停止旧版本部署新版本</p></li>
-
-<li><p>滚动更新(rolling-update)：一个接一个地以滚动更新方式发布新版本</p></li>
-
-<li><p>蓝绿(blue/green)：新版本与旧版本一起存在，然后切换流量</p></li>
-
-<li><p>金丝雀(canary)：将新版本面向一部分用户发布，然后继续全量发布</p></li>
-
-<li><p>A/B测(a/b testing)：以精确的方式（HTTP 头、cookie、权重等）向部分用户发布新版本。<code>A/B测</code>实际上是一种基于数据统计做出业务决策的技术。在 Kubernetes 中并不原生支持，需要额外的一些高级组件来完成改设置（比如Istio、Linkerd、Traefik、或者自定义 Nginx/Haproxy 等）。</p></li>
+<li>
+<p>重建(recreate)：停止旧版本部署新版本</p>
+</li>
+<li>
+<p>滚动更新(rolling-update)：一个接一个地以滚动更新方式发布新版本</p>
+</li>
+<li>
+<p>蓝绿(blue/green)：新版本与旧版本一起存在，然后切换流量</p>
+</li>
+<li>
+<p>金丝雀(canary)：将新版本面向一部分用户发布，然后继续全量发布</p>
+</li>
+<li>
+<p>A/B 测(a/b testing)：以精确的方式（HTTP 头、cookie、权重等）向部分用户发布新版本。<code>A/B测</code>实际上是一种基于数据统计做出业务决策的技术。在 Kubernetes 中并不原生支持，需要额外的一些高级组件来完成改设置（比如 Istio、Linkerd、Traefik、或者自定义 Nginx/Haproxy 等）。</p>
+</li>
 </ul>
                   <a href="https://www.qikqiak.com/post/k8s-deployment-strategies/" class="post-read-more">[阅读全文]</a>
                 
@@ -331,7 +329,7 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 February 2, 2018
+                
               </p>
               <div class="post-entry">
                 
@@ -362,7 +360,7 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 October 18, 2017
+                
               </p>
               <div class="post-entry">
                 
@@ -447,7 +445,7 @@ autocomplete('#aa-search-input',
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -459,7 +457,7 @@ autocomplete('#aa-search-input',
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -476,7 +474,7 @@ autocomplete('#aa-search-input',
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -485,7 +483,7 @@ autocomplete('#aa-search-input',
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

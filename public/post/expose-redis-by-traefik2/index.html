@@ -14,16 +14,15 @@
   <meta property="og:description" content="前面我们已经提到了 Traefik2.0 已经正式发布了，Traefik2.0 已经支持了 TCP 服务的，但是 Traefik 的官方文档实在是有点混乱，特别是在 Kubernetes 下面的使用更不详细，我在业余时间已经在尝试对官方文档进行翻译，地址：https://www.qikqiak.com/traefik-book，去掉了一些多余的文档，增加一些在 Kubernetes 下面的使用案例。">
   <meta name="twitter:description" content="前面我们已经提到了 Traefik2.0 已经正式发布了，Traefik2.0 已经支持了 TCP 服务的，但是 Traefik 的官方文档实在是有点混乱，特别是在 Kubernetes 下面的使用更不详细，我在业余时间已经在尝试对官方文档进行翻译，地址：https://www.qikqiak.com/traefik-book，去掉了一些多余的文档，增加一些在 Kubernetes 下面的使用案 …">
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/post/expose-redis-by-traefik2/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/post/expose-redis-by-traefik2/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -32,7 +31,7 @@
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -83,7 +82,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -226,7 +225,7 @@ autocomplete('#aa-search-input',
 
 
   
-    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/photo-1570997491915-47ade51fed9f.jpeg" data-img-desc-1="https://unsplash.com/photos/77AW8rM9KGg"></div>
+    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://picdn.youdianzhishi.com/images/photo-1570997491915-47ade51fed9f.jpeg" data-img-desc-1="https://unsplash.com/photos/77AW8rM9KGg"></div>
   
 
   <header class="header-section has-img">
@@ -241,12 +240,8 @@ autocomplete('#aa-search-input',
                   
                   
                     <span class="post-meta">
-  
-    发表于 October 14, 2019
-  
-  
+  发表于 October 14, 2019  
 </span>
-
 
                   
               </div>
@@ -268,12 +263,8 @@ autocomplete('#aa-search-input',
                 
                 
                   <span class="post-meta">
-  
-    发表于 October 14, 2019
-  
-  
+  发表于 October 14, 2019  
 </span>
-
 
                 
             </div>
@@ -330,123 +321,106 @@ autocomplete('#aa-search-input',
           
 
           <p>前面我们已经提到了 <a href="https://www.qikqiak.com/post/traefik2-ga/">Traefik2.0 已经正式发布了</a>，Traefik2.0 已经支持了 TCP 服务的，但是 Traefik 的官方文档实在是有点混乱，特别是在 Kubernetes 下面的使用更不详细，我在业余时间已经在尝试对官方文档进行翻译，地址：<a href="https://www.qikqiak.com/traefik-book/">https://www.qikqiak.com/traefik-book</a>，去掉了一些多余的文档，增加一些在 Kubernetes 下面的使用案例。</p>
-
 <p>本文是来演示如何在 Kubernetes 下面通过 Traefik 暴露一个 TCP 服务的，这里我们以 Redis 为例。首先需要保证 Traefik 2.0 已经安装到了 Kubernetes 集群之中，可以参考之前我们提供的安装资源清单 <a href="https://github.com/cnych/kubeapp/tree/master/traefik2">https://github.com/cnych/kubeapp</a>。</p>
-
 <h2 id="部署-redis">部署 Redis</h2>
-
 <p>为了演示方便，我们这里只部署单节点的 Redis，对于 Redis 集群模式并不是我们这里的重点，下面是我们部署使用的资源清单文件：（redis.yaml）</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: extensions/v1beta1
-kind: Deployment
-metadata:
-  name: redis
-spec:
-  template:
-    metadata:
-      labels:
-        app: redis
-    spec:
-      containers:
-      - name: redis
-        image: redis:<span style="color:#bd93f9">3.2</span>.<span style="color:#bd93f9">11</span>
-        ports:
-        - containerPort: <span style="color:#bd93f9">6379</span>
-          protocol: TCP
-
---<span style="color:#f1fa8c">-
-</span><span style="color:#f1fa8c">
-</span><span style="color:#f1fa8c">apiVersion: v1</span>
-kind: Service
-metadata:
-  name: redis
-spec:
-  ports:
-  - port: <span style="color:#bd93f9">6379</span>
-    targetPort: <span style="color:#bd93f9">6379</span>
-  selector:
-    app: redis</code></pre></div>
-<p>直接创建即可：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl apply -f redis.yaml</code></pre></div>
-<h2 id="暴露-tcp-服务">暴露 TCP 服务</h2>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: extensions/v1beta1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: Deployment
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: redis
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">template</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">labels</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">app</span>: redis
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">containers</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">name</span>: redis
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">image</span>: redis:3.2.11
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">ports</span>:
+</span></span><span style="display:flex;"><span>            - <span style="color:#ff79c6">containerPort</span>: <span style="color:#bd93f9">6379</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">protocol</span>: TCP
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: v1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: Service
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: redis
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">ports</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">port</span>: <span style="color:#bd93f9">6379</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">targetPort</span>: <span style="color:#bd93f9">6379</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">selector</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">app</span>: redis
+</span></span></code></pre></div><p>直接创建即可：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl apply -f redis.yaml
+</span></span></code></pre></div><h2 id="暴露-tcp-服务">暴露 TCP 服务</h2>
 <p>由于 Traefik 中使用 TCP 路由配置需要 SNI，而 SNI 又是依赖 TLS 的，所以我们需要配置证书才行，但是如果没有证书的话，我们可以使用通配符 <code>*</code> 进行配置，我们这里创建一个 IngressRouteTCP 类型的 CRD 对象（前面我们就已经安装了对应的 CRD 资源）：(ingressroute-redis.yaml)</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRouteTCP
-metadata:
-  name: redis
-spec:
-  entryPoints:
-    - redis
-  routes:
-  - match: HostSNI(`<span style="color:#ff79c6">*`)</span>
-    services:
-    - name: redis
-      port: <span style="color:#bd93f9">6379</span></code></pre></div>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-5376999672787220"
-     data-ad-slot="9165834656"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: traefik.containo.us/v1alpha1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: IngressRouteTCP
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: redis
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">entryPoints</span>:
+</span></span><span style="display:flex;"><span>    - redis
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">routes</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">match</span>: HostSNI(`*`)
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">services</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">name</span>: redis
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">port</span>: <span style="color:#bd93f9">6379</span>
+</span></span></code></pre></div><!-- raw HTML omitted -->
 <p>要注意的是这里的<code>entryPoints</code>部分，是根据我们启动的 Traefik 的静态配置中的 entryPoints 来决定的，比如我们可以自己添加一个用于 Redis 的专门的入口点：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">containers:
-- image: traefik:v2.<span style="color:#bd93f9">0</span>
-  name: traefik-ingress-lb
-  ports:
-  - name: web
-    containerPort: <span style="color:#bd93f9">80</span>
-    hostPort: <span style="color:#bd93f9">80</span>
-  - name: websecure
-    containerPort: <span style="color:#bd93f9">443</span>
-    hostPort: <span style="color:#bd93f9">443</span>
-  - name: redis
-    containerPort: <span style="color:#bd93f9">6379</span>
-    hostPort: <span style="color:#bd93f9">6379</span>
-  - name: admin
-    containerPort: <span style="color:#bd93f9">8080</span>
-  args:
-  - --entrypoints.web.Address=:<span style="color:#bd93f9">80</span>
-  - --entrypoints.websecure.Address=:<span style="color:#bd93f9">443</span>
-  - --entrypoints.redis.Address=:<span style="color:#bd93f9">6379</span>
-  - --api.insecure=<span style="color:#ff79c6">true</span>
-  - --providers.kubernetescrd
-  - --api
-  - --api.dashboard=<span style="color:#ff79c6">true</span>
-  - --accesslog</code></pre></div>
-<p>这里给入口点添加 hostPort 是为了能够通过节点的端口访问到服务，关于 <code>entryPoints</code> 入口点的更多信息，可以查看文档 <a href="https://www.qikqiak.com/traefik-book/routing/entrypoints/">entrypoints</a> 了解更多信息。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">containers</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ff79c6">image</span>: traefik:v2.0
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">name</span>: traefik-ingress-lb
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">ports</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ff79c6">name</span>: web
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">containerPort</span>: <span style="color:#bd93f9">80</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">hostPort</span>: <span style="color:#bd93f9">80</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ff79c6">name</span>: websecure
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">containerPort</span>: <span style="color:#bd93f9">443</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">hostPort</span>: <span style="color:#bd93f9">443</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ff79c6">name</span>: redis
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">containerPort</span>: <span style="color:#bd93f9">6379</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">hostPort</span>: <span style="color:#bd93f9">6379</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ff79c6">name</span>: admin
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">containerPort</span>: <span style="color:#bd93f9">8080</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">args</span>:
+</span></span><span style="display:flex;"><span>      - --entrypoints.web.Address=:80
+</span></span><span style="display:flex;"><span>      - --entrypoints.websecure.Address=:443
+</span></span><span style="display:flex;"><span>      - --entrypoints.redis.Address=:6379
+</span></span><span style="display:flex;"><span>      - --api.insecure=true
+</span></span><span style="display:flex;"><span>      - --providers.kubernetescrd
+</span></span><span style="display:flex;"><span>      - --api
+</span></span><span style="display:flex;"><span>      - --api.dashboard=true
+</span></span><span style="display:flex;"><span>      - --accesslog
+</span></span></code></pre></div><p>这里给入口点添加 hostPort 是为了能够通过节点的端口访问到服务，关于 <code>entryPoints</code> 入口点的更多信息，可以查看文档 <a href="https://www.qikqiak.com/traefik-book/routing/entrypoints/">entrypoints</a> 了解更多信息。</p>
 <p>然后直接创建上面的 IngressRouteTCP 对象：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl apply -f ingressroute-redis.yaml</code></pre></div>
-<p>创建完成后，同样我们可以去 Traefik 的 Dashboard 页面上查看是否生效：</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/traefik-redis-tcp.jpg" alt="traefik redis service"><figcaption>traefik redis service</figcaption></figure>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl apply -f ingressroute-redis.yaml
+</span></span></code></pre></div><p>创建完成后，同样我们可以去 Traefik 的 Dashboard 页面上查看是否生效：</p>
+<p><img src="https://picdn.youdianzhishi.com/images/traefik-redis-tcp.jpg" alt="traefik redis service"></p>
 <p>然后我们配置一个域名解析到 Traefik 所在的节点，然后通过 6379 端口来连接 Redis 服务：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ redis-cli -h redis.youdianzhishi.com -p <span style="color:#bd93f9">6379</span>
-redis.youdianzhishi.com:6379&gt; ping
-PONG
-redis.youdianzhishi.com:6379&gt; <span style="color:#8be9fd;font-style:italic">set</span> hello world
-OK
-redis.youdianzhishi.com:6379&gt; get hello
-<span style="color:#f1fa8c">&#34;world&#34;</span>
-redis.youdianzhishi.com:6379&gt;</code></pre></div>
-<p>到这里我们就完成了将 Redis（TCP）服务暴露给外部用户了。本文中用到的资源清单文件可以从这里获取：<a href="https://github.com/cnych/kubeapp/tree/master/traefik2/redis">https://github.com/cnych/kubeapp/tree/master/traefik2/redis</a>。</p>
-
-<p>关于 Traefik 2.0 的更多使用，可以关注 <a href="[https://www.qikqiak.com/traefik-book]">https://www.qikqiak.com/traefik-book</a> 文档。</p>
-
-<p><a href="https://youdianzhishi.com/web/course/1030" title="从 Docker 到 Kubernetes 进阶课程"><img src="https://sdn.youdianzhishi.com/images/2019/10/24/65f2cfb229184268a18745fe202b281b.jpg?imageView2/2/format/webp" alt="Kubernetes进阶训练营"></a></p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ redis-cli -h redis.youdianzhishi.com -p <span style="color:#bd93f9">6379</span>
+</span></span><span style="display:flex;"><span>redis.youdianzhishi.com:6379&gt; ping
+</span></span><span style="display:flex;"><span>PONG
+</span></span><span style="display:flex;"><span>redis.youdianzhishi.com:6379&gt; <span style="color:#8be9fd;font-style:italic">set</span> hello world
+</span></span><span style="display:flex;"><span>OK
+</span></span><span style="display:flex;"><span>redis.youdianzhishi.com:6379&gt; get hello
+</span></span><span style="display:flex;"><span><span style="color:#f1fa8c">&#34;world&#34;</span>
+</span></span><span style="display:flex;"><span>redis.youdianzhishi.com:6379&gt;
+</span></span></code></pre></div><p>到这里我们就完成了将 Redis（TCP）服务暴露给外部用户了。本文中用到的资源清单文件可以从这里获取：<a href="https://github.com/cnych/kubeapp/tree/master/traefik2/redis">https://github.com/cnych/kubeapp/tree/master/traefik2/redis</a>。</p>
+<p>关于 Traefik 2.0 的更多使用，可以关注 <a href="%5Bhttps://www.qikqiak.com/traefik-book%5D">https://www.qikqiak.com/traefik-book</a> 文档。</p>
+<!-- raw HTML omitted -->
 
           <h2>微信公众号</h2>
-<p>扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的 kubernetes 讨论群里面共同学习。</p>
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/qrcode.png" alt="wechat-account-qrcode">
+<p>
+  扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的
+  kubernetes 讨论群里面共同学习。
+</p>
+<img
+  src="https://picdn.youdianzhishi.com/images/qrcode.png"
+  alt="wechat-account-qrcode"
+/>
 
   
           
@@ -647,7 +621,7 @@ redis.youdianzhishi.com:6379&gt;</code></pre></div>
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -659,7 +633,7 @@ redis.youdianzhishi.com:6379&gt;</code></pre></div>
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -676,7 +650,7 @@ redis.youdianzhishi.com:6379&gt;</code></pre></div>
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -685,7 +659,7 @@ redis.youdianzhishi.com:6379&gt;</code></pre></div>
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

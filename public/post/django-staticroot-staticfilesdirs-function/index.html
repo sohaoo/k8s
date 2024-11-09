@@ -14,16 +14,15 @@
   <meta property="og:description" content="在做Django项目的时候，经常会遇到静态文件访问的问题，在本地开发的时候可以正常的访问静态文件，部署到服务器上后就出现各种幺蛾子了，我猜你一定也遇到过吧？之前在settings.py配置文件中对STATIC_ROOT与STATICFILES_DIRS两个配置项不是特别理解，总感觉都差不多，在线上就把STATIC_ROOT替换成STATICFILES_DIRS了，虽然可以解决问题，但是却没有知其所以然。">
   <meta name="twitter:description" content="在做Django项目的时候，经常会遇到静态文件访问的问题，在本地开发的时候可以正常的访问静态文件，部署到服务器上后就出现各种幺蛾子了，我猜你一定也遇到过吧？之前在settings.py配置文件中对STATIC_ROOT与STATICFILES_DIRS两个配置项不是特别理解，总感觉都差不多，在线上就把STATIC_ROOT替换成STATICFILES_DIRS了，虽然可以解决问题，但是却没有知其所 …">
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/post/django-staticroot-staticfilesdirs-function/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/post/django-staticroot-staticfilesdirs-function/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -32,7 +31,7 @@
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -83,7 +82,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -241,12 +240,8 @@ autocomplete('#aa-search-input',
                   
                   
                     <span class="post-meta">
-  
-    发表于 November 1, 2017
-  
-  
+  发表于 November 1, 2017  
 </span>
-
 
                   
               </div>
@@ -268,12 +263,8 @@ autocomplete('#aa-search-input',
                 
                 
                   <span class="post-meta">
-  
-    发表于 November 1, 2017
-  
-  
+  发表于 November 1, 2017  
 </span>
-
 
                 
             </div>
@@ -326,43 +317,41 @@ autocomplete('#aa-search-input',
           
 
           <p>在做<code>Django</code>项目的时候，经常会遇到静态文件访问的问题，在本地开发的时候可以正常的访问静态文件，部署到服务器上后就出现各种幺蛾子了，我猜你一定也遇到过吧？之前在<code>settings.py</code>配置文件中对<code>STATIC_ROOT</code>与<code>STATICFILES_DIRS</code>两个配置项不是特别理解，总感觉都差不多，在线上就把<code>STATIC_ROOT</code>替换成<code>STATICFILES_DIRS</code>了，虽然可以解决问题，但是却没有知其所以然。</p>
-
-<h2 id="static-root">STATIC_ROOT</h2>
-
+<h2 id="static_root">STATIC_ROOT</h2>
 <p><code>STATIC_ROOT</code>是<strong>Django 1.3</strong>新增的特性，该目录下面的文件会被当成静态文件进行处理。与<code>STATIC_ROOT</code>搭配使用的还有<code>STATIC_URL</code>，一般默认用<code>/static/</code>，用于指定静态目录的URL。其实<code>STATIC_ROOT</code>是用来方便部署<code>Django App</code>的。我们在写<code>Django App</code>的时候，经常会有一些和该App 相关的静态文件，虽然我认为的最佳实践方式是将静态文件放在统一的目录，但是毕竟<code>Django</code>是支持这种操作的，所以在1.3版本以前，部署的时候就比较麻烦了。</p>
-
 <ul>
-<li><p>第一种方法是使用<code>django.views.static.serve</code>来处理文件。在App的<code>urls.py</code>里面加上一条路由：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">url(<span style="color:#f1fa8c">r</span><span style="color:#f1fa8c">&#34;^(?/static/P&lt;path&gt;.*)$&#34;</span>, <span style="color:#f1fa8c">&#34;django.views.static.serve&#34;</span>, {<span style="color:#f1fa8c">&#34;document_root&#34;</span> : <span style="color:#f1fa8c">&#34;/path/to/project/app/static/&#34;</span>})</code></pre></div>
-<p>但是这样的话线上的静态文件就都通过<code>Django</code>来进行处理了，这样速度太慢了，毕竟处理静态文件不是<code>Django</code>的特长。</p>
-
-<ul>
-<li>处理静态文件什么在行？<code>Nginx</code>再加上<code>CDN</code>呗，所以现在就可以将每个App 里面的静态文件复制到一个统一的文件夹里面，然后在<code>nginx</code>中将<code>/static/</code>映射到该目录就行。但是这样是不是特别麻烦啊，每次上线都得把每个App 下面的静态文件复制一遍。</li>
+<li>
+<p>第一种方法是使用<code>django.views.static.serve</code>来处理文件。在App的<code>urls.py</code>里面加上一条路由：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>url(<span style="color:#f1fa8c">r</span><span style="color:#f1fa8c">&#34;^(?/static/P&lt;path&gt;.*)$&#34;</span>, <span style="color:#f1fa8c">&#34;django.views.static.serve&#34;</span>, {<span style="color:#f1fa8c">&#34;document_root&#34;</span> : <span style="color:#f1fa8c">&#34;/path/to/project/app/static/&#34;</span>})
+</span></span></code></pre></div><p>但是这样的话线上的静态文件就都通过<code>Django</code>来进行处理了，这样速度太慢了，毕竟处理静态文件不是<code>Django</code>的特长。</p>
+</li>
+<li>
+<p>处理静态文件什么在行？<code>Nginx</code>再加上<code>CDN</code>呗，所以现在就可以将每个App 里面的静态文件复制到一个统一的文件夹里面，然后在<code>nginx</code>中将<code>/static/</code>映射到该目录就行。但是这样是不是特别麻烦啊，每次上线都得把每个App 下面的静态文件复制一遍。</p>
+</li>
 </ul>
-
 <p>为了解决上面的问题，1.3版本以后便提供了一个新的方法自动地将所有静态文件放在一起。在开发阶段不必费心去做映射。在部署到生产环境的时候，只需要配置<code>nginx</code>把<code>/static/</code>映射到<code>STATIC_ROOT</code>配置的目录，然后运行<code>python manage.py collectstatic</code>，自动地就会把各个App 下面的静态文件给复制到<code>STATIC_ROOT</code>。由于复制过来的文件会覆盖掉原来的文件，所以一定不要在<code>STATIC_ROOT</code>目录下面放置我们自己的静态文件。</p>
-
-<h2 id="staticfiles-dirs">STATICFILES_DIRS</h2>
-
+<h2 id="staticfiles_dirs">STATICFILES_DIRS</h2>
 <p>从名字可以看出<code>STATICFILES_DIRS</code>指定了一个工程里面哪个目录存放了与这个工程相关的静态文件，这是一个列表。上面的<code>collectstatic</code>命令也会将该列表下面的静态文件收集到<code>STATIC_ROOT</code>目录下面去的，所以<code>STATICFILES_DIRS</code>下面是不能包含<code>STATIC_ROOT</code>这个路径的，对吧？</p>
-
 <h2 id="最佳实践">最佳实践</h2>
-
 <p>所以最佳的配置方式是将所有的App 下面的静态文件统一放置到一个目录下面，然后将该目录设置为<code>STATICFILES_DIRS</code>，<code>STATIC_ROOT</code>则设置为另外的目录。如下：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python">STATIC_URL <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;/static/&#39;</span>
-<span style="color:#6272a4"># 开发阶段放置项目自己的静态文件</span>
-STATICFILES_DIRS <span style="color:#ff79c6">=</span> (
-os<span style="color:#ff79c6">.</span>path<span style="color:#ff79c6">.</span>join(BASE_DIR, <span style="color:#f1fa8c">&#39;staticfiles&#39;</span>),
-)
-<span style="color:#6272a4"># 执行collectstatic命令后会将项目中的静态文件收集到该目录下面来（所以不应该在该目录下面放置自己的一些静态文件，因为会覆盖掉）</span>
-STATIC_ROOT <span style="color:#ff79c6">=</span> os<span style="color:#ff79c6">.</span>path<span style="color:#ff79c6">.</span>join(BASE_DIR, <span style="color:#f1fa8c">&#39;static&#39;</span>)</code></pre></div></li>
-</ul>
-
-<p>在开发阶段，<code>Django</code>把/static 映射到<code>django.contrib.staticfiles</code>这个App。<code>staticfiles</code>自动地从<code>STATICFILES_DIRS</code>、<code>STATIC_ROOT</code>以及各个App的static子目录里面搜索静态文件。一旦布署到开发环境上，<code>settings.py</code>不需要重新编写，只要在<code>Nginx</code>的配置文件里面写好映射，/static将会被<code>Nginx</code>处理。<code>django.contrib.staticfiles</code>虽然仍然存在，但因为不会接收到以<code>/static/</code>开始的路径，所以将不会产生作用。不必担心<code>Django</code>会使用处理速度变慢。另外，当<code>settings.DEBUG is False</code>的时候，<code>staticfiles</code>将自动关闭。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>STATIC_URL <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;/static/&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 开发阶段放置项目自己的静态文件</span>
+</span></span><span style="display:flex;"><span>STATICFILES_DIRS <span style="color:#ff79c6">=</span> (
+</span></span><span style="display:flex;"><span>    os<span style="color:#ff79c6">.</span>path<span style="color:#ff79c6">.</span>join(BASE_DIR, <span style="color:#f1fa8c">&#39;staticfiles&#39;</span>),
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 执行collectstatic命令后会将项目中的静态文件收集到该目录下面来（所以不应该在该目录下面放置自己的一些静态文件，因为会覆盖掉）</span>
+</span></span><span style="display:flex;"><span>STATIC_ROOT <span style="color:#ff79c6">=</span> os<span style="color:#ff79c6">.</span>path<span style="color:#ff79c6">.</span>join(BASE_DIR, <span style="color:#f1fa8c">&#39;static&#39;</span>)
+</span></span></code></pre></div><p>在开发阶段，<code>Django</code>把/static 映射到<code>django.contrib.staticfiles</code>这个App。<code>staticfiles</code>自动地从<code>STATICFILES_DIRS</code>、<code>STATIC_ROOT</code>以及各个App的static子目录里面搜索静态文件。一旦布署到开发环境上，<code>settings.py</code>不需要重新编写，只要在<code>Nginx</code>的配置文件里面写好映射，/static将会被<code>Nginx</code>处理。<code>django.contrib.staticfiles</code>虽然仍然存在，但因为不会接收到以<code>/static/</code>开始的路径，所以将不会产生作用。不必担心<code>Django</code>会使用处理速度变慢。另外，当<code>settings.DEBUG is False</code>的时候，<code>staticfiles</code>将自动关闭。</p>
 
           <h2>微信公众号</h2>
-<p>扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的 kubernetes 讨论群里面共同学习。</p>
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/qrcode.png" alt="wechat-account-qrcode">
+<p>
+  扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的
+  kubernetes 讨论群里面共同学习。
+</p>
+<img
+  src="https://picdn.youdianzhishi.com/images/qrcode.png"
+  alt="wechat-account-qrcode"
+/>
 
   
           
@@ -455,7 +444,7 @@ STATIC_ROOT <span style="color:#ff79c6">=</span> os<span style="color:#ff79c6">.
           
           
             <li class="next">
-              <a href="https://www.qikqiak.com/post/make-https-blog/" data-toggle="tooltip" data-placement="top" title="给博客加上HTTPS">后一篇 &rarr;</a>
+              <a href="https://www.qikqiak.com/post/manual-install-high-available-kubernetes-cluster/" data-toggle="tooltip" data-placement="top" title="手动搭建高可用的kubernetes 集群">后一篇 &rarr;</a>
             </li>
           
         </ul>
@@ -563,7 +552,7 @@ STATIC_ROOT <span style="color:#ff79c6">=</span> os<span style="color:#ff79c6">.
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -575,7 +564,7 @@ STATIC_ROOT <span style="color:#ff79c6">=</span> os<span style="color:#ff79c6">.
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -592,7 +581,7 @@ STATIC_ROOT <span style="color:#ff79c6">=</span> os<span style="color:#ff79c6">.
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -601,7 +590,7 @@ STATIC_ROOT <span style="color:#ff79c6">=</span> os<span style="color:#ff79c6">.
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

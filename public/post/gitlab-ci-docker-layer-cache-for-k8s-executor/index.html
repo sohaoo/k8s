@@ -14,16 +14,15 @@
   <meta property="og:description" content="前面我们有文章介绍过如何在 Kubernetes 集群中使用 GitLab CI 来实现 CI/CD，在构建镜像的环节我们基本上都是使用的 Docker On Docker 的模式，这是因为 Kubernetes 集群使用的是 Docker 这种容器运行时，所以我们可以将宿主机的 docker.sock 文件挂载到容器中构建镜像，而最近我们在使用 Kubernetes 1.22.X 版本后将容器运行时更改为了 Containerd，这样节点上没有可用的 Docker 服务了，这个时候就需要更改构建镜像的模式了，当然要实现构建镜像的方式有很多，我们这里还是选择使用 Docker 来构建我们的 Docker 镜像，也就是使用 Docker IN Docker 的模式。">
   <meta name="twitter:description" content="前面我们有文章介绍过如何在 Kubernetes 集群中使用 GitLab CI 来实现 CI/CD，在构建镜像的环节我们基本上都是使用的 Docker On Docker 的模式，这是因为 Kubernetes 集群使用的是 Docker 这种容器运行时，所以我们可以将宿主机的 docker.sock 文件挂载到容器中构建镜像，而最近我们在使用 Kubernetes 1.22.X 版本后将容器运 …">
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/post/gitlab-ci-docker-layer-cache-for-k8s-executor/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/post/gitlab-ci-docker-layer-cache-for-k8s-executor/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -32,7 +31,7 @@
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -83,7 +82,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -226,7 +225,7 @@ autocomplete('#aa-search-input',
 
 
   
-    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20211109172525.png" data-img-desc-1="https://unsplash.com/photos/Zyv7Dc-lOjw"></div>
+    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://picdn.youdianzhishi.com/images/20211109172525.png" data-img-desc-1="https://unsplash.com/photos/Zyv7Dc-lOjw"></div>
   
 
   <header class="header-section has-img">
@@ -241,12 +240,8 @@ autocomplete('#aa-search-input',
                   
                   
                     <span class="post-meta">
-  
-    发表于 November 9, 2021
-  
-  
+  发表于 November 9, 2021  
 </span>
-
 
                   
               </div>
@@ -268,12 +263,8 @@ autocomplete('#aa-search-input',
                 
                 
                   <span class="post-meta">
-  
-    发表于 November 9, 2021
-  
-  
+  发表于 November 9, 2021  
 </span>
-
 
                 
             </div>
@@ -326,159 +317,163 @@ autocomplete('#aa-search-input',
           
 
           <p>前面我们有文章介绍过如何在 Kubernetes 集群中使用 GitLab CI 来实现 CI/CD，在构建镜像的环节我们基本上都是使用的 <code>Docker On Docker</code> 的模式，这是因为 Kubernetes 集群使用的是 Docker 这种容器运行时，所以我们可以将宿主机的 <code>docker.sock</code> 文件挂载到容器中构建镜像，而最近我们在使用 Kubernetes 1.22.X 版本后将容器运行时更改为了 Containerd，这样节点上没有可用的 Docker 服务了，这个时候就需要更改构建镜像的模式了，当然要实现构建镜像的方式有很多，我们这里还是选择使用 Docker 来构建我们的 Docker 镜像，也就是使用 <code>Docker IN Docker</code> 的模式。</p>
-
-<p>在每次构建镜像的时候，GitLab Runner 都会启动一个包含3个容器的 Pod，其中一个就是运行 Docker 守护进程的 Docker DIND 容器，构建的容器会去连接到运行在同一个 Pod 上的 Docker 守护进程，由于 Pod 中的所有容器共享同一个 network namespace，构建镜像的 Docker CLI 能够通过 localhost 直接连接到 Docker 守护进程进行构建。但是这种方式最大的一个问题是每次构建都是启动一个全新的 Docker 守护进程，造成没有缓存 Docker layer 层，这会显著增加我们的构建时间。</p>
-
+<p>在每次构建镜像的时候，GitLab Runner 都会启动一个包含 3 个容器的 Pod，其中一个就是运行 Docker 守护进程的 Docker DIND 容器，构建的容器会去连接到运行在同一个 Pod 上的 Docker 守护进程，由于 Pod 中的所有容器共享同一个 network namespace，构建镜像的 Docker CLI 能够通过 localhost 直接连接到 Docker 守护进程进行构建。但是这种方式最大的一个问题是每次构建都是启动一个全新的 Docker 守护进程，造成没有缓存 Docker layer 层，这会显著增加我们的构建时间。</p>
 <p>这个问题的解决方法非常简单，与其为每个 Pod 运行一个 Docker DIND 服务的 sidecar 容器，不如让我们运行一个独立的 Docker DIND 容器，构建容器的所有 Docker CLI 都连接到这个一个 Docker 守护进程上，这个时候我们将 Docker layer 层进行持久化，也就起到了缓存的作用了。</p>
-
 <p>首先创建一个 PVC 来存储 Docker 的持久化数据，为了性能考虑，这里我们使用的是一个 Local PV：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: local-volume
-provisioner: kubernetes.io/no-provisioner
-reclaimPolicy: Delete
-volumeBindingMode: WaitForFirstConsumer
-
----
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: docker-pv
-spec:
-  capacity:
-    storage: 5Gi
-  accessModes:
-  - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
-  storageClassName: local-volume
-  local:
-    path: /mnt/k8s/docker  <span style="color:#6272a4"># 数据存储的目录</span>
-  nodeAffinity:
-    required:
-      nodeSelectorTerms:
-      - matchExpressions:
-        - key: kubernetes.io/hostname
-          operator: In
-          values:
-          - node1  <span style="color:#6272a4"># 运行在node1节点</span>
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  labels:
-    app: docker-dind
-  name: docker-dind-data
-  namespace: kube-ops
-spec:
-  accessModes:
-    - ReadWriteOnce
-  storageClassName: local-volume
-  resources:
-    requests:
-      storage: 5Gi</code></pre></div>
-<p>然后使用 Deployment 部署一个 Docker DIND 服务：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: docker-dind
-  namespace: kube-ops
-  labels:
-    app: docker-dind
-spec:
-  selector:
-    matchLabels:
-      app: docker-dind
-  template:
-    metadata:
-      labels:
-        app: docker-dind
-    spec:
-      containers:
-        - image: docker:dind
-          name: docker-dind
-          args:
-          - --registry-mirror=https://ot2k4d59.mirror.aliyuncs.com/  <span style="color:#6272a4"># 指定一个镜像加速器地址</span>
-          env:
-            - name: DOCKER_DRIVER
-              value: overlay2
-            - name: DOCKER_HOST
-              value: tcp://<span style="color:#bd93f9">0.0</span>.<span style="color:#bd93f9">0.0</span>:<span style="color:#bd93f9">2375</span>
-            - name: DOCKER_TLS_CERTDIR   <span style="color:#6272a4"># 禁用 TLS </span>
-              value: <span style="color:#f1fa8c">&#34;&#34;</span>
-          volumeMounts:
-            - name: docker-dind-data-vol <span style="color:#6272a4"># 持久化docker根目录</span>
-              mountPath: /var/lib/docker/
-          ports:
-            - name: daemon-port
-              containerPort: <span style="color:#bd93f9">2375</span>
-          securityContext:
-            privileged: <span style="color:#ff79c6">true</span> <span style="color:#6272a4"># 需要设置成特权模式</span>
-      volumes:
-        - name: docker-dind-data-vol
-          persistentVolumeClaim:
-            claimName: docker-dind-data</code></pre></div>
-<p>然后创建一个 Service 以方便构建的 Docker CLI 与其连接：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: v1
-kind: Service
-metadata:
-  name: docker-dind
-  namespace: kube-ops
-  labels:
-    app: docker-dind
-spec:
-  ports:
-    - port: <span style="color:#bd93f9">2375</span>
-      targetPort: <span style="color:#bd93f9">2375</span>
-  selector:
-    app: docker-dind</code></pre></div>
-<p>将 Docker DIND 服务部署完成后，我们就可以在 Gitlab CI 中使用这个守护程序来构建镜像了，如下所示：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">tages:
-  - image
-
-build_image:
-  stage: image
-  image: docker:latest
-  variables:
-    DOCKER_HOST: tcp://docker-dind:<span style="color:#bd93f9">2375</span>  <span style="color:#6272a4"># 通过 service dns 形式连接 docker dind 服务</span>
-  script:
-    - docker info
-    - docker build -t xxxx .
-    - docker push xxxx
-  only:
-    - tags</code></pre></div>
-<p>由于我们缓存了 Docker layer 层，这个时候构建的速度会明显提升。最后随着镜像的大量构建会产生很多镜像数据，我们可以写一个 Cronjob 用来定时清除缓存：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: batch/v1
-kind: CronJob
-metadata:
-  name: docker-dind-clear-cache
-  namespace: kube-ops
-spec:
-  schedule: <span style="color:#bd93f9">0</span> <span style="color:#bd93f9">0</span> * * <span style="color:#bd93f9">0</span>  <span style="color:#6272a4"># 每周清理一次</span>
-  jobTemplate:
-    metadata:
-      labels:
-        app: docker-dind
-      name: docker-dind-clear-cache
-    spec:
-      template:
-        spec:
-          restartPolicy: OnFailure
-          containers:
-            - name: clear-cache
-              image: docker:latest
-              command:
-                - docker
-                - system
-                - prune
-                - -af
-              env:
-                - name: DOCKER_HOST
-                  value: tcp://docker-dind:<span style="color:#bd93f9">2375</span></code></pre></div>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: storage.k8s.io/v1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: StorageClass
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: local-volume
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">provisioner</span>: kubernetes.io/no-provisioner
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">reclaimPolicy</span>: Delete
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">volumeBindingMode</span>: WaitForFirstConsumer
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: v1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: PersistentVolume
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: docker-pv
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">capacity</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">storage</span>: 5Gi
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">accessModes</span>:
+</span></span><span style="display:flex;"><span>    - ReadWriteOnce
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">persistentVolumeReclaimPolicy</span>: Retain
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">storageClassName</span>: local-volume
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">local</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">path</span>: /mnt/k8s/docker <span style="color:#6272a4"># 数据存储的目录</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">nodeAffinity</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">required</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">nodeSelectorTerms</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">matchExpressions</span>:
+</span></span><span style="display:flex;"><span>            - <span style="color:#ff79c6">key</span>: kubernetes.io/hostname
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">operator</span>: In
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">values</span>:
+</span></span><span style="display:flex;"><span>                - node1 <span style="color:#6272a4"># 运行在node1节点</span>
+</span></span><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: v1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: PersistentVolumeClaim
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">labels</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">app</span>: docker-dind
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: docker-dind-data
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">namespace</span>: kube-ops
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">accessModes</span>:
+</span></span><span style="display:flex;"><span>    - ReadWriteOnce
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">storageClassName</span>: local-volume
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">resources</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">requests</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">storage</span>: 5Gi
+</span></span></code></pre></div><p>然后使用 Deployment 部署一个 Docker DIND 服务：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: apps/v1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: Deployment
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: docker-dind
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">namespace</span>: kube-ops
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">labels</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">app</span>: docker-dind
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">selector</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">matchLabels</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">app</span>: docker-dind
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">template</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">labels</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">app</span>: docker-dind
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">containers</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">image</span>: docker:dind
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">name</span>: docker-dind
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">args</span>:
+</span></span><span style="display:flex;"><span>            - --registry-mirror=https://ot2k4d59.mirror.aliyuncs.com/ <span style="color:#6272a4"># 指定一个镜像加速器地址</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">env</span>:
+</span></span><span style="display:flex;"><span>            - <span style="color:#ff79c6">name</span>: DOCKER_DRIVER
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">value</span>: overlay2
+</span></span><span style="display:flex;"><span>            - <span style="color:#ff79c6">name</span>: DOCKER_HOST
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">value</span>: tcp://0.0.0.0:2375
+</span></span><span style="display:flex;"><span>            - <span style="color:#ff79c6">name</span>: DOCKER_TLS_CERTDIR <span style="color:#6272a4"># 禁用 TLS</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">value</span>: <span style="color:#f1fa8c">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">volumeMounts</span>:
+</span></span><span style="display:flex;"><span>            - <span style="color:#ff79c6">name</span>: docker-dind-data-vol <span style="color:#6272a4"># 持久化docker根目录</span>
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">mountPath</span>: /var/lib/docker/
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">ports</span>:
+</span></span><span style="display:flex;"><span>            - <span style="color:#ff79c6">name</span>: daemon-port
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">containerPort</span>: <span style="color:#bd93f9">2375</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">securityContext</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">privileged</span>: <span style="color:#ff79c6">true</span> <span style="color:#6272a4"># 需要设置成特权模式</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">volumes</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">name</span>: docker-dind-data-vol
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">persistentVolumeClaim</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">claimName</span>: docker-dind-data
+</span></span></code></pre></div><p>然后创建一个 Service 以方便构建的 Docker CLI 与其连接：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: v1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: Service
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: docker-dind
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">namespace</span>: kube-ops
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">labels</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">app</span>: docker-dind
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">ports</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">port</span>: <span style="color:#bd93f9">2375</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">targetPort</span>: <span style="color:#bd93f9">2375</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">selector</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">app</span>: docker-dind
+</span></span></code></pre></div><p>将 Docker DIND 服务部署完成后，我们就可以在 Gitlab CI 中使用这个守护程序来构建镜像了，如下所示：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">tages</span>:
+</span></span><span style="display:flex;"><span>  - image
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">build_image</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">stage</span>: image
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">image</span>: docker:latest
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">variables</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">DOCKER_HOST</span>: tcp://docker-dind:2375 <span style="color:#6272a4"># 通过 service dns 形式连接 docker dind 服务</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">script</span>:
+</span></span><span style="display:flex;"><span>    - docker info
+</span></span><span style="display:flex;"><span>    - docker build -t xxxx .
+</span></span><span style="display:flex;"><span>    - docker push xxxx
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">only</span>:
+</span></span><span style="display:flex;"><span>    - tags
+</span></span></code></pre></div><p>由于我们缓存了 Docker layer 层，这个时候构建的速度会明显提升。最后随着镜像的大量构建会产生很多镜像数据，我们可以写一个 Cronjob 用来定时清除缓存：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: batch/v1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: CronJob
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: docker-dind-clear-cache
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">namespace</span>: kube-ops
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">schedule</span>: <span style="color:#bd93f9">0</span> <span style="color:#bd93f9">0</span> * * <span style="color:#bd93f9">0</span> <span style="color:#6272a4"># 每周清理一次</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">jobTemplate</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">labels</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">app</span>: docker-dind
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">name</span>: docker-dind-clear-cache
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">template</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">restartPolicy</span>: OnFailure
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">containers</span>:
+</span></span><span style="display:flex;"><span>            - <span style="color:#ff79c6">name</span>: clear-cache
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">image</span>: docker:latest
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">command</span>:
+</span></span><span style="display:flex;"><span>                - docker
+</span></span><span style="display:flex;"><span>                - system
+</span></span><span style="display:flex;"><span>                - prune
+</span></span><span style="display:flex;"><span>                - -af
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">env</span>:
+</span></span><span style="display:flex;"><span>                - <span style="color:#ff79c6">name</span>: DOCKER_HOST
+</span></span><span style="display:flex;"><span>                  <span style="color:#ff79c6">value</span>: tcp://docker-dind:2375
+</span></span></code></pre></div>
 
           <h2>微信公众号</h2>
-<p>扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的 kubernetes 讨论群里面共同学习。</p>
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/qrcode.png" alt="wechat-account-qrcode">
+<p>
+  扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的
+  kubernetes 讨论群里面共同学习。
+</p>
+<img
+  src="https://picdn.youdianzhishi.com/images/qrcode.png"
+  alt="wechat-account-qrcode"
+/>
 
   
           
@@ -679,7 +674,7 @@ spec:
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -691,7 +686,7 @@ spec:
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -708,7 +703,7 @@ spec:
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -717,7 +712,7 @@ spec:
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

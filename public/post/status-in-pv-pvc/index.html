@@ -14,16 +14,15 @@
   <meta property="og:description" content="我们对 PV 和 PVC 的几种状态应该不算陌生，但是在使用过程中可能也会产生一些疑问，比如为什么 PV 变成 Failed 状态了，新创建的 PVC 如何能够绑定之前的 PV，我可以恢复之前的 PV 吗？这里我们就来对 PV 和 PVC 中的几种状态变化再次进行说明。">
   <meta name="twitter:description" content="我们对 PV 和 PVC 的几种状态应该不算陌生，但是在使用过程中可能也会产生一些疑问，比如为什么 PV 变成 Failed 状态了，新创建的 PVC 如何能够绑定之前的 PV，我可以恢复之前的 PV 吗？这里我们就来对 PV 和 PVC 中的几种状态变化再次进行说明。">
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/post/status-in-pv-pvc/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/post/status-in-pv-pvc/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -32,7 +31,7 @@
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -83,7 +82,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -226,7 +225,7 @@ autocomplete('#aa-search-input',
 
 
   
-    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200614115018.png" data-img-desc-1="pv/pvc 状态"></div>
+    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://picdn.youdianzhishi.com/images/20200614115018.png" data-img-desc-1="pv/pvc 状态"></div>
   
 
   <header class="header-section has-img">
@@ -241,12 +240,8 @@ autocomplete('#aa-search-input',
                   
                   
                     <span class="post-meta">
-  
-    发表于 June 14, 2020
-  
-  
+  发表于 June 14, 2020  
 </span>
-
 
                   
               </div>
@@ -268,12 +263,8 @@ autocomplete('#aa-search-input',
                 
                 
                   <span class="post-meta">
-  
-    发表于 June 14, 2020
-  
-  
+  发表于 June 14, 2020  
 </span>
-
 
                 
             </div>
@@ -315,19 +306,17 @@ autocomplete('#aa-search-input',
             
 <aside class="toc">
   <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li>
-<ul>
-<li><a href="#创建pv">创建PV</a></li>
-<li><a href="#新建-pvc">新建 PVC</a></li>
-<li><a href="#删除-pv">删除 PV</a></li>
-<li><a href="#重新创建-pv">重新创建 PV</a></li>
-<li><a href="#删除-pvc">删除 PVC</a></li>
-</ul></li>
-</ul></li>
-</ul>
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#创建-pv">创建 PV</a></li>
+        <li><a href="#新建-pvc">新建 PVC</a></li>
+        <li><a href="#删除-pv">删除 PV</a></li>
+        <li><a href="#重新创建-pv">重新创建 PV</a></li>
+        <li><a href="#删除-pvc">删除 PVC</a></li>
+      </ul>
+    </li>
+  </ul>
 </nav>
 </aside>
 
@@ -346,136 +335,123 @@ autocomplete('#aa-search-input',
           
 
           <p>我们对 PV 和 PVC 的几种状态应该不算陌生，但是在使用过程中可能也会产生一些疑问，比如为什么 PV 变成 Failed 状态了，新创建的 PVC 如何能够绑定之前的 PV，我可以恢复之前的 PV 吗？这里我们就来对 PV 和 PVC 中的几种状态变化再次进行说明。</p>
-
 <p>在不同的情况下，PV 和 PVC 的状态变化我们用如下所示的表格来进行说明：</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200614120848.png" alt="PV、PVC 状态"><figcaption>PV、PVC 状态</figcaption></figure>
-
-<h3 id="创建pv">创建PV</h3>
-
+<p><img src="https://picdn.youdianzhishi.com/images/20200614120848.png" alt="PV、PVC 状态"></p>
+<h3 id="创建-pv">创建 PV</h3>
 <p>正常情况下 PV 被创建成功后是 Available 状态：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: nfs-pv
-spec:
-  storageClassName: manual
-  capacity: 
-    storage: 1Gi
-  accessModes:
-  - ReadWriteOnce
-  persistentVolumeReclaimPolicy: Retain
-  nfs:
-    path: /data/k8s  <span style="color:#6272a4"># 指定nfs的挂载点</span>
-    server: <span style="color:#bd93f9">10.151</span>.<span style="color:#bd93f9">30.1</span>  <span style="color:#6272a4"># 指定nfs服务地址</span></code></pre></div>
-<p>直接创建上面的 PV 对象，就可以看到状态是 Available 状态，表示可以用于 PVC 绑定：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ kubectl get pv nfs-pv
-NAME     CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM   STORAGECLASS   REASON   AGE
-nfs-pv   1Gi        RWO            Retain           Available           manual                  7s</code></pre></div>
-<h3 id="新建-pvc">新建 PVC</h3>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: v1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: PersistentVolume
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: nfs-pv
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">storageClassName</span>: manual
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">capacity</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">storage</span>: 1Gi
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">accessModes</span>:
+</span></span><span style="display:flex;"><span>    - ReadWriteOnce
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">persistentVolumeReclaimPolicy</span>: Retain
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">nfs</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">path</span>: /data/k8s <span style="color:#6272a4"># 指定nfs的挂载点</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">server</span>: <span style="color:#bd93f9">10.151.30.1</span> <span style="color:#6272a4"># 指定nfs服务地址</span>
+</span></span></code></pre></div><p>直接创建上面的 PV 对象，就可以看到状态是 Available 状态，表示可以用于 PVC 绑定：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ kubectl get pv nfs-pv
+</span></span><span style="display:flex;"><span>NAME     CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM   STORAGECLASS   REASON   AGE
+</span></span><span style="display:flex;"><span>nfs-pv   1Gi        RWO            Retain           Available           manual                  7s
+</span></span></code></pre></div><h3 id="新建-pvc">新建 PVC</h3>
 <p>刚添加的 PVC 状态是 Pending，如果有合适的 PV，这个 Pending 状态会立刻变为 Bound 状态，同时相应的 PVC 也会变为 Bound，PVC 和 PV 进行了绑定。 我们可以先添加 PVC，后添加 PV，这样就能保证看到 Pending 状态。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: nfs-pvc
-spec:
-  storageClassName: manual
-  accessModes:
-  - ReadWriteOnce
-  resources:
-    requests:
-      storage: 1Gi</code></pre></div>
-<p>新建上面的 PVC 资源对象，刚新建完成会是 Pending 状态：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ kubectl get pvc nfs-pvc
-NAME      STATUS    VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   AGE
-nfs-pvc   Pending                                      manual         7s</code></pre></div>
-<p>当 PVC 找到合适的 PV 绑定后，就会立刻变成 Bound 状态，PV 也从 Available 状态变成了 Bound 状态：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ kubectl get pvc nfs-pvc
-NAME      STATUS   VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   AGE
-nfs-pvc   Bound    nfs-pv   1Gi        RWO            manual         2m8s
-$ kubectl get pv nfs-pv  
-NAME     CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM             STORAGECLASS   REASON   AGE
-nfs-pv   1Gi        RWO            Retain           Bound    default/nfs-pvc   manual                  23s</code></pre></div>
-<h3 id="删除-pv">删除 PV</h3>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: v1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: PersistentVolumeClaim
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: nfs-pvc
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">storageClassName</span>: manual
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">accessModes</span>:
+</span></span><span style="display:flex;"><span>    - ReadWriteOnce
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">resources</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">requests</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">storage</span>: 1Gi
+</span></span></code></pre></div><p>新建上面的 PVC 资源对象，刚新建完成会是 Pending 状态：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ kubectl get pvc nfs-pvc
+</span></span><span style="display:flex;"><span>NAME      STATUS    VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+</span></span><span style="display:flex;"><span>nfs-pvc   Pending                                      manual         7s
+</span></span></code></pre></div><p>当 PVC 找到合适的 PV 绑定后，就会立刻变成 Bound 状态，PV 也从 Available 状态变成了 Bound 状态：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ kubectl get pvc nfs-pvc
+</span></span><span style="display:flex;"><span>NAME      STATUS   VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+</span></span><span style="display:flex;"><span>nfs-pvc   Bound    nfs-pv   1Gi        RWO            manual         2m8s
+</span></span><span style="display:flex;"><span>$ kubectl get pv nfs-pv
+</span></span><span style="display:flex;"><span>NAME     CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM             STORAGECLASS   REASON   AGE
+</span></span><span style="display:flex;"><span>nfs-pv   1Gi        RWO            Retain           Bound    default/nfs-pvc   manual                  23s
+</span></span></code></pre></div><h3 id="删除-pv">删除 PV</h3>
 <p>由于现在 PVC 和 PV 已经是处于绑定状态了，那么如果这个时候我们不小心将 PV 进行了删除，会出现怎样的情况呢：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ kubectl delete pv nfs-pv
-persistentvolume <span style="color:#f1fa8c">&#34;nfs-pv&#34;</span> deleted
-
-^C
-$ kubectl get pv nfs-pv   
-NAME     CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS        CLAIM             STORAGECLASS   REASON   AGE
-nfs-pv   1Gi        RWO            Retain           Terminating   default/nfs-pvc   manual                  12m
-$ kubectl get pvc nfs-pvc                          
-NAME      STATUS   VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   AGE
-nfs-pvc   Bound    nfs-pv   1Gi        RWO            manual         13m</code></pre></div>
-<p>事实上我们这里删除 PV 被 hang 住了，也就是不能真正的删除 PV，但是这个时候 PV 会变成 Terminating 状态，而对应的 PVC 还是 Bound 状态，也就是说这个时候由于 PV 和 PVC 已经绑定在一起了，就不能先删除 PV，只是现在状态是 Terminating 状态，对于 PVC 还是没有任何影响，那么这个时候我们应该怎么处理呢？</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ kubectl delete pv nfs-pv
+</span></span><span style="display:flex;"><span>persistentvolume <span style="color:#f1fa8c">&#34;nfs-pv&#34;</span> deleted
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>^C
+</span></span><span style="display:flex;"><span>$ kubectl get pv nfs-pv
+</span></span><span style="display:flex;"><span>NAME     CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS        CLAIM             STORAGECLASS   REASON   AGE
+</span></span><span style="display:flex;"><span>nfs-pv   1Gi        RWO            Retain           Terminating   default/nfs-pvc   manual                  12m
+</span></span><span style="display:flex;"><span>$ kubectl get pvc nfs-pvc
+</span></span><span style="display:flex;"><span>NAME      STATUS   VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+</span></span><span style="display:flex;"><span>nfs-pvc   Bound    nfs-pv   1Gi        RWO            manual         13m
+</span></span></code></pre></div><p>事实上我们这里删除 PV 被 hang 住了，也就是不能真正的删除 PV，但是这个时候 PV 会变成 Terminating 状态，而对应的 PVC 还是 Bound 状态，也就是说这个时候由于 PV 和 PVC 已经绑定在一起了，就不能先删除 PV，只是现在状态是 Terminating 状态，对于 PVC 还是没有任何影响，那么这个时候我们应该怎么处理呢？</p>
 <p>我们可以通过编辑 PV，删除 PV 中的 finalizers 属性来强制删除 PV：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ kubectl edit pv nfs-pv
-<span style="color:#6272a4"># 按照下面所示删除 finalizers 属性中的内容</span></code></pre></div>
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200614105632.png" alt="delete finalizers"><figcaption>delete finalizers</figcaption></figure>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ kubectl edit pv nfs-pv
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 按照下面所示删除 finalizers 属性中的内容</span>
+</span></span></code></pre></div><p><img src="https://picdn.youdianzhishi.com/images/20200614105632.png" alt="delete finalizers"></p>
 <p>编辑完成后 PV 就会被真正删除了，而 PVC 也是 Lost 状态了：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ kubectl get pv nfs-pv
-Error from server <span style="color:#ff79c6">(</span>NotFound<span style="color:#ff79c6">)</span>: persistentvolumes <span style="color:#f1fa8c">&#34;nfs-pv&#34;</span> not found
-$ kubectl get pvc nfs-pvc
-NAME      STATUS   VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   AGE
-nfs-pvc   Lost     nfs-pv   <span style="color:#bd93f9">0</span>                         manual         23m</code></pre></div>
-<!--adsens-text-->
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ kubectl get pv nfs-pv
+</span></span><span style="display:flex;"><span>Error from server <span style="color:#ff79c6">(</span>NotFound<span style="color:#ff79c6">)</span>: persistentvolumes <span style="color:#f1fa8c">&#34;nfs-pv&#34;</span> not found
+</span></span><span style="display:flex;"><span>$ kubectl get pvc nfs-pvc
+</span></span><span style="display:flex;"><span>NAME      STATUS   VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+</span></span><span style="display:flex;"><span>nfs-pvc   Lost     nfs-pv   <span style="color:#bd93f9">0</span>                         manual         23m
+</span></span></code></pre></div><!-- raw HTML omitted -->
 <h3 id="重新创建-pv">重新创建 PV</h3>
-
 <p>当我们看到 PVC 处于 Lost 状态的时候不用着急，这是由于之前已经绑定的 PV 已经没有了，但是 PVC 里面仍然有 PV 的绑定信息：</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200614110121.png" alt="pv volumeName"><figcaption>pv volumeName</figcaption></figure>
-
+<p><img src="https://picdn.youdianzhishi.com/images/20200614110121.png" alt="pv volumeName"></p>
 <p>所以要解决这个问题也很简单，只需要重新把之前的 PV 创建出来即可：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># 重新创建 PV</span>
-$ kubectl apply -f volume.yaml 
-persistentvolume/nfs-pv created</code></pre></div>
-<p>当 PV 创建成功后，PVC 和 PV 状态就都恢复成 Bound 状态了：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ kubectl get pv nfs-pv   
-NAME     CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM             STORAGECLASS   REASON   AGE
-nfs-pv   1Gi        RWO            Retain           Bound    default/nfs-pvc   manual                  93s
-<span style="color:#6272a4"># PVC 恢复成了正常的 Bound 状态</span>
-$ kubectl get pvc nfs-pvc        
-NAME      STATUS   VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   AGE
-nfs-pvc   Bound    nfs-pv   1Gi        RWO            manual         27m</code></pre></div>
-<h3 id="删除-pvc">删除 PVC</h3>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#6272a4"># 重新创建 PV</span>
+</span></span><span style="display:flex;"><span>$ kubectl apply -f volume.yaml
+</span></span><span style="display:flex;"><span>persistentvolume/nfs-pv created
+</span></span></code></pre></div><p>当 PV 创建成功后，PVC 和 PV 状态就都恢复成 Bound 状态了：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ kubectl get pv nfs-pv
+</span></span><span style="display:flex;"><span>NAME     CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM             STORAGECLASS   REASON   AGE
+</span></span><span style="display:flex;"><span>nfs-pv   1Gi        RWO            Retain           Bound    default/nfs-pvc   manual                  93s
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># PVC 恢复成了正常的 Bound 状态</span>
+</span></span><span style="display:flex;"><span>$ kubectl get pvc nfs-pvc
+</span></span><span style="display:flex;"><span>NAME      STATUS   VOLUME   CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+</span></span><span style="display:flex;"><span>nfs-pvc   Bound    nfs-pv   1Gi        RWO            manual         27m
+</span></span></code></pre></div><h3 id="删除-pvc">删除 PVC</h3>
 <p>上面是先删除 PV 的情况，那么如果我们是先删除的 PVC 的话会是什么样的状况呢？</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ kubectl delete pvc nfs-pvc
-persistentvolumeclaim <span style="color:#f1fa8c">&#34;nfs-pvc&#34;</span> deleted
-$ kubectl get pv nfs-pv     
-NAME     CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS     CLAIM             STORAGECLASS   REASON   AGE
-nfs-pv   1Gi        RWO            Retain           Released   default/nfs-pvc   manual                  3m36s</code></pre></div>
-<p>我们可以看到 PVC 被删除后，PV 变成了 Released 的状态，但是我们仔细看后面的 CLAIM 属性，其中依然还保留着 PVC 的绑定信息，也可以将 PV 的对象信息通过下面的命令导出：</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200614110759.png" alt="pv claimRef"><figcaption>pv claimRef</figcaption></figure>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ kubectl delete pvc nfs-pvc
+</span></span><span style="display:flex;"><span>persistentvolumeclaim <span style="color:#f1fa8c">&#34;nfs-pvc&#34;</span> deleted
+</span></span><span style="display:flex;"><span>$ kubectl get pv nfs-pv
+</span></span><span style="display:flex;"><span>NAME     CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS     CLAIM             STORAGECLASS   REASON   AGE
+</span></span><span style="display:flex;"><span>nfs-pv   1Gi        RWO            Retain           Released   default/nfs-pvc   manual                  3m36s
+</span></span></code></pre></div><p>我们可以看到 PVC 被删除后，PV 变成了 Released 的状态，但是我们仔细看后面的 CLAIM 属性，其中依然还保留着 PVC 的绑定信息，也可以将 PV 的对象信息通过下面的命令导出：</p>
+<p><img src="https://picdn.youdianzhishi.com/images/20200614110759.png" alt="pv claimRef"></p>
 <p>这个时候大家可能就会想到现在我的 PVC 被删除了，PV 也变成了 Released 状态，那么我重建之前的 PVC 他们不就可以重新绑定了，事实并不会，PVC 只能和 <code>Available</code> 状态的 PV 进行绑定。</p>
-
 <p>这个时候我们就需要手工去进行干预了，真实生产环境下管理员会把数据备份或迁移出来，然后修改 PV，删除 <code>claimRef</code> 对 PVC 的引用，这个时候 Kubernetes 的 PV 控制器 watch 到 PV 变化后，就会将 PV 修改为 Available 状态，Available 状态的 PV 当然就可以被其他 PVC 绑定了。</p>
-
 <p>直接编辑 PV 删除 <code>cliamRef</code> 属性中的内容即可：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#6272a4"># 删除 cliamRef 中的内容</span>
-$ kubectl edit pv nfs-pv
-persistentvolume/nfs-pv edited</code></pre></div>
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200614111244.png" alt="remove pv claimRef"><figcaption>remove pv claimRef</figcaption></figure>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#6272a4"># 删除 cliamRef 中的内容</span>
+</span></span><span style="display:flex;"><span>$ kubectl edit pv nfs-pv
+</span></span><span style="display:flex;"><span>persistentvolume/nfs-pv edited
+</span></span></code></pre></div><p><img src="https://picdn.youdianzhishi.com/images/20200614111244.png" alt="remove pv claimRef"></p>
 <p>删除完成后，这个时候 PV 就会变成正常的 Available 状态了，重新去重建之前的 PVC 当然就可以正常绑定了：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">$ kubectl get pv nfs-pv
-NAME     CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM   STORAGECLASS   REASON   AGE
-nfs-pv   1Gi        RWO            Retain           Available           manual                  12m</code></pre></div>
-<p>在较新版本的 Kubernetes 集群中对 PV 的各种功能也做了增强，比如克隆、快照等功能都是非常有用的，我们后续再来对这些新功能进行说明。</p>
-
-<!--adsens-self-->
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ kubectl get pv nfs-pv
+</span></span><span style="display:flex;"><span>NAME     CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS      CLAIM   STORAGECLASS   REASON   AGE
+</span></span><span style="display:flex;"><span>nfs-pv   1Gi        RWO            Retain           Available           manual                  12m
+</span></span></code></pre></div><p>在较新版本的 Kubernetes 集群中对 PV 的各种功能也做了增强，比如克隆、快照等功能都是非常有用的，我们后续再来对这些新功能进行说明。</p>
+<!-- raw HTML omitted -->
 
           <h2>微信公众号</h2>
-<p>扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的 kubernetes 讨论群里面共同学习。</p>
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/qrcode.png" alt="wechat-account-qrcode">
+<p>
+  扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的
+  kubernetes 讨论群里面共同学习。
+</p>
+<img
+  src="https://picdn.youdianzhishi.com/images/qrcode.png"
+  alt="wechat-account-qrcode"
+/>
 
   
           
@@ -676,7 +652,7 @@ nfs-pv   1Gi        RWO            Retain           Available           manual  
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -688,7 +664,7 @@ nfs-pv   1Gi        RWO            Retain           Available           manual  
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -705,7 +681,7 @@ nfs-pv   1Gi        RWO            Retain           Available           manual  
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -714,7 +690,7 @@ nfs-pv   1Gi        RWO            Retain           Available           manual  
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

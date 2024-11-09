@@ -14,16 +14,15 @@
   <meta property="og:description" content="提到强大的django，最能引起大家共鸣的可能是其自带的admin了，提供了默认的强大的功能，而且我们还能根据自己的需求进行定制。django admin的列表页自带了一个批量删除所选对象的action，我们还可以添加自定义的功能action来实现其他功能，比如批量标记将文章标记为已发布。如下代码：">
   <meta name="twitter:description" content="提到强大的django，最能引起大家共鸣的可能是其自带的admin了，提供了默认的强大的功能，而且我们还能根据自己的需求进行定制。django admin的列表页自带了一个批量删除所选对象的action，我们还可以添加自定义的功能action来实现其他功能，比如批量标记将文章标记为已发布。如下代码：">
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/post/custom-django-admin-actions/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/post/custom-django-admin-actions/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -32,7 +31,7 @@
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -83,7 +82,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -241,12 +240,8 @@ autocomplete('#aa-search-input',
                 
                 
                   <span class="post-meta">
-  
-    发表于 July 2, 2014
-  
-  
+  发表于 July 2, 2014  
 </span>
-
 
                 
             </div>
@@ -301,28 +296,33 @@ autocomplete('#aa-search-input',
           
 
           <p>提到强大的<code>django</code>，最能引起大家共鸣的可能是其自带的<code>admin</code>了，提供了默认的强大的功能，而且我们还能根据自己的需求进行定制。<code>django admin</code>的列表页自带了一个批量删除所选对象的action，我们还可以添加自定义的功能action来实现其他功能，比如批量标记将文章标记为已发布。如下代码：</p>
-
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#ff79c6">class</span> <span style="color:#50fa7b">PhotoDescAdmin</span>(admin<span style="color:#ff79c6">.</span>ModelAdmin):
-    <span style="color:#ff79c6">def</span> <span style="color:#50fa7b">pub_time</span>(self, obj):
-        <span style="color:#ff79c6">return</span> obj<span style="color:#ff79c6">.</span>photo<span style="color:#ff79c6">.</span>pub_time<span style="color:#ff79c6">.</span>strftime(<span style="color:#f1fa8c">&#34;%Y-%m-</span><span style="color:#f1fa8c">%d</span><span style="color:#f1fa8c">&#34;</span>)
-    pub_time<span style="color:#ff79c6">.</span>short_description <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;关联图片发布日期&#39;</span>
-
-    <span style="color:#ff79c6">def</span> <span style="color:#50fa7b">make_published</span>(self, request, queryset):
-        queryset<span style="color:#ff79c6">.</span>update(enabled<span style="color:#ff79c6">=</span>True)
-    make_published<span style="color:#ff79c6">.</span>short_description <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;将选择的描述标记为【发布】&#34;</span>
-
-    list_display <span style="color:#ff79c6">=</span> (<span style="color:#f1fa8c">&#39;id&#39;</span>, <span style="color:#f1fa8c">&#39;pub_time&#39;</span>, <span style="color:#f1fa8c">&#39;category&#39;</span>, <span style="color:#f1fa8c">&#39;photo&#39;</span>, <span style="color:#f1fa8c">&#39;description&#39;</span>,
-        <span style="color:#f1fa8c">&#39;user_id&#39;</span>, <span style="color:#f1fa8c">&#39;user_name&#39;</span>, <span style="color:#f1fa8c">&#39;enabled&#39;</span>, <span style="color:#f1fa8c">&#39;created_at&#39;</span>)
-    list_filter <span style="color:#ff79c6">=</span> (<span style="color:#f1fa8c">&#39;created_at&#39;</span>, <span style="color:#f1fa8c">&#39;category&#39;</span>,)
-    search_fields <span style="color:#ff79c6">=</span> (<span style="color:#f1fa8c">&#39;description&#39;</span>,)
-    ordering <span style="color:#ff79c6">=</span> (<span style="color:#f1fa8c">&#39;-created_at&#39;</span>,)
-    raw_id_fields <span style="color:#ff79c6">=</span> (<span style="color:#f1fa8c">&#39;photo&#39;</span>, <span style="color:#f1fa8c">&#39;category&#39;</span>, )
-    actions <span style="color:#ff79c6">=</span> [make_published]</code></pre></div>
-<p>注意上面代码中<code>make_published</code>方法的参数，以及PhotoDescAdmin中的actions，这样我们就可以在<code>django admin</code>后台系统的photodesc列表中看到多了一个action：将选择的描述标记为【发布】。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#ff79c6">class</span> <span style="color:#50fa7b">PhotoDescAdmin</span>(admin<span style="color:#ff79c6">.</span>ModelAdmin):
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">def</span> <span style="color:#50fa7b">pub_time</span>(self, obj):
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">return</span> obj<span style="color:#ff79c6">.</span>photo<span style="color:#ff79c6">.</span>pub_time<span style="color:#ff79c6">.</span>strftime(<span style="color:#f1fa8c">&#34;%Y-%m-</span><span style="color:#f1fa8c">%d</span><span style="color:#f1fa8c">&#34;</span>)
+</span></span><span style="display:flex;"><span>    pub_time<span style="color:#ff79c6">.</span>short_description <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#39;关联图片发布日期&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">def</span> <span style="color:#50fa7b">make_published</span>(self, request, queryset):
+</span></span><span style="display:flex;"><span>        queryset<span style="color:#ff79c6">.</span>update(enabled<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>)
+</span></span><span style="display:flex;"><span>    make_published<span style="color:#ff79c6">.</span>short_description <span style="color:#ff79c6">=</span> <span style="color:#f1fa8c">&#34;将选择的描述标记为【发布】&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    list_display <span style="color:#ff79c6">=</span> (<span style="color:#f1fa8c">&#39;id&#39;</span>, <span style="color:#f1fa8c">&#39;pub_time&#39;</span>, <span style="color:#f1fa8c">&#39;category&#39;</span>, <span style="color:#f1fa8c">&#39;photo&#39;</span>, <span style="color:#f1fa8c">&#39;description&#39;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f1fa8c">&#39;user_id&#39;</span>, <span style="color:#f1fa8c">&#39;user_name&#39;</span>, <span style="color:#f1fa8c">&#39;enabled&#39;</span>, <span style="color:#f1fa8c">&#39;created_at&#39;</span>)
+</span></span><span style="display:flex;"><span>    list_filter <span style="color:#ff79c6">=</span> (<span style="color:#f1fa8c">&#39;created_at&#39;</span>, <span style="color:#f1fa8c">&#39;category&#39;</span>,)
+</span></span><span style="display:flex;"><span>    search_fields <span style="color:#ff79c6">=</span> (<span style="color:#f1fa8c">&#39;description&#39;</span>,)
+</span></span><span style="display:flex;"><span>    ordering <span style="color:#ff79c6">=</span> (<span style="color:#f1fa8c">&#39;-created_at&#39;</span>,)
+</span></span><span style="display:flex;"><span>    raw_id_fields <span style="color:#ff79c6">=</span> (<span style="color:#f1fa8c">&#39;photo&#39;</span>, <span style="color:#f1fa8c">&#39;category&#39;</span>, )
+</span></span><span style="display:flex;"><span>    actions <span style="color:#ff79c6">=</span> [make_published]
+</span></span></code></pre></div><p>注意上面代码中<code>make_published</code>方法的参数，以及PhotoDescAdmin中的actions，这样我们就可以在<code>django admin</code>后台系统的photodesc列表中看到多了一个action：将选择的描述标记为【发布】。</p>
 
           <h2>微信公众号</h2>
-<p>扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的 kubernetes 讨论群里面共同学习。</p>
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/qrcode.png" alt="wechat-account-qrcode">
+<p>
+  扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的
+  kubernetes 讨论群里面共同学习。
+</p>
+<img
+  src="https://picdn.youdianzhishi.com/images/qrcode.png"
+  alt="wechat-account-qrcode"
+/>
 
   
           
@@ -521,7 +521,7 @@ autocomplete('#aa-search-input',
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -533,7 +533,7 @@ autocomplete('#aa-search-input',
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -550,7 +550,7 @@ autocomplete('#aa-search-input',
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -559,7 +559,7 @@ autocomplete('#aa-search-input',
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

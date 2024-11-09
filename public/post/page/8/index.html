@@ -11,16 +11,15 @@
   <meta name="twitter:title" content="Posts" />
 
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/post/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/post/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -29,7 +28,7 @@
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -80,7 +79,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -238,6 +237,103 @@ autocomplete('#aa-search-input',
         <div class="posts-list">
           
             <article class="post-preview">
+              <a href="https://www.qikqiak.com/post/custom-k8s-ingress-controller-with-go/">
+                <h2 class="post-title">使用 Golang 自定义 Kubernetes Ingress Controller</h2>
+
+                
+              </a>
+
+              <p class="post-meta">
+                
+              </p>
+              <div class="post-entry">
+                
+                  <p>在 Kubernetes 中通过 Ingress 来暴露服务到集群外部，这个已经是一个很普遍的方式了，而真正扮演请求转发的角色是背后的 Ingress Controller，比如我们经常使用的 traefik、ingress-nginx 等就是一个 Ingress Controller。本文我们将通过 golang 来实现一个简单的自定义的 Ingress Controller，可以加深我们对 Ingress 的理解。</p>
+                  <a href="https://www.qikqiak.com/post/custom-k8s-ingress-controller-with-go/" class="post-read-more">[阅读全文]</a>
+                
+              </div>
+
+              
+                <span class="post-meta">
+                  
+                    #<a href="https://www.qikqiak.com/tags/kubernetes/">kubernetes</a>&nbsp;
+                  
+                    #<a href="https://www.qikqiak.com/tags/ingress/">ingress</a>&nbsp;
+                  
+                    #<a href="https://www.qikqiak.com/tags/golang/">golang</a>&nbsp;
+                  
+                </span>
+              
+
+            </article>
+          
+            <article class="post-preview">
+              <a href="https://www.qikqiak.com/post/canary-with-traefik2/">
+                <h2 class="post-title">Traefik 2.0 实现灰度发布</h2>
+
+                
+              </a>
+
+              <p class="post-meta">
+                
+              </p>
+              <div class="post-entry">
+                
+                  <p>前面的文章中我们已经使用 Traefik2.0 实现了 <a href="https://www.qikqiak.com/post/expose-redis-by-traefik2">暴露 Redis(TCP) 服务</a> 以及 <a href="https://www.qikqiak.com/post/automatic-https-with-traefik2">自动化 HTTPS</a> 得功能，在 <a href="https://www.qikqiak.com/post/traefik2-ga/">Traefik2.0 发布的特性</a> 中我们了解到除了这些基础功能之外，还支持一些其他的特性，本文就将来实现灰度发布的高级功能。</p>
+                  <a href="https://www.qikqiak.com/post/canary-with-traefik2/" class="post-read-more">[阅读全文]</a>
+                
+              </div>
+
+              
+                <span class="post-meta">
+                  
+                    #<a href="https://www.qikqiak.com/tags/traefik/">traefik</a>&nbsp;
+                  
+                    #<a href="https://www.qikqiak.com/tags/kubernetes/">kubernetes</a>&nbsp;
+                  
+                    #<a href="https://www.qikqiak.com/tags/ingress/">ingress</a>&nbsp;
+                  
+                    #<a href="https://www.qikqiak.com/tags/%E7%81%B0%E5%BA%A6/">灰度</a>&nbsp;
+                  
+                </span>
+              
+
+            </article>
+          
+            <article class="post-preview">
+              <a href="https://www.qikqiak.com/post/automatic-https-with-traefik2/">
+                <h2 class="post-title">Traefik 2.0 实现自动化 HTTPS</h2>
+
+                
+              </a>
+
+              <p class="post-meta">
+                
+              </p>
+              <div class="post-entry">
+                
+                  <p>上一篇文章我们实现了 <a href="https://www.qikqiak.com/post/expose-redis-by-traefik2/">Traefik 2.0 暴露 Redis(TCP) 服务</a>，我们了解到 Traefik 中使用 TCP 路由配置需要 SNI，而 SNI 又是依赖 TLS 的，所以需要配置证书才能正常访问 TCP 服务，其实 Traefik 除了支持我们手动配置 TLS 证书之外，还支持自动生成 TLS 证书，本文就来为大家介绍如何在 Traefik 2.0 中配置自动化 HTTPS 服务。</p>
+                  <a href="https://www.qikqiak.com/post/automatic-https-with-traefik2/" class="post-read-more">[阅读全文]</a>
+                
+              </div>
+
+              
+                <span class="post-meta">
+                  
+                    #<a href="https://www.qikqiak.com/tags/traefik/">traefik</a>&nbsp;
+                  
+                    #<a href="https://www.qikqiak.com/tags/kubernetes/">kubernetes</a>&nbsp;
+                  
+                    #<a href="https://www.qikqiak.com/tags/ingress/">ingress</a>&nbsp;
+                  
+                    #<a href="https://www.qikqiak.com/tags/https/">https</a>&nbsp;
+                  
+                </span>
+              
+
+            </article>
+          
+            <article class="post-preview">
               <a href="https://www.qikqiak.com/post/expose-redis-by-traefik2/">
                 <h2 class="post-title">Traefik 2.0 暴露 Redis(TCP) 服务</h2>
 
@@ -245,7 +341,7 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 October 14, 2019
+                
               </p>
               <div class="post-entry">
                 
@@ -278,7 +374,7 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 October 6, 2019
+                
               </p>
               <div class="post-entry">
                 
@@ -311,7 +407,7 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 September 27, 2019
+                
               </p>
               <div class="post-entry">
                 
@@ -342,7 +438,7 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 September 25, 2019
+                
               </p>
               <div class="post-entry">
                 
@@ -373,12 +469,11 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 September 18, 2019
+                
               </p>
               <div class="post-entry">
                 
-                  <p><a href="https://www.qikqiak.com/post/traefik2-ga/"><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/traefik2.png" alt="traefik 2.0" /></a></p>
-
+                  <p><a href="https://www.qikqiak.com/post/traefik2-ga/"><img src="https://picdn.youdianzhishi.com/images/traefik2.png" alt="traefik 2.0"></a></p>
 <p>寄予厚望的 <a href="https://traefik.io/">Traefik 2.0</a> 经过了一年的等待，今天终于正式发布了，此次大版本的更新添加了许多新功能，特别是大家都期望的支持 TCP 的功能。接下来我们就来探索下 Traefik 2.0 中有哪些新增的功能呢？</p>
                   <a href="https://www.qikqiak.com/post/traefik2-ga/" class="post-read-more">[阅读全文]</a>
                 
@@ -406,7 +501,7 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 September 16, 2019
+                
               </p>
               <div class="post-entry">
                 
@@ -435,7 +530,7 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 September 15, 2019
+                
               </p>
               <div class="post-entry">
                 
@@ -468,13 +563,12 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 September 10, 2019
+                
               </p>
               <div class="post-entry">
                 
                   <p><a href="https://applatix.com/open-source/argo/">Argo</a> 是 <a href="https://applatix.com/">Applatix</a> 推出的一个开源项目，为 Kubernetes 提供 container-native（工作流中的每个步骤是通过容器实现）工作流程。Argo 可以让用户用一个类似于传统的 YAML 文件定义的 DSL 来运行多个步骤的 Pipeline。该框架提供了复杂的循环、条件判断、依赖管理等功能，这有助于提高部署应用程序的灵活性以及配置和依赖的灵活性。使用 Argo，用户可以定义复杂的依赖关系，以编程方式构建复杂的工作流、制品管理，可以将任何步骤的输出结果作为输入链接到后续的步骤中去，并且可以在可视化 UI 界面中监控调度的作业任务。</p>
-
-<p><a href="https://www.qikqiak.com/post/argo-workflow-engine-for-k8s/"><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/argo-k8s.png" alt="Argo" /></a></p>
+<p><a href="https://www.qikqiak.com/post/argo-workflow-engine-for-k8s/"><img src="https://picdn.youdianzhishi.com/images/argo-k8s.png" alt="Argo"></a></p>
                   <a href="https://www.qikqiak.com/post/argo-workflow-engine-for-k8s/" class="post-read-more">[阅读全文]</a>
                 
               </div>
@@ -501,14 +595,12 @@ autocomplete('#aa-search-input',
               </a>
 
               <p class="post-meta">
-                发表于 September 5, 2019
+                
               </p>
               <div class="post-entry">
                 
-                  <p><a href="https://www.qikqiak.com/post/maesh-service-mesh-by-trafik/"><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/maesh.jpg" alt="Maesh" /></a></p>
-
+                  <p><a href="https://www.qikqiak.com/post/maesh-service-mesh-by-trafik/"><img src="https://picdn.youdianzhishi.com/images/maesh.jpg" alt="Maesh"></a></p>
 <p>Containous（Traefik 团队）推出了全新设计的轻量级 service mesh（服务网格）工具：<a href="http://mae.sh/">Maesh</a>，Maesh 允许对 Kubernetes 集群内流动的流量进行管理，这与入流量和出流量同样很重要。</p>
-
 <p>Maesh 构建在 Traefk 之上，是一个简单但功能齐全的服务网格，支持最新的服务网格接口规范 <a href="https://smi-spec.io/">SMI</a>，有助于与现有的一些解决方案进行集成。此外，Maesh 默认是需要开启使用的，这意味着在你决定将它们添加到网格之前，你的现有服务不会受到影响。</p>
                   <a href="https://www.qikqiak.com/post/maesh-service-mesh-by-trafik/" class="post-read-more">[阅读全文]</a>
                 
@@ -522,111 +614,6 @@ autocomplete('#aa-search-input',
                     #<a href="https://www.qikqiak.com/tags/istio/">istio</a>&nbsp;
                   
                     #<a href="https://www.qikqiak.com/tags/mash/">Mash</a>&nbsp;
-                  
-                </span>
-              
-
-            </article>
-          
-            <article class="post-preview">
-              <a href="https://www.qikqiak.com/post/vmware-k8s-dashboard-octant/">
-                <h2 class="post-title">VMWare 开源的 Kubernetes 可视化工具 Octant</h2>
-
-                
-              </a>
-
-              <p class="post-meta">
-                发表于 September 3, 2019
-              </p>
-              <div class="post-entry">
-                
-                  <p>上午看新闻发现 VMWare 开源了一款 Kubernetes Dashboard 的可视化工具 <a href="https://github.com/vmware/octant">Octant</a> ，这是一款帮助开发人员了解应用程序在 Kubernetes 集群中如何运行的工具。它通过可视化的方式，呈现 Kubernetes 对象的依赖关系，可将本地端口请求转发到正在运行的 pod，查看 pod 日志，浏览不同的集群。此外，用户还可以通过安装或编写插件来扩展 Octant 的功能。</p>
-                  <a href="https://www.qikqiak.com/post/vmware-k8s-dashboard-octant/" class="post-read-more">[阅读全文]</a>
-                
-              </div>
-
-              
-                <span class="post-meta">
-                  
-                    #<a href="https://www.qikqiak.com/tags/vmware/">vmware</a>&nbsp;
-                  
-                    #<a href="https://www.qikqiak.com/tags/kubernetes/">kubernetes</a>&nbsp;
-                  
-                    #<a href="https://www.qikqiak.com/tags/octant/">Octant</a>&nbsp;
-                  
-                </span>
-              
-
-            </article>
-          
-            <article class="post-preview">
-              <a href="https://www.qikqiak.com/post/use-kubeadm-install-kubernetes-1.15.3/">
-                <h2 class="post-title">使用 kubeadm 搭建 v1.15.3 版本 Kubernetes 集群</h2>
-
-                
-              </a>
-
-              <p class="post-meta">
-                发表于 August 27, 2019
-              </p>
-              <div class="post-entry">
-                
-                  <p>以前文章和视频中都是<a href="https://www.qikqiak.com/use-kubeadm-install-kubernetes-1.10/">使用的 Kubeadm 搭建的 Kubernetes 集群</a>，但是版本比较低了（1.10.0版本），近期有不少反馈让更新下版本，本文将通过 Kubeadm 来搭建最新版本的 Kubernetes 1.15.3 集群，其实和以前搭建的方式方法基本一致，我们这里准备使用 calico 网络插件以及 ipvs 模式的 kube-proxy。</p>
-                  <a href="https://www.qikqiak.com/post/use-kubeadm-install-kubernetes-1.15.3/" class="post-read-more">[阅读全文]</a>
-                
-              </div>
-
-              
-                <span class="post-meta">
-                  
-                    #<a href="https://www.qikqiak.com/tags/kubeadm/">kubeadm</a>&nbsp;
-                  
-                    #<a href="https://www.qikqiak.com/tags/kubernetes/">kubernetes</a>&nbsp;
-                  
-                    #<a href="https://www.qikqiak.com/tags/coredns/">coredns</a>&nbsp;
-                  
-                    #<a href="https://www.qikqiak.com/tags/ipvs/">ipvs</a>&nbsp;
-                  
-                    #<a href="https://www.qikqiak.com/tags/calico/">calico</a>&nbsp;
-                  
-                </span>
-              
-
-            </article>
-          
-            <article class="post-preview">
-              <a href="https://www.qikqiak.com/post/use-github-actions-build-go-app/">
-                <h2 class="post-title">使用 GitHub Actions 自动化构建 Golang 应用</h2>
-
-                
-              </a>
-
-              <p class="post-meta">
-                发表于 August 24, 2019
-              </p>
-              <div class="post-entry">
-                
-                  <p>GitHub 前一段时间推出了自家的自动化构建工具：<a href="https://github.com/features/actions">GitHub Actions</a>，不过目前还没有开放注册，只能通过申请等待官方审核。我第一时间就提交了申请，现在已经审核通过了，所以第一时间体验了<code>GitHub Actions</code>的功能，总体感受是 Travis CI 之类的工具应该现在在墙角<code>瑟瑟发抖</code>吧😄？</p>
-
-<p><code>GitHub Actions</code>允许构建一个完整的 CI/CD Pipeline，与 GitHub 生态系统深度集成，而无需使用 Travis CI 或者 Circle CI 等第三方服务，对于开源项目都是可以免费使用的。如果你也想尽快使用的话，可以通过链接 <a href="https://github.com/features/actions/signup">https://github.com/features/actions/signup</a> 去申请权限。</p>
-
-<p><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/github-actions.jpg" alt="github actions" /></p>
-                  <a href="https://www.qikqiak.com/post/use-github-actions-build-go-app/" class="post-read-more">[阅读全文]</a>
-                
-              </div>
-
-              
-                <span class="post-meta">
-                  
-                    #<a href="https://www.qikqiak.com/tags/ci/">CI</a>&nbsp;
-                  
-                    #<a href="https://www.qikqiak.com/tags/cd/">CD</a>&nbsp;
-                  
-                    #<a href="https://www.qikqiak.com/tags/github/">github</a>&nbsp;
-                  
-                    #<a href="https://www.qikqiak.com/tags/golang/">golang</a>&nbsp;
-                  
-                    #<a href="https://www.qikqiak.com/tags/pipeline/">pipeline</a>&nbsp;
                   
                 </span>
               
@@ -710,7 +697,7 @@ autocomplete('#aa-search-input',
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -722,7 +709,7 @@ autocomplete('#aa-search-input',
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -739,7 +726,7 @@ autocomplete('#aa-search-input',
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -748,7 +735,7 @@ autocomplete('#aa-search-input',
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

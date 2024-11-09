@@ -14,16 +14,15 @@
   <meta property="og:description" content="Okteto 是一个通过在 Kubernetes 中来开发和测试代码的应用程序开发工具。可以通过 Okteto 在 Kubernetes 中一键为我们启动一个开发环境，非常简单方便。前面我们也介绍过 Google 推出的 Skaffold 工具，今天我们演示下如何使用 Okteto 来搭建 Python 应用开发环境。">
   <meta name="twitter:description" content="Okteto 是一个通过在 Kubernetes 中来开发和测试代码的应用程序开发工具。可以通过 Okteto 在 Kubernetes 中一键为我们启动一个开发环境，非常简单方便。前面我们也介绍过 Google 推出的 Skaffold 工具，今天我们演示下如何使用 Okteto 来搭建 Python 应用开发环境。">
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/post/remote-deploy-env-with-okteto/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/post/remote-deploy-env-with-okteto/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -32,7 +31,7 @@
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -83,7 +82,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -226,7 +225,7 @@ autocomplete('#aa-search-input',
 
 
   
-    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200513120948.png" data-img-desc-1="https://unsplash.com/photos/yZTCvnOTpms"></div>
+    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://picdn.youdianzhishi.com/images/20200513120948.png" data-img-desc-1="https://unsplash.com/photos/yZTCvnOTpms"></div>
   
 
   <header class="header-section has-img">
@@ -241,12 +240,8 @@ autocomplete('#aa-search-input',
                   
                   
                     <span class="post-meta">
-  
-    发表于 May 13, 2020
-  
-  
+  发表于 May 13, 2020  
 </span>
-
 
                   
               </div>
@@ -268,12 +263,8 @@ autocomplete('#aa-search-input',
                 
                 
                   <span class="post-meta">
-  
-    发表于 May 13, 2020
-  
-  
+  发表于 May 13, 2020  
 </span>
-
 
                 
             </div>
@@ -328,47 +319,28 @@ autocomplete('#aa-search-input',
           
 
           <p><a href="https://okteto.com/">Okteto</a> 是一个通过在 Kubernetes 中来开发和测试代码的应用程序开发工具。可以通过 <code>Okteto</code> 在 Kubernetes 中一键为我们启动一个开发环境，非常简单方便。前面我们也介绍过 Google 推出的 <a href="https://www.qikqiak.com/post/skaffold-simple-local-develop-k8s-app-tools/">Skaffold</a> 工具，今天我们演示下如何使用 <code>Okteto</code> 来搭建 Python 应用开发环境。</p>
-
 <h2 id="安装">安装</h2>
-
 <p>我们只需要在本地开发机上面安装 <a href="https://okteto.com/docs/getting-started/installation">Okteto CLI</a> 工具即可，要想使用 Okteto 来配置环境就需要我们本地机上可以访问一个 Kubernetes 集群，所以前提是需要配置一个可访问的 Kubernetes 集群的 kubeconfig 文件，如果你没有 Kubernetes 集群的话，可以使用 <a href="https://okteto.com/">OKteto Cloud</a> 提供的环境，对于个人用户来说免费的额度基本上够用了。<code>Okteto CLI</code> 就是一个二进制文件，所以安装非常简单。</p>
-
 <p>对于 MacOS 或者 Linux 系统执行执行如下命令即可：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ curl https://get.okteto.com -sSfL | SH</code></pre></div>
-<p>对于 Windows 用户直接下载 <a href="https://downloads.okteto.com/cli/okteto.exe">https://downloads.okteto.com/cli/okteto.exe</a> 并将其添加到您的 <code>$PATH</code> 路径中即可。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ curl https://get.okteto.com -sSfL | SH
+</span></span></code></pre></div><p>对于 Windows 用户直接下载 <a href="https://downloads.okteto.com/cli/okteto.exe">https://downloads.okteto.com/cli/okteto.exe</a> 并将其添加到您的 <code>$PATH</code> 路径中即可。</p>
 <p>配置完成后在终端中执行如下命令，正常就安装完成了：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ okteto version
-okteto version <span style="color:#bd93f9">1</span>.8.8</code></pre></div>
-<h2 id="项目配置">项目配置</h2>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ okteto version
+</span></span><span style="display:flex;"><span>okteto version 1.8.8
+</span></span></code></pre></div><h2 id="项目配置">项目配置</h2>
 <p>打开 PyCharm IDE，为我们的应用环境一个新的项目，选择 <code>Pure Python</code> 模板，命名为 <code>guestbook</code>。</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200513102624.png" alt="new python project"><figcaption>new python project</figcaption></figure>
-
-<p><a href="https://okteto.com/docs/reference/development-environment">远程开发环境</a> 其实就是一个运行在远程的一个 Docker 容器，其中包含构建和开发应用程序的一些环境依赖而已。<code>Okteto</code> 会在项目中读取 <code>okteto.yml</code> 文件来定义应用程序的开发环境。
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-5376999672787220"
-     data-ad-slot="9165834656"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-
-比如我们这里在 <code>guestbook</code> 项目根目录下面创建一个名为 <code>okteto.yml</code> 的文件，文件内容如下所示：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">name: guestbook
-image: okteto/python:<span style="color:#bd93f9">3</span>
-forward:
-  - <span style="color:#bd93f9">8080</span>:<span style="color:#bd93f9">8080</span>
-remote: <span style="color:#bd93f9">2222</span>
-command:
-- bash</code></pre></div>
-<p>该文件定义了 <code>Okteto</code> 的操作：</p>
-
+<p><img src="https://picdn.youdianzhishi.com/images/20200513102624.png" alt="new python project"></p>
+<p><a href="https://okteto.com/docs/reference/development-environment">远程开发环境</a> 其实就是一个运行在远程的一个 Docker 容器，其中包含构建和开发应用程序的一些环境依赖而已。<code>Okteto</code> 会在项目中读取 <code>okteto.yml</code> 文件来定义应用程序的开发环境。</p>
+<!-- raw HTML omitted -->
+<p>比如我们这里在 <code>guestbook</code> 项目根目录下面创建一个名为 <code>okteto.yml</code> 的文件，文件内容如下所示：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">name</span>: guestbook
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">image</span>: okteto/python:3
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">forward</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#bd93f9">8080</span>:<span style="color:#bd93f9">8080</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">remote</span>: <span style="color:#bd93f9">2222</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">command</span>:
+</span></span><span style="display:flex;"><span>  - bash
+</span></span></code></pre></div><p>该文件定义了 <code>Okteto</code> 的操作：</p>
 <ul>
 <li>创建一个名为 <code>guestbook</code> 的开发环境</li>
 <li>使用 <code>okteto/python:3</code> 这个镜像</li>
@@ -376,13 +348,10 @@ command:
 <li>将端口 8080 转发到远程环境</li>
 <li><code>bash</code> 命令在启动的时候运行，所以我们可以获得一个远程终端</li>
 </ul>
-
 <blockquote>
 <p>关于 <code>okteto.yml</code> 配置清单更多的使用可以查看文档 <a href="https://okteto.com/docs/reference/manifest">https://okteto.com/docs/reference/manifest</a> 了解更多。</p>
 </blockquote>
-
 <p>现在我们来部署开发环境，在 PyCharm 中直接打开本地终端，然后直接执行 <code>okteto up</code> 命令，第一次启动的时候会让我们确认是否创建它，输入 <code>y</code> 确认即可。该命令会自动执行环境配置任务：</p>
-
 <ul>
 <li>将 <code>okteto.yml</code> 描述的开发环境部署到 Kubernetes 集群中</li>
 <li>将端口 8080 转发到远程环境中</li>
@@ -390,81 +359,69 @@ command:
 <li>启动<a href="https://okteto.com/docs/reference/file-synchronization/index.html">文件同步服务</a>，这样可以让我们本地的文件系统和开发环境的 Pod 之间保持同步更新</li>
 <li>在远程开发环境中启动一个远程的 Shell，现在我们就可以像在本地计算机上一个构建、测试和运行应用程序了。</li>
 </ul>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200513104206.png" alt="okteto up"><figcaption>okteto up</figcaption></figure>
-
+<p><img src="https://picdn.youdianzhishi.com/images/20200513104206.png" alt="okteto up"></p>
 <p>配置环境的过程其实就是在 Kubernetes 集群中启动一个 Pod 来提供开发环境，我们可以在 Kubernetes 中查看这个新启动的 Pod：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl get pod -l <span style="color:#8be9fd;font-style:italic">app</span><span style="color:#ff79c6">=</span>guestbook
-NAME                         READY   STATUS    RESTARTS   AGE
-guestbook-8494ccd87b-q459j   <span style="color:#bd93f9">1</span>/1     Running   <span style="color:#bd93f9">0</span>          12m</code></pre></div>
-<p>默认情况下，PyCharm 会使用本地的 Python 解释器，我们这里的环境是远程的，所以需要将其配置为使用远程的开发环境作为解释器，这样可以确保我们的开发环境和本地没有任何关联。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl get pod -l <span style="color:#8be9fd;font-style:italic">app</span><span style="color:#ff79c6">=</span>guestbook
+</span></span><span style="display:flex;"><span>NAME                         READY   STATUS    RESTARTS   AGE
+</span></span><span style="display:flex;"><span>guestbook-8494ccd87b-q459j   1/1     Running   <span style="color:#bd93f9">0</span>          12m
+</span></span></code></pre></div><p>默认情况下，PyCharm 会使用本地的 Python 解释器，我们这里的环境是远程的，所以需要将其配置为使用远程的开发环境作为解释器，这样可以确保我们的开发环境和本地没有任何关联。</p>
 <p>在 PyCharm 最下方的状态栏的右下方选择 <code>Python Interpreters</code>，然后点击 <code>Add Interpreter...</code> 菜单来添加一个新的解释器：
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200513104458.png" alt="Add Interpreter" /></p>
-
+<img src="https://picdn.youdianzhishi.com/images/20200513104458.png" alt="Add Interpreter"></p>
 <p>然后选择左侧的 <code>SSH Interpreter</code>：</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200513104553.png" alt="SSH Interpreter"><figcaption>SSH Interpreter</figcaption></figure>
-
+<p><img src="https://picdn.youdianzhishi.com/images/20200513104553.png" alt="SSH Interpreter"></p>
 <p>选择 <code>New server configuration</code> 新建一个配置，配置内容如下图所示：</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200513105647.png" alt="New server configuration"><figcaption>New server configuration</figcaption></figure>
-
+<p><img src="https://picdn.youdianzhishi.com/images/20200513105647.png" alt="New server configuration"></p>
 <p>点击 <code>NEXT</code> 进入认证配置页面，选择使用 <code>Key pair</code>，输入 <code>Private key file</code> 文件的路径 <code>/Users/ych/.okteto/id_rsa_okteto</code>，这里将 <code>/Users/ych</code> 替换成自己的 <code>$HOME</code> 目录路径即可：</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200513105722.png" alt="Key pair"><figcaption>Key pair</figcaption></figure>
-
+<p><img src="https://picdn.youdianzhishi.com/images/20200513105722.png" alt="Key pair"></p>
 <p><code>okteto up</code> 命令第一次运行的时候，会为我们创建一个 SSH 密钥对，并将其保存在 <code>$HOME/.okteto/id_rsa_okteto</code> 和 <code>$HOME/.okteto/id_rsa_okteto.pub</code> 文件中，在开发环境中启动的 SSH 服务中会自动使用这些密钥进行身份验证。</p>
-
 <p>SSH 配置完成后，我们可以更新下解释器的路径，需要注意的是现在的路径是远程开发环境的路径，这里我们替换成 <code>/usr/local/bin/python</code>，文件夹映射设置为 <code>&lt;Project root&gt; -&gt; /okteto</code>，并禁用文件上传，因为 <code>Okteto</code> 会自动帮我们同步的。</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200513105954.png" alt="SSH Config"><figcaption>SSH Config</figcaption></figure>
-
+<p><img src="https://picdn.youdianzhishi.com/images/20200513105954.png" alt="SSH Config"></p>
 <p>点击 <code>FINISH</code> 按钮就配置完成了。现在我们的项目就会直接使用远程开发环境中的 Python 解释器了，而不是本地的。</p>
-
 <h2 id="测试">测试</h2>
-
 <p>在项目中新建一个名为 <code>app.py</code> 的文件来测试下应用，文件内容如下所示：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-py" data-lang="py"><span style="color:#ff79c6">from</span> flask <span style="color:#ff79c6">import</span> Flask, jsonify
-
-app <span style="color:#ff79c6">=</span> Flask(__name__)
-
-@app.route(<span style="color:#f1fa8c">&#34;/&#34;</span>, methods<span style="color:#ff79c6">=</span>[<span style="color:#f1fa8c">&#34;GET&#34;</span>])
-<span style="color:#ff79c6">def</span> <span style="color:#50fa7b">get_messages</span>():
-    <span style="color:#ff79c6">return</span> jsonify(message<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;Hello okteto&#34;</span>)
-
-<span style="color:#ff79c6">if</span> __name__ <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;__main__&#39;</span>:
-    app<span style="color:#ff79c6">.</span>run(host<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;0.0.0.0&#39;</span>, port<span style="color:#ff79c6">=</span><span style="color:#bd93f9">8080</span>, debug<span style="color:#ff79c6">=</span>True)</code></pre></div>
-<p>用 <code>Flask</code> 启动一个简单的 Web Server。现在还需要安装环境依赖，在控制台（注意带有 <code>okteto &gt;</code> 提示的）中执行如下命令：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">default:guestbook okteto&gt; pip install flask</code></pre></div>
-<p>安装完成后，同样我们可以将依赖添加到 <code>requirements.txt</code> 文件中：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">default:guestbook okteto&gt; pip freeze &gt; requirements.txt</code></pre></div>
-<p>其实上面我们的操作是在远程的 Pod 中执行的，但是由于 <code>Okteto</code> 会自动同步文件，所以很快我们也会在本地项目中看到 <code>requirements.txt</code> 这个文件。同样现在我们可以在控制台中执行 <code>python app.py</code> 命令来启动服务器：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">default:guestbook okteto&gt; python app.py
- * Serving Flask app <span style="color:#f1fa8c">&#34;app&#34;</span> <span style="color:#ff79c6">(</span>lazy loading<span style="color:#ff79c6">)</span>
- * Environment: production
-   WARNING: This is a development server. Do not use it in a production deployment.
-   Use a production WSGI server instead.
- * Debug mode: on
- * Running on http://0.0.0.0:8080/ <span style="color:#ff79c6">(</span>Press CTRL+C to quit<span style="color:#ff79c6">)</span>
- * Restarting with stat
- * Debugger is active!
- * Debugger PIN: <span style="color:#bd93f9">599</span>-491-525</code></pre></div>
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200513111653.png" alt="test flask codeb"><figcaption>test flask codeb</figcaption></figure>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-py" data-lang="py"><span style="display:flex;"><span><span style="color:#ff79c6">from</span> flask <span style="color:#ff79c6">import</span> Flask, jsonify
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>app <span style="color:#ff79c6">=</span> Flask(__name__)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>@app.route(<span style="color:#f1fa8c">&#34;/&#34;</span>, methods<span style="color:#ff79c6">=</span>[<span style="color:#f1fa8c">&#34;GET&#34;</span>])
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">def</span> <span style="color:#50fa7b">get_messages</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">return</span> jsonify(message<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;Hello okteto&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">if</span> __name__ <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#39;__main__&#39;</span>:
+</span></span><span style="display:flex;"><span>    app<span style="color:#ff79c6">.</span>run(host<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;0.0.0.0&#39;</span>, port<span style="color:#ff79c6">=</span><span style="color:#bd93f9">8080</span>, debug<span style="color:#ff79c6">=</span><span style="color:#ff79c6">True</span>)
+</span></span></code></pre></div><p>用 <code>Flask</code> 启动一个简单的 Web Server。现在还需要安装环境依赖，在控制台（注意带有 <code>okteto &gt;</code> 提示的）中执行如下命令：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>default:guestbook okteto&gt; pip install flask
+</span></span></code></pre></div><p>安装完成后，同样我们可以将依赖添加到 <code>requirements.txt</code> 文件中：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>default:guestbook okteto&gt; pip freeze &gt; requirements.txt
+</span></span></code></pre></div><p>其实上面我们的操作是在远程的 Pod 中执行的，但是由于 <code>Okteto</code> 会自动同步文件，所以很快我们也会在本地项目中看到 <code>requirements.txt</code> 这个文件。同样现在我们可以在控制台中执行 <code>python app.py</code> 命令来启动服务器：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>default:guestbook okteto&gt; python app.py
+</span></span><span style="display:flex;"><span> * Serving Flask app <span style="color:#f1fa8c">&#34;app&#34;</span> <span style="color:#ff79c6">(</span>lazy loading<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span> * Environment: production
+</span></span><span style="display:flex;"><span>   WARNING: This is a development server. Do not use it in a production deployment.
+</span></span><span style="display:flex;"><span>   Use a production WSGI server instead.
+</span></span><span style="display:flex;"><span> * Debug mode: on
+</span></span><span style="display:flex;"><span> * Running on http://0.0.0.0:8080/ <span style="color:#ff79c6">(</span>Press CTRL+C to quit<span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span> * Restarting with stat
+</span></span><span style="display:flex;"><span> * Debugger is active!
+</span></span><span style="display:flex;"><span> * Debugger PIN: 599-491-525
+</span></span></code></pre></div><p><img src="https://picdn.youdianzhishi.com/images/20200513111653.png" alt="test flask codeb"></p>
 <p>启动完成后，我们的应用程序就在远程的开发环境中启动并运行起来了，由于我们在 <code>okteto.yml</code> 文件中配置了将本地的 8080 端口转发到远程的 8080 端口，所以我们也可以通过本地的 8080 端口进行访问了，而且每次代码的改动， <code>Flask</code> 都会自动重新加载我们的应用程序：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ curl http://0.0.0.0:8080
-<span style="color:#ff79c6">{</span>
-  <span style="color:#f1fa8c">&#34;message&#34;</span>: <span style="color:#f1fa8c">&#34;Hello okteto&#34;</span>
-<span style="color:#ff79c6">}</span></code></pre></div>
-<p>到这里我们就完成了为 Python 应用程序配置远程开发环境的功能。</p>
-
-<p><a href="https://youdianzhishi.com/web/course/1030" title="从 Docker 到 Kubernetes 进阶课程"><img src="https://sdn.youdianzhishi.com/images/2019/10/24/65f2cfb229184268a18745fe202b281b.jpg?imageView2/2/format/webp" alt="Kubernetes进阶训练营"></a></p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ curl http://0.0.0.0:8080
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f1fa8c">&#34;message&#34;</span>: <span style="color:#f1fa8c">&#34;Hello okteto&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>到这里我们就完成了为 Python 应用程序配置远程开发环境的功能。</p>
+<!-- raw HTML omitted -->
 
           <h2>微信公众号</h2>
-<p>扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的 kubernetes 讨论群里面共同学习。</p>
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/qrcode.png" alt="wechat-account-qrcode">
+<p>
+  扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的
+  kubernetes 讨论群里面共同学习。
+</p>
+<img
+  src="https://picdn.youdianzhishi.com/images/qrcode.png"
+  alt="wechat-account-qrcode"
+/>
 
   
           
@@ -665,7 +622,7 @@ app <span style="color:#ff79c6">=</span> Flask(__name__)
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -677,7 +634,7 @@ app <span style="color:#ff79c6">=</span> Flask(__name__)
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -694,7 +651,7 @@ app <span style="color:#ff79c6">=</span> Flask(__name__)
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -703,7 +660,7 @@ app <span style="color:#ff79c6">=</span> Flask(__name__)
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

@@ -11,25 +11,21 @@
   <meta name="twitter:title" content="在 Kubernetes 上部署 Spinnaker" />
 
   <meta name="description" content="
-
 Spinnaker 是一种持续交付平台，最初由 Netflix 开发，用于快速、可靠地发布软件变更。Spinnaker 使开发人员可以更轻松地专注于编写代码，而无需担心底层的云基础设施，它可以和 Jenkins 以及其他流行的构建工具无缝集成。很早就想要体验下 Spinnaker 了，但是由于 GFW 的原因尝试了很多次都无功而返，这次解决了代理的问题终于顺利的在 Kubernetes 集群上成功部署上了 Spinnaker。">
   <meta property="og:description" content="
-
 Spinnaker 是一种持续交付平台，最初由 Netflix 开发，用于快速、可靠地发布软件变更。Spinnaker 使开发人员可以更轻松地专注于编写代码，而无需担心底层的云基础设施，它可以和 Jenkins 以及其他流行的构建工具无缝集成。很早就想要体验下 Spinnaker 了，但是由于 GFW 的原因尝试了很多次都无功而返，这次解决了代理的问题终于顺利的在 Kubernetes 集群上成功部署上了 Spinnaker。">
   <meta name="twitter:description" content="
-
-Spinnaker 是一种持续交付平台，最初由 Netflix 开发，用于快速、可靠地发布软件变更。Spinnaker 使开发人员可以更轻松地专注于编写代码，而无需担心底层的云基础设施，它可以和 Jenkins 以及其他流行的构建工具无缝集成。很早就想要体验下 Spinnaker 了，但是由于 GFW 的原因尝试了很多次都无功而返，这次解决了代理的问题终于顺利的在 Kubernetes 集群上 …">
+Spinnaker 是一种持续交付平台，最初由 Netflix 开发，用于快速、可靠地发布软件变更。Spinnaker 使开发人员可以更轻松地专注于编写代码，而无需担心底层的云基础设施，它可以和 Jenkins 以及其他流行的构建工具无缝集成。很早就想要体验下 Spinnaker 了，但是由于 GFW 的原因尝试了很多次都无功而返，这次解决了代理的问题终于顺利的在 Kubernetes 集群上成 …">
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/post/deploy-spinnaker-on-k8s/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/post/deploy-spinnaker-on-k8s/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -38,7 +34,7 @@ Spinnaker 是一种持续交付平台，最初由 Netflix 开发，用于快速�
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -89,7 +85,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -247,12 +243,8 @@ autocomplete('#aa-search-input',
                 
                 
                   <span class="post-meta">
-  
-    发表于 February 18, 2020
-  
-  
+  发表于 February 18, 2020  
 </span>
-
 
                 
             </div>
@@ -306,193 +298,180 @@ autocomplete('#aa-search-input',
           
           
 
-          <p><a href="https://www.qikqiak.com/post/deploy-spinnaker-on-k8s/"><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/spinnaker-on-k8s.png" alt="在 Kubernetes 上部署 Spinnaker" /></a></p>
-
+          <p><a href="https://www.qikqiak.com/post/deploy-spinnaker-on-k8s/"><img src="https://picdn.youdianzhishi.com/images/spinnaker-on-k8s.png" alt="在 Kubernetes 上部署 Spinnaker"></a></p>
 <p><a href="https://www.spinnaker.io/">Spinnaker</a> 是一种持续交付平台，最初由 Netflix 开发，用于快速、可靠地发布软件变更。Spinnaker 使开发人员可以更轻松地专注于编写代码，而无需担心底层的云基础设施，它可以和 Jenkins 以及其他流行的构建工具无缝集成。很早就想要体验下 Spinnaker 了，但是由于 GFW 的原因尝试了很多次都无功而返，这次解决了代理的问题终于顺利的在 Kubernetes 集群上成功部署上了 Spinnaker。</p>
-
 <p>本文将使用 helm3 来为大家演示在 Kubernetes 集群上安装 Spinnaker，对应的环境版本如下所示：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ helm version
-version.BuildInfo<span style="color:#ff79c6">{</span>Version:<span style="color:#f1fa8c">&#34;v3.0.1&#34;</span>, GitCommit:<span style="color:#f1fa8c">&#34;7c22ef9ce89e0ebeb7125ba2ebf7d421f3e82ffa&#34;</span>, GitTreeState:<span style="color:#f1fa8c">&#34;clean&#34;</span>, GoVersion:<span style="color:#f1fa8c">&#34;go1.13.4&#34;</span><span style="color:#ff79c6">}</span>
-$ kubectl version                          
-Client Version: version.Info<span style="color:#ff79c6">{</span>Major:<span style="color:#f1fa8c">&#34;1&#34;</span>, Minor:<span style="color:#f1fa8c">&#34;14&#34;</span>, GitVersion:<span style="color:#f1fa8c">&#34;v1.14.2&#34;</span>, GitCommit:<span style="color:#f1fa8c">&#34;66049e3b21efe110454d67df4fa62b08ea79a19b&#34;</span>, GitTreeState:<span style="color:#f1fa8c">&#34;clean&#34;</span>, BuildDate:<span style="color:#f1fa8c">&#34;2019-05-16T18:55:03Z&#34;</span>, GoVersion:<span style="color:#f1fa8c">&#34;go1.12.5&#34;</span>, Compiler:<span style="color:#f1fa8c">&#34;gc&#34;</span>, Platform:<span style="color:#f1fa8c">&#34;darwin/amd64&#34;</span><span style="color:#ff79c6">}</span>
-Server Version: version.Info<span style="color:#ff79c6">{</span>Major:<span style="color:#f1fa8c">&#34;1&#34;</span>, Minor:<span style="color:#f1fa8c">&#34;16&#34;</span>, GitVersion:<span style="color:#f1fa8c">&#34;v1.16.2&#34;</span>, GitCommit:<span style="color:#f1fa8c">&#34;c97fe5036ef3df2967d086711e6c0c405941e14b&#34;</span>, GitTreeState:<span style="color:#f1fa8c">&#34;clean&#34;</span>, BuildDate:<span style="color:#f1fa8c">&#34;2019-10-15T19:09:08Z&#34;</span>, GoVersion:<span style="color:#f1fa8c">&#34;go1.12.10&#34;</span>, Compiler:<span style="color:#f1fa8c">&#34;gc&#34;</span>, Platform:<span style="color:#f1fa8c">&#34;linux/amd64&#34;</span><span style="color:#ff79c6">}</span></code></pre></div>
-<p>对于 Helm3 的安装配置其实很简单，只需要在 kubectl 所在节点上面安装上 Helm3 客户端即可，默认就会读取 kubeconfig 文件来访问集群。我们这里使用微软提供的 helm chart 仓库源：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$  helm repo ls
-NAME            URL                                      
-stable          http://mirror.azure.cn/kubernetes/charts/
-$ helm repo update
-Hang tight <span style="color:#ff79c6">while</span> we grab the latest from your chart repositories...
-...Successfully got an update from the <span style="color:#f1fa8c">&#34;stable&#34;</span> chart repository
-Update Complete. ⎈ Happy Helming!⎈ </code></pre></div>
-<p>由于我们这里使用的是 Kubernetes 1.16.x 版本，该版本之后将之前很多资源对象的一些旧的 API 废弃掉了，比如 Deployment 只能使用 <code>apps/v1</code> 这个版本了，而我们这里要使用的 Spinnaker 对应的 chart 包目前还是使用的以前的 API 版本，所以我们需要手动下载下来做一次更改：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ helm fetch stable/spinnaker
-$ tar -xvf spinnaker-1.23.2.tgz</code></pre></div>
-<p>然后将 spinnaker chart 模板中的 Deployment、StatefulSet 这些资源对象的 apiVersion 更改成 <code>apps/v1</code>，也需要记住如果是 Deployment 还需要添加上 <code>selector.matchLabels</code> 字段，大家可以直接使用我更改后的 chart 模板 <a href="https://github.com/cnych/spinnaker-helm">https://github.com/cnych/spinnaker-helm</a>。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ helm version
+</span></span><span style="display:flex;"><span>version.BuildInfo<span style="color:#ff79c6">{</span>Version:<span style="color:#f1fa8c">&#34;v3.0.1&#34;</span>, GitCommit:<span style="color:#f1fa8c">&#34;7c22ef9ce89e0ebeb7125ba2ebf7d421f3e82ffa&#34;</span>, GitTreeState:<span style="color:#f1fa8c">&#34;clean&#34;</span>, GoVersion:<span style="color:#f1fa8c">&#34;go1.13.4&#34;</span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>$ kubectl version
+</span></span><span style="display:flex;"><span>Client Version: version.Info<span style="color:#ff79c6">{</span>Major:<span style="color:#f1fa8c">&#34;1&#34;</span>, Minor:<span style="color:#f1fa8c">&#34;14&#34;</span>, GitVersion:<span style="color:#f1fa8c">&#34;v1.14.2&#34;</span>, GitCommit:<span style="color:#f1fa8c">&#34;66049e3b21efe110454d67df4fa62b08ea79a19b&#34;</span>, GitTreeState:<span style="color:#f1fa8c">&#34;clean&#34;</span>, BuildDate:<span style="color:#f1fa8c">&#34;2019-05-16T18:55:03Z&#34;</span>, GoVersion:<span style="color:#f1fa8c">&#34;go1.12.5&#34;</span>, Compiler:<span style="color:#f1fa8c">&#34;gc&#34;</span>, Platform:<span style="color:#f1fa8c">&#34;darwin/amd64&#34;</span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>Server Version: version.Info<span style="color:#ff79c6">{</span>Major:<span style="color:#f1fa8c">&#34;1&#34;</span>, Minor:<span style="color:#f1fa8c">&#34;16&#34;</span>, GitVersion:<span style="color:#f1fa8c">&#34;v1.16.2&#34;</span>, GitCommit:<span style="color:#f1fa8c">&#34;c97fe5036ef3df2967d086711e6c0c405941e14b&#34;</span>, GitTreeState:<span style="color:#f1fa8c">&#34;clean&#34;</span>, BuildDate:<span style="color:#f1fa8c">&#34;2019-10-15T19:09:08Z&#34;</span>, GoVersion:<span style="color:#f1fa8c">&#34;go1.12.10&#34;</span>, Compiler:<span style="color:#f1fa8c">&#34;gc&#34;</span>, Platform:<span style="color:#f1fa8c">&#34;linux/amd64&#34;</span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>对于 Helm3 的安装配置其实很简单，只需要在 kubectl 所在节点上面安装上 Helm3 客户端即可，默认就会读取 kubeconfig 文件来访问集群。我们这里使用微软提供的 helm chart 仓库源：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$  helm repo ls
+</span></span><span style="display:flex;"><span>NAME            URL
+</span></span><span style="display:flex;"><span>stable          http://mirror.azure.cn/kubernetes/charts/
+</span></span><span style="display:flex;"><span>$ helm repo update
+</span></span><span style="display:flex;"><span>Hang tight <span style="color:#ff79c6">while</span> we grab the latest from your chart repositories...
+</span></span><span style="display:flex;"><span>...Successfully got an update from the <span style="color:#f1fa8c">&#34;stable&#34;</span> chart repository
+</span></span><span style="display:flex;"><span>Update Complete. ⎈ Happy Helming!⎈
+</span></span></code></pre></div><p>由于我们这里使用的是 Kubernetes 1.16.x 版本，该版本之后将之前很多资源对象的一些旧的 API 废弃掉了，比如 Deployment 只能使用 <code>apps/v1</code> 这个版本了，而我们这里要使用的 Spinnaker 对应的 chart 包目前还是使用的以前的 API 版本，所以我们需要手动下载下来做一次更改：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ helm fetch stable/spinnaker
+</span></span><span style="display:flex;"><span>$ tar -xvf spinnaker-1.23.2.tgz
+</span></span></code></pre></div><p>然后将 spinnaker chart 模板中的 Deployment、StatefulSet 这些资源对象的 apiVersion 更改成 <code>apps/v1</code>，也需要记住如果是 Deployment 还需要添加上 <code>selector.matchLabels</code> 字段，大家可以直接使用我更改后的 chart 模板 <a href="https://github.com/cnych/spinnaker-helm">https://github.com/cnych/spinnaker-helm</a>。</p>
 <p>在 chart 模板的 <code>values.yaml</code> 文件中指定了 <code>halyard.spinnakerVersion=1.17.6</code>，这还是因为 apiVersion 版本的问题，该版本以上就可以兼容 Kubernetes v1.16.x 的集群，另外将默认的 <code>gcr.io</code> 的镜像替换成了微软的镜像源 <code>gcr.azk8s.cn</code>，此外还有一个非常重要的就是存储的指定，这里我们创建了一个 <code>StorageClass</code> 的资源对象来提供存储，我这里是创建的一个 <code>Ceph RBD</code> 类型的存储 <code>rook-ceph-block</code>，当然任何可用的 <code>StorageClass</code> 资源对象都是可以的：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-   name: rook-ceph-block
-provisioner: rook-ceph.rbd.csi.ceph.com
-reclaimPolicy: Retain
-parameters:
-    <span style="color:#6272a4"># clusterID 是 rook 集群运行的命名空间</span>
-    clusterID: rook-ceph
-
-    <span style="color:#6272a4"># 指定存储池</span>
-    pool: k8s-test-pool
-
-    <span style="color:#6272a4"># RBD image (实际的存储介质) 格式. 默认为 &#34;2&#34;.</span>
-    imageFormat: <span style="color:#f1fa8c">&#34;2&#34;</span>
-
-    <span style="color:#6272a4"># RBD image 特性. CSI RBD 现在只支持 `layering` .</span>
-    imageFeatures: layering
-
-    <span style="color:#6272a4"># Ceph 管理员认证信息，这些都是在 clusterID 命名空间下面自动生成的</span>
-    csi.storage.k8s.io/provisioner-secret-name: rook-csi-rbd-provisioner
-    csi.storage.k8s.io/provisioner-secret-namespace: rook-ceph
-    csi.storage.k8s.io/node-stage-secret-name: rook-csi-rbd-node
-    csi.storage.k8s.io/node-stage-secret-namespace: rook-ceph
-    <span style="color:#6272a4"># 指定 volume 的文件系统格式，如果不指定, csi-provisioner 会默认设置为 `ext4`</span>
-    csi.storage.k8s.io/fstype: ext4</code></pre></div>
-<p>需要为 halyard、redis、mino 都指定对应的存储，当然直接指定一个合适的 PVC 也是可以的，这里可以根据实际情况决定：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">halyard:
-  ...
-  persistence:
-    storageClass: rook-ceph-block
-...
-redis:
-  ...
-  master:
-    persistence:
-      storageClass: rook-ceph-block
-...
-minio:
-  ...
-  persistence:
-    storageClass: rook-ceph-block
-...</code></pre></div>
-<p>接下来<strong>最重要的一步就是必须要为 halyard 配置代理</strong>，所以继续下去的前提是你需要配置一个在 Kubernetes 的 Pod 中可以访问的代理，比如我这里的代理地址为 <code>10.151.30.11:8118</code>，则需要配置如下所示的 <code>JAVA_OPTS</code> 这个环境变量：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">halyard:
-  env:
-    - name: JAVA_OPTS
-      value: <span style="color:#f1fa8c">&#39;&#34;-Djava.security.egd=file:/dev/./urandom&#34; &#34;-Dhttp.proxyHost=10.151.30.11&#34; &#34;-Dhttps.proxyHost=10.151.30.11&#34; &#34;-Dhttp.proxyPort=8118&#34; &#34;-Dhttps.proxyPort=8118&#34; &#34;-Dhttp.nonProxyHosts=\&#34;localhost|*.spinnaker.com\&#34;&#34;&#39;</span></code></pre></div>
-<p>获取上面我修改过后的 Spinnaker 的 Chart 模板，将 <code>values.yaml</code> 文件中上面对应的配置替换成自己对应的配置即可。</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ git clone https://github.com/cnych/spinnaker-helm spinnaker
-$ kubectl create ns spinnaker
-<span style="color:#6272a4"># 安装 spinnaker</span>
-$ helm install spinnaker --namespace spinnaker ./spinnaker</code></pre></div>
-<p>由于安装过程非常耗时，可能上面的 <code>helm install</code> 的过程可能会有超时提示，这个可以忽略：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ helm ls -n spinnaker
-NAME            NAMESPACE       REVISION        UPDATED                                 STATUS  CHART            APP VERSION
-spinnaker       spinnaker       <span style="color:#bd93f9">1</span>               <span style="color:#bd93f9">2020</span>-02-17 <span style="color:#bd93f9">19</span>:28:02.644552 +0800 CST    failed  spinnaker-1.23.2 <span style="color:#bd93f9">1</span>.16.2 </code></pre></div>
-<p>安装完成后最开始会生成如下所示的几个 Pod，其中 <code>spinnaker-install-using-hal-th8qf</code> 就是用来去真正安装 Spinnaker 的一个 Job 任务：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl get pods -n spinnaker
-spinnaker-install-using-hal-th8qf   <span style="color:#bd93f9">0</span>/1     Completed   <span style="color:#bd93f9">0</span>          17h
-spinnaker-minio-86f5b8785-bkjfq     <span style="color:#bd93f9">1</span>/1     Running     <span style="color:#bd93f9">0</span>          17h
-spinnaker-redis-master-0            <span style="color:#bd93f9">1</span>/1     Running     <span style="color:#bd93f9">0</span>          17h
-spinnaker-spinnaker-halyard-0       <span style="color:#bd93f9">1</span>/1     Running     <span style="color:#bd93f9">0</span>          17h</code></pre></div>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-5376999672787220"
-     data-ad-slot="9165834656"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: storage.k8s.io/v1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: StorageClass
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: rook-ceph-block
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">provisioner</span>: rook-ceph.rbd.csi.ceph.com
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">reclaimPolicy</span>: Retain
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">parameters</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4"># clusterID 是 rook 集群运行的命名空间</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">clusterID</span>: rook-ceph
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4"># 指定存储池</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">pool</span>: k8s-test-pool
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4"># RBD image (实际的存储介质) 格式. 默认为 &#34;2&#34;.</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">imageFormat</span>: <span style="color:#f1fa8c">&#34;2&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4"># RBD image 特性. CSI RBD 现在只支持 `layering` .</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">imageFeatures</span>: layering
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4"># Ceph 管理员认证信息，这些都是在 clusterID 命名空间下面自动生成的</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">csi.storage.k8s.io/provisioner-secret-name</span>: rook-csi-rbd-provisioner
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">csi.storage.k8s.io/provisioner-secret-namespace</span>: rook-ceph
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">csi.storage.k8s.io/node-stage-secret-name</span>: rook-csi-rbd-node
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">csi.storage.k8s.io/node-stage-secret-namespace</span>: rook-ceph
+</span></span><span style="display:flex;"><span>  <span style="color:#6272a4"># 指定 volume 的文件系统格式，如果不指定, csi-provisioner 会默认设置为 `ext4`</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">csi.storage.k8s.io/fstype</span>: ext4
+</span></span></code></pre></div><p>需要为 halyard、redis、mino 都指定对应的存储，当然直接指定一个合适的 PVC 也是可以的，这里可以根据实际情况决定：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">halyard</span>:
+</span></span><span style="display:flex;"><span>  ...
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">persistence</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">storageClass</span>: rook-ceph-block
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">redis</span>:
+</span></span><span style="display:flex;"><span>  ...
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">master</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">persistence</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">storageClass</span>: rook-ceph-block
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">minio</span>:
+</span></span><span style="display:flex;"><span>  ...
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">persistence</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">storageClass</span>: rook-ceph-block
+</span></span><span style="display:flex;"><span>...
+</span></span></code></pre></div><p>接下来<strong>最重要的一步就是必须要为 halyard 配置代理</strong>，所以继续下去的前提是你需要配置一个在 Kubernetes 的 Pod 中可以访问的代理，比如我这里的代理地址为 <code>10.151.30.11:8118</code>，则需要配置如下所示的 <code>JAVA_OPTS</code> 这个环境变量：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">halyard</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">env</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">name</span>: JAVA_OPTS
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">value</span>: <span style="color:#f1fa8c">&#39;&#34;-Djava.security.egd=file:/dev/./urandom&#34; &#34;-Dhttp.proxyHost=10.151.30.11&#34; &#34;-Dhttps.proxyHost=10.151.30.11&#34; &#34;-Dhttp.proxyPort=8118&#34; &#34;-Dhttps.proxyPort=8118&#34; &#34;-Dhttp.nonProxyHosts=\&#34;localhost|*.spinnaker.com\&#34;&#34;&#39;</span>
+</span></span></code></pre></div><p>获取上面我修改过后的 Spinnaker 的 Chart 模板，将 <code>values.yaml</code> 文件中上面对应的配置替换成自己对应的配置即可。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ git clone https://github.com/cnych/spinnaker-helm spinnaker
+</span></span><span style="display:flex;"><span>$ kubectl create ns spinnaker
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 安装 spinnaker</span>
+</span></span><span style="display:flex;"><span>$ helm install spinnaker --namespace spinnaker ./spinnaker
+</span></span></code></pre></div><p>由于安装过程非常耗时，可能上面的 <code>helm install</code> 的过程可能会有超时提示，这个可以忽略：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ helm ls -n spinnaker
+</span></span><span style="display:flex;"><span>NAME            NAMESPACE       REVISION        UPDATED                                 STATUS  CHART            APP VERSION
+</span></span><span style="display:flex;"><span>spinnaker       spinnaker       <span style="color:#bd93f9">1</span>               2020-02-17 19:28:02.644552 +0800 CST    failed  spinnaker-1.23.2 1.16.2
+</span></span></code></pre></div><p>安装完成后最开始会生成如下所示的几个 Pod，其中 <code>spinnaker-install-using-hal-th8qf</code> 就是用来去真正安装 Spinnaker 的一个 Job 任务：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl get pods -n spinnaker
+</span></span><span style="display:flex;"><span>spinnaker-install-using-hal-th8qf   0/1     Completed   <span style="color:#bd93f9">0</span>          17h
+</span></span><span style="display:flex;"><span>spinnaker-minio-86f5b8785-bkjfq     1/1     Running     <span style="color:#bd93f9">0</span>          17h
+</span></span><span style="display:flex;"><span>spinnaker-redis-master-0            1/1     Running     <span style="color:#bd93f9">0</span>          17h
+</span></span><span style="display:flex;"><span>spinnaker-spinnaker-halyard-0       1/1     Running     <span style="color:#bd93f9">0</span>          17h
+</span></span></code></pre></div><!-- raw HTML omitted -->
 <p>不过由于在安装 Spinnaker 的过程中会使用 <code>gcr.io</code> 的镜像，所以会看到很多 Pod 镜像拉取失败的错误，这个时候我们可以手动编辑 Deployment 对象更改镜像地址：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl get deploy -n spinnaker
-NAME               READY   UP-TO-DATE   AVAILABLE   AGE
-spin-clouddriver   <span style="color:#bd93f9">0</span>/1     <span style="color:#bd93f9">1</span>            <span style="color:#bd93f9">0</span>           17h
-spin-deck          <span style="color:#bd93f9">0</span>/1     <span style="color:#bd93f9">1</span>            <span style="color:#bd93f9">0</span>           17h
-spin-echo          <span style="color:#bd93f9">0</span>/1     <span style="color:#bd93f9">1</span>            <span style="color:#bd93f9">0</span>           17h
-spin-front50       <span style="color:#bd93f9">0</span>/1     <span style="color:#bd93f9">1</span>            <span style="color:#bd93f9">0</span>           17h
-spin-gate          <span style="color:#bd93f9">0</span>/1     <span style="color:#bd93f9">1</span>            <span style="color:#bd93f9">0</span>           17h
-spin-igor          <span style="color:#bd93f9">0</span>/1     <span style="color:#bd93f9">1</span>            <span style="color:#bd93f9">0</span>           17h
-spin-orca          <span style="color:#bd93f9">0</span>/1     <span style="color:#bd93f9">1</span>            <span style="color:#bd93f9">0</span>           17h
-spin-rosco         <span style="color:#bd93f9">0</span>/1     <span style="color:#bd93f9">1</span>            <span style="color:#bd93f9">0</span>           17h
-spinnaker-minio    <span style="color:#bd93f9">1</span>/1     <span style="color:#bd93f9">1</span>            <span style="color:#bd93f9">1</span>           17h</code></pre></div>
-<p>比如修改 <code>spin-deck</code> 这个 Deployment 资源对象的镜像地址：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl edit deploy spin-deck -n spinnaker
-<span style="color:#6272a4"># 然后在打开的编辑中将 gcr.io 替换成 gcr.azk8s.cn</span></code></pre></div>
-<p>用同样的方法替换其他资源对象，正常替换过后隔一段时间就可以正常启动 Pod 了，最终的 Pod 列表如下所示：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ kubectl get pods -n spinnaker           
-NAME                                READY   STATUS      RESTARTS   AGE
-spin-clouddriver-76b8989b4f-cjw8r   <span style="color:#bd93f9">1</span>/1     Running     <span style="color:#bd93f9">0</span>          17h
-spin-deck-5fd7b64b77-fnl5r          <span style="color:#bd93f9">1</span>/1     Running     <span style="color:#bd93f9">0</span>          17h
-spin-echo-644c4cb6b6-gh98w          <span style="color:#bd93f9">1</span>/1     Running     <span style="color:#bd93f9">0</span>          17h
-spin-front50-9d99cd697-cqbxb        <span style="color:#bd93f9">1</span>/1     Running     <span style="color:#bd93f9">0</span>          17h
-spin-gate-6c49bccb6f-nhbzx          <span style="color:#bd93f9">1</span>/1     Running     <span style="color:#bd93f9">0</span>          17h
-spin-igor-7c84d9bcb-rltw7           <span style="color:#bd93f9">1</span>/1     Running     <span style="color:#bd93f9">0</span>          17h
-spin-orca-b5944685-wbm5p            <span style="color:#bd93f9">1</span>/1     Running     <span style="color:#bd93f9">0</span>          17h
-spin-rosco-6d5f9c8f55-g89hq         <span style="color:#bd93f9">1</span>/1     Running     <span style="color:#bd93f9">0</span>          17h
-spinnaker-install-using-hal-th8qf   <span style="color:#bd93f9">0</span>/1     Completed   <span style="color:#bd93f9">0</span>          17h
-spinnaker-minio-86f5b8785-bkjfq     <span style="color:#bd93f9">1</span>/1     Running     <span style="color:#bd93f9">0</span>          17h
-spinnaker-redis-master-0            <span style="color:#bd93f9">1</span>/1     Running     <span style="color:#bd93f9">0</span>          17h
-spinnaker-spinnaker-halyard-0       <span style="color:#bd93f9">1</span>/1     Running     <span style="color:#bd93f9">0</span>          17h</code></pre></div>
-<p>到这里就证明我们的 Spinnaker 已经安装成功了，这个时候如果我们想要把 Spinnaker 暴露给外部用户访问，当然可以创建一个 NodePort 类型的 Service，或者创建一个 Ingress 资源对象即可，其实上面的 chart 模板中我们就可以通过配置指定 Ingress 资源对象的参数。由于我这里使用的是 Traefik2.1 版本，所以单独创建一个 IngressRoute 资源对象来暴露服务：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: spin-deck-https
-  namespace: spinnaker
-spec:
-  entryPoints:
-  - websecure
-  routes:
-  - match: Host(`spinnaker.qikqiak.com`)
-    kind: Rule
-    services:
-    - name: spin-deck
-      port: <span style="color:#bd93f9">9000</span>
-  tls:
-    certResolver: ali
-    domains:
-    - main: <span style="color:#f1fa8c">&#34;*.qikqiak.com&#34;</span>
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: Middleware
-metadata:
-  name: redirect-https
-  namespace: spinnaker
-spec:
-  redirectScheme:
-    scheme: https
----
-apiVersion: traefik.containo.us/v1alpha1
-kind: IngressRoute
-metadata:
-  name: spin-deck-http
-  namespace: spinnaker
-spec:
-  entryPoints:
-  - web
-  routes:
-  - match: Host(`spinnaker.qikqiak.com`)
-    kind: Rule
-    services:
-    - name: spin-deck
-      port: <span style="color:#bd93f9">9000</span>
-    middlewares: 
-    - name: redirect-https</code></pre></div>
-<p>直接创建上面的资源对象即可，对 Traefik2 使用不是很熟悉的，可以查看前面的文章 <a href="https://www.qikqiak.com/post/traefik-2.1-101/">一文搞懂 Traefik2.1 的使用</a> 了解更多，然后直接对域名 <code>spinnaker.qikqiak.com</code> 做好 DNS 解析即可在浏览器中访问 Spinnaker 了：</p>
-
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200218133426.png" alt="spinnaker dashboard"><figcaption>spinnaker dashboard</figcaption></figure>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl get deploy -n spinnaker
+</span></span><span style="display:flex;"><span>NAME               READY   UP-TO-DATE   AVAILABLE   AGE
+</span></span><span style="display:flex;"><span>spin-clouddriver   0/1     <span style="color:#bd93f9">1</span>            <span style="color:#bd93f9">0</span>           17h
+</span></span><span style="display:flex;"><span>spin-deck          0/1     <span style="color:#bd93f9">1</span>            <span style="color:#bd93f9">0</span>           17h
+</span></span><span style="display:flex;"><span>spin-echo          0/1     <span style="color:#bd93f9">1</span>            <span style="color:#bd93f9">0</span>           17h
+</span></span><span style="display:flex;"><span>spin-front50       0/1     <span style="color:#bd93f9">1</span>            <span style="color:#bd93f9">0</span>           17h
+</span></span><span style="display:flex;"><span>spin-gate          0/1     <span style="color:#bd93f9">1</span>            <span style="color:#bd93f9">0</span>           17h
+</span></span><span style="display:flex;"><span>spin-igor          0/1     <span style="color:#bd93f9">1</span>            <span style="color:#bd93f9">0</span>           17h
+</span></span><span style="display:flex;"><span>spin-orca          0/1     <span style="color:#bd93f9">1</span>            <span style="color:#bd93f9">0</span>           17h
+</span></span><span style="display:flex;"><span>spin-rosco         0/1     <span style="color:#bd93f9">1</span>            <span style="color:#bd93f9">0</span>           17h
+</span></span><span style="display:flex;"><span>spinnaker-minio    1/1     <span style="color:#bd93f9">1</span>            <span style="color:#bd93f9">1</span>           17h
+</span></span></code></pre></div><p>比如修改 <code>spin-deck</code> 这个 Deployment 资源对象的镜像地址：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl edit deploy spin-deck -n spinnaker
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 然后在打开的编辑中将 gcr.io 替换成 gcr.azk8s.cn</span>
+</span></span></code></pre></div><p>用同样的方法替换其他资源对象，正常替换过后隔一段时间就可以正常启动 Pod 了，最终的 Pod 列表如下所示：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ kubectl get pods -n spinnaker
+</span></span><span style="display:flex;"><span>NAME                                READY   STATUS      RESTARTS   AGE
+</span></span><span style="display:flex;"><span>spin-clouddriver-76b8989b4f-cjw8r   1/1     Running     <span style="color:#bd93f9">0</span>          17h
+</span></span><span style="display:flex;"><span>spin-deck-5fd7b64b77-fnl5r          1/1     Running     <span style="color:#bd93f9">0</span>          17h
+</span></span><span style="display:flex;"><span>spin-echo-644c4cb6b6-gh98w          1/1     Running     <span style="color:#bd93f9">0</span>          17h
+</span></span><span style="display:flex;"><span>spin-front50-9d99cd697-cqbxb        1/1     Running     <span style="color:#bd93f9">0</span>          17h
+</span></span><span style="display:flex;"><span>spin-gate-6c49bccb6f-nhbzx          1/1     Running     <span style="color:#bd93f9">0</span>          17h
+</span></span><span style="display:flex;"><span>spin-igor-7c84d9bcb-rltw7           1/1     Running     <span style="color:#bd93f9">0</span>          17h
+</span></span><span style="display:flex;"><span>spin-orca-b5944685-wbm5p            1/1     Running     <span style="color:#bd93f9">0</span>          17h
+</span></span><span style="display:flex;"><span>spin-rosco-6d5f9c8f55-g89hq         1/1     Running     <span style="color:#bd93f9">0</span>          17h
+</span></span><span style="display:flex;"><span>spinnaker-install-using-hal-th8qf   0/1     Completed   <span style="color:#bd93f9">0</span>          17h
+</span></span><span style="display:flex;"><span>spinnaker-minio-86f5b8785-bkjfq     1/1     Running     <span style="color:#bd93f9">0</span>          17h
+</span></span><span style="display:flex;"><span>spinnaker-redis-master-0            1/1     Running     <span style="color:#bd93f9">0</span>          17h
+</span></span><span style="display:flex;"><span>spinnaker-spinnaker-halyard-0       1/1     Running     <span style="color:#bd93f9">0</span>          17h
+</span></span></code></pre></div><p>到这里就证明我们的 Spinnaker 已经安装成功了，这个时候如果我们想要把 Spinnaker 暴露给外部用户访问，当然可以创建一个 NodePort 类型的 Service，或者创建一个 Ingress 资源对象即可，其实上面的 chart 模板中我们就可以通过配置指定 Ingress 资源对象的参数。由于我这里使用的是 Traefik2.1 版本，所以单独创建一个 IngressRoute 资源对象来暴露服务：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: traefik.containo.us/v1alpha1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: IngressRoute
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: spin-deck-https
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">namespace</span>: spinnaker
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">entryPoints</span>:
+</span></span><span style="display:flex;"><span>    - websecure
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">routes</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">match</span>: Host(`spinnaker.qikqiak.com`)
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">kind</span>: Rule
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">services</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">name</span>: spin-deck
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">port</span>: <span style="color:#bd93f9">9000</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">tls</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">certResolver</span>: ali
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">domains</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ff79c6">main</span>: <span style="color:#f1fa8c">&#34;*.qikqiak.com&#34;</span>
+</span></span><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: traefik.containo.us/v1alpha1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: Middleware
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: redirect-https
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">namespace</span>: spinnaker
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">redirectScheme</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">scheme</span>: https
+</span></span><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">apiVersion</span>: traefik.containo.us/v1alpha1
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">kind</span>: IngressRoute
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">metadata</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">name</span>: spin-deck-http
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">namespace</span>: spinnaker
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">spec</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">entryPoints</span>:
+</span></span><span style="display:flex;"><span>    - web
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">routes</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">match</span>: Host(`spinnaker.qikqiak.com`)
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">kind</span>: Rule
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">services</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">name</span>: spin-deck
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">port</span>: <span style="color:#bd93f9">9000</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">middlewares</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">name</span>: redirect-https
+</span></span></code></pre></div><p>直接创建上面的资源对象即可，对 Traefik2 使用不是很熟悉的，可以查看前面的文章 <a href="https://www.qikqiak.com/post/traefik-2.1-101/">一文搞懂 Traefik2.1 的使用</a> 了解更多，然后直接对域名 <code>spinnaker.qikqiak.com</code> 做好 DNS 解析即可在浏览器中访问 Spinnaker 了：</p>
+<p><img src="https://picdn.youdianzhishi.com/images/20200218133426.png" alt="spinnaker dashboard"></p>
 <p>到这里就安装成功了，当然这只是万里长征的第一步呢，后面我们再慢慢的去了解 Spinnaker 到底有哪些值得我们关注的功能。</p>
-
-<p><a href="https://youdianzhishi.com/web/course/1030" title="从 Docker 到 Kubernetes 进阶课程"><img src="https://sdn.youdianzhishi.com/images/2019/10/24/65f2cfb229184268a18745fe202b281b.jpg?imageView2/2/format/webp" alt="Kubernetes进阶训练营"></a></p>
-
+<!-- raw HTML omitted -->
 
           <h2>微信公众号</h2>
-<p>扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的 kubernetes 讨论群里面共同学习。</p>
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/qrcode.png" alt="wechat-account-qrcode">
+<p>
+  扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的
+  kubernetes 讨论群里面共同学习。
+</p>
+<img
+  src="https://picdn.youdianzhishi.com/images/qrcode.png"
+  alt="wechat-account-qrcode"
+/>
 
   
           
@@ -693,7 +672,7 @@ spec:
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -705,7 +684,7 @@ spec:
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -722,7 +701,7 @@ spec:
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -731,7 +710,7 @@ spec:
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

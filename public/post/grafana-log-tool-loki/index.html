@@ -17,16 +17,15 @@ Loki是 Grafana Labs 团队最新的开源项目，是一个水平可扩展，�
   <meta name="twitter:description" content="
 Loki是 Grafana Labs 团队最新的开源项目，是一个水平可扩展，高可用性，多租户的日志聚合系统。它的设计非常经济高效且易于操作，因为它不会为日志内容编制索引，而是为每个日志流编制一组标签。项目受 Prometheus 启发，官方的介绍就是：Like Prometheus, but for logs.，类似于 Prometheus 的日志系统。">
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/post/grafana-log-tool-loki/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/post/grafana-log-tool-loki/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -35,7 +34,7 @@ Loki是 Grafana Labs 团队最新的开源项目，是一个水平可扩展，�
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -86,7 +85,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -244,12 +243,8 @@ autocomplete('#aa-search-input',
                 
                 
                   <span class="post-meta">
-  
-    发表于 December 14, 2018
-  
-  
+  发表于 December 14, 2018  
 </span>
-
 
                 
             </div>
@@ -305,132 +300,111 @@ autocomplete('#aa-search-input',
           
           
 
-          <p><img src="https://www.qikqiak.com/img/posts/grafana-loki-cover.png" alt="" />
+          <p><img src="https://www.qikqiak.com/img/posts/grafana-loki-cover.png" alt="">
 <code>Loki</code>是 Grafana Labs 团队最新的开源项目，是一个水平可扩展，高可用性，多租户的日志聚合系统。它的设计非常经济高效且易于操作，因为它不会为日志内容编制索引，而是为每个日志流编制一组标签。项目受 Prometheus 启发，官方的介绍就是：<code>Like Prometheus, but for logs.</code>，类似于 Prometheus 的日志系统。</p>
-
 <h2 id="介绍">介绍</h2>
-
 <p>与其他日志聚合系统相比，<code>Loki</code>具有下面的一些特性：</p>
-
 <ul>
 <li>不对日志进行全文索引。通过存储压缩非结构化日志和仅索引元数据，Loki 操作起来会更简单，更省成本。</li>
 <li>通过使用与 Prometheus 相同的标签记录流对日志进行索引和分组，这使得日志的扩展和操作效率更高。</li>
 <li>特别适合储存 Kubernetes Pod 日志; 诸如 Pod 标签之类的元数据会被自动删除和编入索引。</li>
 <li>受 Grafana 原生支持。</li>
 </ul>
-
 <p>Loki 由以下3个部分组成：</p>
-
 <ul>
 <li><code>loki</code>是主服务器，负责存储日志和处理查询。</li>
 <li><code>promtail</code>是代理，负责收集日志并将其发送给 loki 。</li>
 <li><code>Grafana</code>用于 UI 展示。</li>
 </ul>
-
 <h2 id="安装">安装</h2>
-
 <p>DockerHub 上提供了<a href="https://hub.docker.com/r/grafana/loki/">Loki</a>和<a href="https://hub.docker.com/r/grafana/promtail/">Promtail</a>的 Docker 镜像，为了方便我们这里直接使用 docker-compose 进行一键安装，其他方式可以参考<code>Loki</code>的<a href="https://github.com/grafana/loki">文档介绍</a>。</p>
-
 <p>首先直接 Clone 源代码：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ git clone https://github.com/grafana/loki.git
-<span style="color:#6272a4"># 进入 docs 目录</span>
-$ <span style="color:#8be9fd;font-style:italic">cd</span> loki/docs</code></pre></div>
-<p>在 docs 目录下面有我们运行的 yaml 文件：(docker-compose.yaml)</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">version: <span style="color:#f1fa8c">&#34;3&#34;</span>
-
-networks:
-  loki:
-
-services:
-  loki:
-    image: grafana/loki:master
-    ports:
-      - <span style="color:#f1fa8c">&#34;3100:3100&#34;</span>
-    volumes:
-      - $PWD:/etc/loki
-    command: -config.file=/etc/loki/loki-local-config.yaml
-    networks:
-      - loki
-
-  promtail:
-    image: grafana/promtail:make-images-static-26a87c9
-    volumes:
-      - $PWD:/etc/promtail
-      - /var/log:/var/log
-    command:
-      -config.file=/etc/promtail/promtail-docker-config.yaml
-    networks:
-      - loki
-
-  grafana:
-    image: grafana/grafana:master
-    ports:
-      - <span style="color:#f1fa8c">&#34;3000:3000&#34;</span>
-    environment:
-      GF_EXPLORE_ENABLED: <span style="color:#f1fa8c">&#34;true&#34;</span>
-    networks:
-      - loki</code></pre></div>
-<p>然后直接使用 docker-compose 启动即可：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ docker-compose up -d</code></pre></div>
-<p>上面的命令会去默认使用当前文件夹下面的<code>docker-compose.yaml</code>文件创建，创建完成后查看创建的容器：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ docker-compose ps
-     Name                    Command               State               Ports
------------------------------------------------------------------------------------------
-docs_grafana_1    /run.sh                          Up      <span style="color:#bd93f9">0</span>.0.0.0:3000-&gt;3000/tcp
-docs_loki_1       /bin/loki -config.file<span style="color:#ff79c6">=</span>/et ...   Up      <span style="color:#bd93f9">0</span>.0.0.0:3100-&gt;3100/tcp, <span style="color:#bd93f9">80</span>/tcp
-docs_promtail_1   /usr/bin/promtail -config. ...   Up</code></pre></div>
-<p>到这里证明已经安装成功了。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ git clone https://github.com/grafana/loki.git
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 进入 docs 目录</span>
+</span></span><span style="display:flex;"><span>$ <span style="color:#8be9fd;font-style:italic">cd</span> loki/docs
+</span></span></code></pre></div><p>在 docs 目录下面有我们运行的 yaml 文件：(docker-compose.yaml)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">version</span>: <span style="color:#f1fa8c">&#34;3&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">networks</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">loki</span>:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">services</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">loki</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">image</span>: grafana/loki:master
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">ports</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#f1fa8c">&#34;3100:3100&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">volumes</span>:
+</span></span><span style="display:flex;"><span>      - $PWD:/etc/loki
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">command</span>: -config.file=/etc/loki/loki-local-config.yaml
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">networks</span>:
+</span></span><span style="display:flex;"><span>      - loki
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">promtail</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">image</span>: grafana/promtail:make-images-static-26a87c9
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">volumes</span>:
+</span></span><span style="display:flex;"><span>      - $PWD:/etc/promtail
+</span></span><span style="display:flex;"><span>      - /var/log:/var/log
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">command</span>:
+</span></span><span style="display:flex;"><span>      -config.file=/etc/promtail/promtail-docker-config.yaml
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">networks</span>:
+</span></span><span style="display:flex;"><span>      - loki
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">grafana</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">image</span>: grafana/grafana:master
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">ports</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#f1fa8c">&#34;3000:3000&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">environment</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">GF_EXPLORE_ENABLED</span>: <span style="color:#f1fa8c">&#34;true&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">networks</span>:
+</span></span><span style="display:flex;"><span>      - loki
+</span></span></code></pre></div><p>然后直接使用 docker-compose 启动即可：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ docker-compose up -d
+</span></span></code></pre></div><p>上面的命令会去默认使用当前文件夹下面的<code>docker-compose.yaml</code>文件创建，创建完成后查看创建的容器：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ docker-compose ps
+</span></span><span style="display:flex;"><span>     Name                    Command               State               Ports
+</span></span><span style="display:flex;"><span>-----------------------------------------------------------------------------------------
+</span></span><span style="display:flex;"><span>docs_grafana_1    /run.sh                          Up      0.0.0.0:3000-&gt;3000/tcp
+</span></span><span style="display:flex;"><span>docs_loki_1       /bin/loki -config.file<span style="color:#ff79c6">=</span>/et ...   Up      0.0.0.0:3100-&gt;3100/tcp, 80/tcp
+</span></span><span style="display:flex;"><span>docs_promtail_1   /usr/bin/promtail -config. ...   Up
+</span></span></code></pre></div><p>到这里证明已经安装成功了。</p>
 <h2 id="使用">使用</h2>
-
 <p>安装完成后，访问上面节点的 3000 端口访问 grafana，默认情况下使用(admin:admin)访问 -&gt; 选择添加数据源：</p>
-
-<figure><img src="https://www.qikqiak.com/img/posts/grafana-loki-dashsource.png" alt="grafana-loki-dashsource"><figcaption>grafana-loki-dashsource</figcaption></figure>
-
+<p><img src="https://www.qikqiak.com/img/posts/grafana-loki-dashsource.png" alt="grafana-loki-dashsource"></p>
 <p>在数据源列表中选择<code>Loki</code>，配置 Loki 源地址：</p>
-
-<figure><img src="https://www.qikqiak.com/img/posts/grafana-loki-dashsource-config.png" alt="grafana-loki-dashsource-config"><figcaption>grafana-loki-dashsource-config</figcaption></figure>
-
+<p><img src="https://www.qikqiak.com/img/posts/grafana-loki-dashsource-config.png" alt="grafana-loki-dashsource-config"></p>
 <p>源地址配置<code>http://loki:3100</code>即可，保存。</p>
-
 <p>保存完成后，切换到 grafana 左侧区域的<code>Explore</code>，即可进入到<code>Loki</code>的页面：</p>
-
-<figure><img src="https://www.qikqiak.com/img/posts/grafana-loki.png" alt="grafana-loki"><figcaption>grafana-loki</figcaption></figure>
-
+<p><img src="https://www.qikqiak.com/img/posts/grafana-loki.png" alt="grafana-loki"></p>
 <p>然后我们点击<code>Log labels</code>就可以把当前系统采集的日志标签给显示出来，可以根据这些标签进行日志的过滤查询：</p>
-
-<figure><img src="https://www.qikqiak.com/img/posts/grafana-loki-log-labels.png" alt="grafana-loki-log-labels"><figcaption>grafana-loki-log-labels</figcaption></figure>
-
+<p><img src="https://www.qikqiak.com/img/posts/grafana-loki-log-labels.png" alt="grafana-loki-log-labels"></p>
 <p>比如我们这里选择<code>/var/log/messages</code>，就会把该文件下面的日志过滤展示出来，不过由于时区的问题，可能还需要设置下时间才可以看到数据：</p>
-
-<figure><img src="https://www.qikqiak.com/img/posts/grafana-loki-logs.png" alt="grafana-loki-logs"><figcaption>grafana-loki-logs</figcaption></figure>
-
+<p><img src="https://www.qikqiak.com/img/posts/grafana-loki-logs.png" alt="grafana-loki-logs"></p>
 <h2 id="选择器">选择器</h2>
-
 <p>对于查询表达式的标签部分，将其包装在花括号中<code>{}</code>，然后使用键值对的语法来选择标签，多个标签表达式用逗号分隔，比如：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#ff79c6">{</span><span style="color:#8be9fd;font-style:italic">app</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;mysql&#34;</span>,name<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;mysql-backup&#34;</span><span style="color:#ff79c6">}</span></code></pre></div>
-<p>目前支持以下标签匹配运算符：</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#ff79c6">{</span><span style="color:#8be9fd;font-style:italic">app</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;mysql&#34;</span>,name<span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;mysql-backup&#34;</span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>目前支持以下标签匹配运算符：</p>
 <ul>
 <li><code>=</code>等于</li>
 <li><code>!=</code>不相等</li>
 <li><code>=~</code>正则表达式匹配</li>
 <li><code>!~</code>不匹配正则表达式</li>
 </ul>
-
 <p>比如：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#ff79c6">{</span><span style="color:#8be9fd;font-style:italic">name</span><span style="color:#ff79c6">=</span>~<span style="color:#f1fa8c">&#34;mysql.+&#34;</span><span style="color:#ff79c6">}</span>
-<span style="color:#ff79c6">{</span>name!~<span style="color:#f1fa8c">&#34;mysql.+&#34;</span><span style="color:#ff79c6">}</span></code></pre></div>
-<p>适用于<code>Prometheus</code>标签选择器规则同样也适用于<code>Loki</code>日志流选择器。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#ff79c6">{</span><span style="color:#8be9fd;font-style:italic">name</span><span style="color:#ff79c6">=</span>~<span style="color:#f1fa8c">&#34;mysql.+&#34;</span><span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">{</span>name!~<span style="color:#f1fa8c">&#34;mysql.+&#34;</span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>适用于<code>Prometheus</code>标签选择器规则同样也适用于<code>Loki</code>日志流选择器。</p>
 <p>想要了解<code>Loki</code>的原始设计文档的可以点击查看这里的文档：<a href="https://docs.google.com/document/d/11tjK_lvp1-SVsFZjgOTr1vV3-q6vBAsZYIQ5ZeYBkyM/view"><code>Loki</code>设计文档</a></p>
-
-<p><a href="https://youdianzhishi.com/web/course/1030" title="从 Docker 到 Kubernetes 进阶课程"><img src="https://sdn.youdianzhishi.com/images/2019/10/24/65f2cfb229184268a18745fe202b281b.jpg?imageView2/2/format/webp" alt="Kubernetes进阶训练营"></a></p>
-
+<!-- raw HTML omitted -->
 
           <h2>微信公众号</h2>
-<p>扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的 kubernetes 讨论群里面共同学习。</p>
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/qrcode.png" alt="wechat-account-qrcode">
+<p>
+  扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的
+  kubernetes 讨论群里面共同学习。
+</p>
+<img
+  src="https://picdn.youdianzhishi.com/images/qrcode.png"
+  alt="wechat-account-qrcode"
+/>
 
   
           
@@ -631,7 +605,7 @@ docs_promtail_1   /usr/bin/promtail -config. ...   Up</code></pre></div>
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -643,7 +617,7 @@ docs_promtail_1   /usr/bin/promtail -config. ...   Up</code></pre></div>
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -660,7 +634,7 @@ docs_promtail_1   /usr/bin/promtail -config. ...   Up</code></pre></div>
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -669,7 +643,7 @@ docs_promtail_1   /usr/bin/promtail -config. ...   Up</code></pre></div>
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

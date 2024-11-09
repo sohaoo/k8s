@@ -14,16 +14,15 @@
   <meta property="og:description" content="在使用 Prometheus 进行监控的时候，通过 AlertManager 来进行告警，但是有很多人对报警的相关配置比较迷糊，不太清楚具体什么时候会进行告警。下面我们来简单介绍下 AlertManager 中的几个容易混淆的参数。">
   <meta name="twitter:description" content="在使用 Prometheus 进行监控的时候，通过 AlertManager 来进行告警，但是有很多人对报警的相关配置比较迷糊，不太清楚具体什么时候会进行告警。下面我们来简单介绍下 AlertManager 中的几个容易混淆的参数。">
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/post/alertmanager-when-alert/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/post/alertmanager-when-alert/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -32,7 +31,7 @@
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -83,7 +82,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -226,7 +225,7 @@ autocomplete('#aa-search-input',
 
 
   
-    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200326124211.png" data-img-desc-1="alertmanager"></div>
+    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://picdn.youdianzhishi.com/images/20200326124211.png" data-img-desc-1="alertmanager"></div>
   
 
   <header class="header-section has-img">
@@ -241,12 +240,8 @@ autocomplete('#aa-search-input',
                   
                   
                     <span class="post-meta">
-  
-    发表于 March 26, 2020
-  
-  
+  发表于 March 26, 2020  
 </span>
-
 
                   
               </div>
@@ -268,12 +263,8 @@ autocomplete('#aa-search-input',
                 
                 
                   <span class="post-meta">
-  
-    发表于 March 26, 2020
-  
-  
+  发表于 March 26, 2020  
 </span>
-
 
                 
             </div>
@@ -328,49 +319,33 @@ autocomplete('#aa-search-input',
           
 
           <p>在使用 Prometheus 进行监控的时候，通过 AlertManager 来进行告警，但是有很多人对报警的相关配置比较迷糊，不太清楚具体什么时候会进行告警。下面我们来简单介绍下 AlertManager 中的几个容易混淆的参数。</p>
-
 <p>首先在 Prometheus 中有两个全局的参数 <code>scrape_interval</code> 和 <code>evaluation_interval</code> 。其中 <code>scrape_interval</code> 参数表示的是 Prometheus 从各种 metrics 接口抓取指标数据的时间间隔，<code>evaluation_interval</code> 参数表示的是 Prometheus 对报警规则进行评估计算的时间间隔。</p>
-
 <p>当一条告警规则评估后，它的状态可能是 <code>inactive</code>、<code>pending</code> 或者 <code>firing</code> 中的一种。评估之后，状态将被发送到关联的 AlertManager 以进行潜在地开始或者停止告警通知的发送。</p>
-
 <p>然后就是 AlertManager 中配置的 <code>group_by</code> 参数起作用的地方了，为了避免连续发送类似的告警通知，可以将相关告警分到同一组中进行告警。分组机制可以将详细的告警信息合并成一个通知，在某些情况下，比如由于系统宕机导致大量的告警被同时触发，在这种情况下分组机制可以将这些被触发的告警合并为一个告警通知，避免一次性接受大量的告警通知：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">group_by: [<span style="color:#f1fa8c">&#39;alertname&#39;</span>, <span style="color:#f1fa8c">&#39;job&#39;</span>]</code></pre></div>
-<p>当一个新的报警分组被创建后，需要等待至少 <code>group_wait</code> 时间来初始化告警。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">group_by</span>: [<span style="color:#f1fa8c">&#34;alertname&#34;</span>, <span style="color:#f1fa8c">&#34;job&#34;</span>]
+</span></span></code></pre></div><p>当一个新的报警分组被创建后，需要等待至少 <code>group_wait</code> 时间来初始化告警。</p>
 <p>这样实际上就缓冲了从 Prometheus 发送到 AlertManager 的告警，将告警按相同的标签分组，而不必全都发送：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">group_by: [<span style="color:#f1fa8c">&#39;alertname&#39;</span>, <span style="color:#f1fa8c">&#39;job&#39;</span>]
-group_wait: 45s <span style="color:#6272a4"># 通常设置成0s ~ 几分钟</span></code></pre></div>
-<p>但是这可能也导致了接收到的告警通知的等待时间更长了。另外一个问题是下次对告警规则进行评估的时候，我们将再次收到相同的分组告警通知，这个时候我们可以使用 <code>group_interval</code> 参数来进行配置，当上一个告警通知发送到一个 group 后，我们在等待 <code>group_interval</code> 时长后，然后再将触发的告警以及已解决的告警发送给 receiver：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">group_by: [<span style="color:#f1fa8c">&#39;instance&#39;</span>, <span style="color:#f1fa8c">&#39;job&#39;</span>]
-group_wait: 45s
-group_interval: 10m <span style="color:#6272a4"># 通常设置成5分钟以上</span></code></pre></div>
-<p>除此之外还有一个 <code>repeat_interval</code> 参数，该参数主要是用于配置告警信息已经发送成功后，再次被触发发送的时间间隔，一般不同类型的告警业务改参数配置不太一样，对于比较重要紧急的可以将改参数设置稍微小点，对于不太紧急的可以设置稍微大点。
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-5376999672787220"
-     data-ad-slot="9165834656"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-
-上面这些都是在 Prometheus 或者 AlertManager 中配置的一些全局的参数，对于具体的告警规则还有时间可以配置，如下所示的告警规则：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">groups:
-- name: test-node-mem
-  rules:
-  - alert: NodeMemoryUsage
-    expr: (node_memory_MemTotal_bytes - (node_memory_MemFree_bytes + node_memory_Buffers_bytes + node_memory_Cached_bytes)) / node_memory_MemTotal_bytes * <span style="color:#bd93f9">100</span> &gt; <span style="color:#bd93f9">90</span>
-    for: 1m
-    labels:
-      team: node
-    annotations:
-      summary: <span style="color:#f1fa8c">&#34;{{$labels.instance}}: High Memory usage detected&#34;</span>
-        description: <span style="color:#f1fa8c">&#34;{{$labels.instance}}: Memory usage is above 90% (current value is: {{ $value }}&#34;</span></code></pre></div>
-<p>上面我们定义了一个名为 <code>test-node-mem</code> 的报警规则分组，一条报警规则主要由以下几部分组成：</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">group_by</span>: [<span style="color:#f1fa8c">&#34;alertname&#34;</span>, <span style="color:#f1fa8c">&#34;job&#34;</span>]
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">group_wait</span>: 45s <span style="color:#6272a4"># 通常设置成0s ~ 几分钟</span>
+</span></span></code></pre></div><p>但是这可能也导致了接收到的告警通知的等待时间更长了。另外一个问题是下次对告警规则进行评估的时候，我们将再次收到相同的分组告警通知，这个时候我们可以使用 <code>group_interval</code> 参数来进行配置，当上一个告警通知发送到一个 group 后，我们在等待 <code>group_interval</code> 时长后，然后再将触发的告警以及已解决的告警发送给 receiver：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">group_by</span>: [<span style="color:#f1fa8c">&#34;instance&#34;</span>, <span style="color:#f1fa8c">&#34;job&#34;</span>]
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">group_wait</span>: 45s
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">group_interval</span>: 10m <span style="color:#6272a4"># 通常设置成5分钟以上</span>
+</span></span></code></pre></div><p>除此之外还有一个 <code>repeat_interval</code> 参数，该参数主要是用于配置告警信息已经发送成功后，再次被触发发送的时间间隔，一般不同类型的告警业务改参数配置不太一样，对于比较重要紧急的可以将改参数设置稍微小点，对于不太紧急的可以设置稍微大点。</p>
+<!-- raw HTML omitted -->
+<p>上面这些都是在 Prometheus 或者 AlertManager 中配置的一些全局的参数，对于具体的告警规则还有时间可以配置，如下所示的告警规则：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">groups</span>:
+</span></span><span style="display:flex;"><span>- <span style="color:#ff79c6">name</span>: test-node-mem
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">rules</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ff79c6">alert</span>: NodeMemoryUsage
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">expr</span>: (node_memory_MemTotal_bytes - (node_memory_MemFree_bytes + node_memory_Buffers_bytes + node_memory_Cached_bytes)) / node_memory_MemTotal_bytes * 100 &gt; 90
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">for</span>: 1m
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">labels</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">team</span>: node
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">annotations</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">summary</span>: <span style="color:#f1fa8c">&#34;{{$labels.instance}}: High Memory usage detected&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">description</span>: <span style="color:#f1fa8c">&#34;{{$labels.instance}}: Memory usage is above 90% (current value is: {{ $value }}&#34;</span>
+</span></span></code></pre></div><p>上面我们定义了一个名为 <code>test-node-mem</code> 的报警规则分组，一条报警规则主要由以下几部分组成：</p>
 <ul>
 <li><code>alert</code>：告警规则的名称</li>
 <li><code>expr</code>：是用于进行报警规则 PromQL 查询语句</li>
@@ -378,21 +353,21 @@ group_interval: 10m <span style="color:#6272a4"># 通常设置成5分钟以上</
 <li><code>labels</code>：自定义标签，允许用户指定额外的标签列表，把它们附加在告警上</li>
 <li><code>annotations</code>：指定了另一组标签，它们不被当做告警实例的身份标识，它们经常用于存储一些额外的信息，用于报警信息的展示之类的</li>
 </ul>
-
 <p>其中的 <code>for</code> 字段同样会影响到我们的告警到达时间，该参数用于表示只有当触发条件持续一段时间后才发送告警，在等待期间新产生的告警状态为<code>pending</code>，这个参数主要用于降噪，很多类似响应时间这样的指标都是有抖动的，通过指定 <code>Pending Duration</code>，我们可以过滤掉这些瞬时抖动，可以让我们能够把注意力放在真正有持续影响的问题上。</p>
-
-<p>所以有的情况下计算我们的监控图表上面已经有部分指标达到了告警的阈值了，但是并不一定会触发告警规则，比如我们上面的规则中，设置的是1分钟的 <code>Pending Duration</code>，对于下图这种情况就不会触发告警，因为持续时间太短，没有达到一分钟：</p>
-
-<p><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/20200326123324.png" alt="" /></p>
-
+<p>所以有的情况下计算我们的监控图表上面已经有部分指标达到了告警的阈值了，但是并不一定会触发告警规则，比如我们上面的规则中，设置的是 1 分钟的 <code>Pending Duration</code>，对于下图这种情况就不会触发告警，因为持续时间太短，没有达到一分钟：</p>
+<p><img src="https://picdn.youdianzhishi.com/images/20200326123324.png" alt=""></p>
 <p>如果告警规则超过阈值的持续时间超过了 <code>Pending Duration</code> 那么就会触发告警了，告警产生后，还要经过 Alertmanager 的分组、抑制处理、静默处理、去重处理和降噪处理最后再发送给接收者。所以从一条告警规则被评估到触发告警再到发送给接收方，中间会有一系列的各种因素进行干预，所以有时候在监控图表上看到已经达到了阈值而最终没有收到监控报警也就不足为奇了。</p>
-
-<p><a href="https://youdianzhishi.com/web/course/1030" title="从 Docker 到 Kubernetes 进阶课程"><img src="https://sdn.youdianzhishi.com/images/2019/10/24/65f2cfb229184268a18745fe202b281b.jpg?imageView2/2/format/webp" alt="Kubernetes进阶训练营"></a></p>
-
+<!-- raw HTML omitted -->
 
           <h2>微信公众号</h2>
-<p>扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的 kubernetes 讨论群里面共同学习。</p>
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/qrcode.png" alt="wechat-account-qrcode">
+<p>
+  扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的
+  kubernetes 讨论群里面共同学习。
+</p>
+<img
+  src="https://picdn.youdianzhishi.com/images/qrcode.png"
+  alt="wechat-account-qrcode"
+/>
 
   
           
@@ -593,7 +568,7 @@ group_interval: 10m <span style="color:#6272a4"># 通常设置成5分钟以上</
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -605,7 +580,7 @@ group_interval: 10m <span style="color:#6272a4"># 通常设置成5分钟以上</
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -622,7 +597,7 @@ group_interval: 10m <span style="color:#6272a4"># 通常设置成5分钟以上</
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -631,7 +606,7 @@ group_interval: 10m <span style="color:#6272a4"># 通常设置成5分钟以上</
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>

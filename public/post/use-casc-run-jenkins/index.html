@@ -14,16 +14,15 @@
   <meta property="og:description" content="今天了解到一个名为Configuration as Code (JcasC)的插件可以来创建Jenkins，这个插件允许你用 YAML 文件来定义 Jenkins 配置。一般我们在使用 Jenkins 的时候多少知道我们需要哪些插件或者其他配置来配合我们的 CI/CD 工作，使用 JcasC 插件，我们就可以将这些信息配置在可读性更高的 YAML 文件中。在本文中，我们会为大家演示如何使用Configuration as Code插件来创建 Jenkins，然后使用 Git、Maven 等工具来编写一个声明式的 Pipeline 去构建一个 Java 应用，另外还会展示如何使用Vault来管理一些私密数据。">
   <meta name="twitter:description" content="今天了解到一个名为Configuration as Code (JcasC)的插件可以来创建Jenkins，这个插件允许你用 YAML 文件来定义 Jenkins 配置。一般我们在使用 Jenkins 的时候多少知道我们需要哪些插件或者其他配置来配合我们的 CI/CD 工作，使用 JcasC 插件，我们就可以将这些信息配置在可读性更高的 YAML 文件中。在本文中， …">
   <meta name="author" content=""/>
-  <link href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
-  <link rel="apple-touch-icon" href="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png"/>
-  <meta property="og:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
-  <meta name="twitter:image" content="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-favicon.png" />
+  <link href="https://picdn.youdianzhishi.com/images/blog-favicon.png" rel="icon" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="https://picdn.youdianzhishi.com/images/blog-favicon.png"/>
+  <meta property="og:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
+  <meta name="twitter:image" content="https://picdn.youdianzhishi.com/images/blog-favicon.png" />
   <meta name="twitter:card" content="summary" />
   <meta property="og:url" content="https://www.qikqiak.com/post/use-casc-run-jenkins/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="阳明的博客" />
 
-  <meta name="generator" content="Hugo 0.55.6" />
   <link rel="canonical" href="https://www.qikqiak.com/post/use-casc-run-jenkins/" />
   <link rel="alternate" href="https://www.qikqiak.com/index.xml" type="application/rss+xml" title="阳明的博客">
 
@@ -32,7 +31,7 @@
   <link href="https://fonts.googleapis.com/css?family=Lora:400,400i,700%7COpen+Sans:400,700" rel="stylesheet">
   
 
-  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.fd9e592432db56ca00a6ba36d872ce217e73efd7563d5e7f34afc581f2c782e5.css' integrity='sha256-/Z5ZJDLbVsoApro22HLOIX5z79dWPV5/NK/FgfLHguU='>
+  <link rel="stylesheet" href='https://www.qikqiak.com/css/bundle.min.a6b62363fe57848ad01efa2a5d1bbb1047c2ffb71b53d8aeb42bc5ed5c77ea7c.css' integrity='sha256-prYjY/5XhIrQHvoqXRu7EEfC/7cbU9iutCvF7Vx36nw='>
 
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
   
@@ -83,7 +82,7 @@ if (!doNotTrack) {
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="https://www.qikqiak.com/" title="阳明的博客">
-        <img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
+        <img src="https://picdn.youdianzhishi.com/images/blog-logo-new.png" style="margin-top: -5px;height: 32px;" alt="阳明的博客">
       </a>
     </div>
 
@@ -226,7 +225,7 @@ autocomplete('#aa-search-input',
 
 
   
-    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/photo-1560233829-bbfb114ddf90.jpeg" data-img-desc-1="https://unsplash.com/photos/RIDhjfZZ7Ys"></div>
+    <div id="header-big-imgs" data-num-img=1 data-img-src-1="https://picdn.youdianzhishi.com/images/photo-1560233829-bbfb114ddf90.jpeg" data-img-desc-1="https://unsplash.com/photos/RIDhjfZZ7Ys"></div>
   
 
   <header class="header-section has-img">
@@ -241,12 +240,8 @@ autocomplete('#aa-search-input',
                   
                   
                     <span class="post-meta">
-  
-    发表于 June 13, 2019
-  
-  
+  发表于 June 13, 2019  
 </span>
-
 
                   
               </div>
@@ -268,12 +263,8 @@ autocomplete('#aa-search-input',
                 
                 
                   <span class="post-meta">
-  
-    发表于 June 13, 2019
-  
-  
+  发表于 June 13, 2019  
 </span>
-
 
                 
             </div>
@@ -317,16 +308,13 @@ autocomplete('#aa-search-input',
             
 <aside class="toc">
   <nav id="TableOfContents">
-<ul>
-<li>
-<ul>
-<li><a href="#使用-vault">使用 Vault</a></li>
-<li><a href="#配置信息">配置信息</a></li>
-<li><a href="#构建-jenkins-镜像">构建 Jenkins 镜像</a></li>
-<li><a href="#运行测试-pipeline">运行测试 Pipeline</a></li>
-<li><a href="#相关链接">相关链接</a></li>
-</ul></li>
-</ul>
+  <ul>
+    <li><a href="#使用-vault">使用 Vault</a></li>
+    <li><a href="#配置信息">配置信息</a></li>
+    <li><a href="#构建-jenkins-镜像">构建 Jenkins 镜像</a></li>
+    <li><a href="#运行测试-pipeline">运行测试 Pipeline</a></li>
+    <li><a href="#相关链接">相关链接</a></li>
+  </ul>
 </nav>
 </aside>
 
@@ -345,277 +333,250 @@ autocomplete('#aa-search-input',
           
 
           <p>今天了解到一个名为<code>Configuration as Code (JcasC)</code>的插件可以来创建<code>Jenkins</code>，这个插件允许你用 YAML 文件来定义 Jenkins 配置。一般我们在使用 Jenkins 的时候多少知道我们需要哪些插件或者其他配置来配合我们的 CI/CD 工作，使用 JcasC 插件，我们就可以将这些信息配置在可读性更高的 YAML 文件中。在本文中，我们会为大家演示如何使用<code>Configuration as Code</code>插件来创建 Jenkins，然后使用 Git、Maven 等工具来编写一个声明式的 Pipeline 去构建一个 Java 应用，另外还会展示如何使用<code>Vault</code>来管理一些私密数据。</p>
-
 <h2 id="使用-vault">使用 Vault</h2>
-
 <p><code>vault</code>是一个密码/证书集中式管理工具，通过 HTTP-API 对外提供统一的密码访问入口，并且提供权限控制以及详细的日志审计功能。</p>
-
 <p>一个系统可能需要访问多个带密码的后端：例如数据库、通过 API keys 对外部系统进行调用，面向服务的架构通信等等。要将众多系统中的用户和权限对应起来已经非常困难，加上提供密钥滚动功能、安全的存储后端还要有详细的审计日志，自定义解决方案几乎不太可能。这也就是 vault 存在的意义。</p>
-
 <p>为了方便我们直接本地使用 Docker 镜像来运行：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ docker run -d --name<span style="color:#ff79c6">=</span>vault --cap-add<span style="color:#ff79c6">=</span>IPC_LOCK -p <span style="color:#bd93f9">8200</span>:8200 vault:1.1.3</code></pre></div>
-<p>我们这里使用的是最新版的 vault，需要我们使用 KV（Key-Value Secrets Engine）HTTP API V2 版本来访问数据，因为新版本的<code>Configuration as Code</code>插件使用的就在 V2 版本，运行容器后，我们可以从控制台日志中获取到用于对 Vault 进行身份验证的令牌：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ docker logs -f <span style="color:#8be9fd;font-style:italic">vault</span>
-<span style="color:#ff79c6">==</span>&gt; Vault server configuration:
-
-             Api Address: http://0.0.0.0:8200
-                     Cgo: disabled
-         Cluster Address: https://0.0.0.0:8201
-              Listener <span style="color:#bd93f9">1</span>: tcp <span style="color:#ff79c6">(</span>addr: <span style="color:#f1fa8c">&#34;0.0.0.0:8200&#34;</span>, cluster address: <span style="color:#f1fa8c">&#34;0.0.0.0:8201&#34;</span>, max_request_duration: <span style="color:#f1fa8c">&#34;1m30s&#34;</span>, max_request_size: <span style="color:#f1fa8c">&#34;33554432&#34;</span>, tls: <span style="color:#f1fa8c">&#34;disabled&#34;</span><span style="color:#ff79c6">)</span>
-               Log Level: info
-                   Mlock: supported: true, enabled: <span style="color:#8be9fd;font-style:italic">false</span>
-                 Storage: inmem
-                 Version: Vault v1.1.3
-             Version Sha: 9bc820f700f83a7c4bcab54c5323735a581b34eb
-
-WARNING! dev mode is enabled! In this mode, Vault runs entirely in-memory
-and starts unsealed with a single unseal key. The root token is already
-authenticated to the CLI, so you can immediately begin using Vault.
-
-You may need to <span style="color:#8be9fd;font-style:italic">set</span> the following environment variable:
-
-    $ <span style="color:#8be9fd;font-style:italic">export</span> <span style="color:#8be9fd;font-style:italic">VAULT_ADDR</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;http://0.0.0.0:8200&#39;</span>
-
-The unseal key and root token are displayed below in <span style="color:#ff79c6">case</span> you want to
-seal/unseal the Vault or re-authenticate.
-
-Unseal Key: 5YKiMo0qe983/DqkDmQGGZmhN9Dp7JCbl0mrSyMgZ3E<span style="color:#ff79c6">=</span>
-Root Token: s.vf0oCbRDGrLNvfYjRfcdcZLg
-
-Development mode should NOT be used in production installations!
-
-<span style="color:#ff79c6">==</span>&gt; Vault server started! Log data will stream in below:
-......</code></pre></div>
-<p>记住上面<code>Root Token</code>的值，我们可以通过该 Token 来添加访问 Jenkins Dashboard 和 Github 的用户名和密码信息，我们可以设置 Jenkins 账户通过<code>rootPassword</code>来获取密码，Github 账户通过<code>githubPassword</code>来获取密码，我们需要进入到 vault 的容器中去进行操作：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ docker <span style="color:#8be9fd;font-style:italic">exec</span> -it vault /bin/sh
-/ <span style="color:#6272a4"># vault kv put secret/jenkins rootPassword=&lt;替换成你的jenkins访问密码&gt; githubPassword=&lt;替换成你的github用户密码&gt;</span>
-Get https://127.0.0.1:8200/v1/sys/internal/ui/mounts/secret/jenkins: http: server gave HTTP response to HTTPS client</code></pre></div>
-<p>我们通过<code>vault kv put</code>来添加一组 secret 信息，会出现上面的错误，我们可以导入<code>VAULT_ADDR</code>和<code>VAULT_TOKEN</code>环境变量来解决上面的问题：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">/ <span style="color:#6272a4"># export VAULT_ADDR=&#39;http://0.0.0.0:8200&#39;</span>
-<span style="color:#6272a4"># 下面的TOKEN也需要导入，否则执行下面的命令会出现missing client token的错误</span>
-/ <span style="color:#6272a4"># export VAULT_TOKEN=s.vf0oCbRDGrLNvfYjRfcdcZLg</span>
-/ <span style="color:#6272a4"># vault kv put secret/jenkins rootPassword=&lt;替换成你的jenkins访问密码&gt; githubPassword=&lt;替换成你的github用户密码&gt;</span>
-Key              Value
----              -----
-created_time     <span style="color:#bd93f9">2019</span>-06-13T03:04:04.9804179Z
-deletion_time    n/a
-destroyed        <span style="color:#8be9fd;font-style:italic">false</span>
-version          <span style="color:#bd93f9">1</span>
-<span style="color:#6272a4"># 通过命令`vault kv get secret/jenkins`验证信息是否创建</span>
-/ <span style="color:#6272a4"># vault kv get secret/jenkins</span>
-<span style="color:#ff79c6">======</span> <span style="color:#8be9fd;font-style:italic">Metadata</span> <span style="color:#ff79c6">======</span>
-Key              Value
----              -----
-created_time     <span style="color:#bd93f9">2019</span>-06-13T03:04:04.9804179Z
-deletion_time    n/a
-destroyed        <span style="color:#8be9fd;font-style:italic">false</span>
-version          <span style="color:#8be9fd;font-style:italic">1</span>
-
-<span style="color:#ff79c6">=========</span> <span style="color:#8be9fd;font-style:italic">Data</span> <span style="color:#ff79c6">=========</span>
-Key               Value
----               -----
-githubPassword    &lt;xxxxxx&gt;
-rootPassword      &lt;xxxxxx&gt;</code></pre></div>
-<h2 id="配置信息">配置信息</h2>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ docker run -d --name<span style="color:#ff79c6">=</span>vault --cap-add<span style="color:#ff79c6">=</span>IPC_LOCK -p 8200:8200 vault:1.1.3
+</span></span></code></pre></div><p>我们这里使用的是最新版的 vault，需要我们使用 KV（Key-Value Secrets Engine）HTTP API V2 版本来访问数据，因为新版本的<code>Configuration as Code</code>插件使用的就在 V2 版本，运行容器后，我们可以从控制台日志中获取到用于对 Vault 进行身份验证的令牌：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ docker logs -f <span style="color:#8be9fd;font-style:italic">vault</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">==</span>&gt; Vault server configuration:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>             Api Address: http://0.0.0.0:8200
+</span></span><span style="display:flex;"><span>                     Cgo: disabled
+</span></span><span style="display:flex;"><span>         Cluster Address: https://0.0.0.0:8201
+</span></span><span style="display:flex;"><span>              Listener 1: tcp <span style="color:#ff79c6">(</span>addr: <span style="color:#f1fa8c">&#34;0.0.0.0:8200&#34;</span>, cluster address: <span style="color:#f1fa8c">&#34;0.0.0.0:8201&#34;</span>, max_request_duration: <span style="color:#f1fa8c">&#34;1m30s&#34;</span>, max_request_size: <span style="color:#f1fa8c">&#34;33554432&#34;</span>, tls: <span style="color:#f1fa8c">&#34;disabled&#34;</span><span style="color:#ff79c6">)</span>
+</span></span><span style="display:flex;"><span>               Log Level: info
+</span></span><span style="display:flex;"><span>                   Mlock: supported: true, enabled: <span style="color:#8be9fd;font-style:italic">false</span>
+</span></span><span style="display:flex;"><span>                 Storage: inmem
+</span></span><span style="display:flex;"><span>                 Version: Vault v1.1.3
+</span></span><span style="display:flex;"><span>             Version Sha: 9bc820f700f83a7c4bcab54c5323735a581b34eb
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>WARNING! dev mode is enabled! In this mode, Vault runs entirely in-memory
+</span></span><span style="display:flex;"><span>and starts unsealed with a single unseal key. The root token is already
+</span></span><span style="display:flex;"><span>authenticated to the CLI, so you can immediately begin using Vault.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>You may need to <span style="color:#8be9fd;font-style:italic">set</span> the following environment variable:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    $ <span style="color:#8be9fd;font-style:italic">export</span> <span style="color:#8be9fd;font-style:italic">VAULT_ADDR</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#39;http://0.0.0.0:8200&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>The unseal key and root token are displayed below in <span style="color:#ff79c6">case</span> you want to
+</span></span><span style="display:flex;"><span>seal/unseal the Vault or re-authenticate.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Unseal Key: 5YKiMo0qe983/DqkDmQGGZmhN9Dp7JCbl0mrSyMgZ3E<span style="color:#ff79c6">=</span>
+</span></span><span style="display:flex;"><span>Root Token: s.vf0oCbRDGrLNvfYjRfcdcZLg
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Development mode should NOT be used in production installations!
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">==</span>&gt; Vault server started! Log data will stream in below:
+</span></span><span style="display:flex;"><span>......
+</span></span></code></pre></div><p>记住上面<code>Root Token</code>的值，我们可以通过该 Token 来添加访问 Jenkins Dashboard 和 Github 的用户名和密码信息，我们可以设置 Jenkins 账户通过<code>rootPassword</code>来获取密码，Github 账户通过<code>githubPassword</code>来获取密码，我们需要进入到 vault 的容器中去进行操作：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ docker <span style="color:#8be9fd;font-style:italic">exec</span> -it vault /bin/sh
+</span></span><span style="display:flex;"><span>/ <span style="color:#6272a4"># vault kv put secret/jenkins rootPassword=&lt;替换成你的jenkins访问密码&gt; githubPassword=&lt;替换成你的github用户密码&gt;</span>
+</span></span><span style="display:flex;"><span>Get https://127.0.0.1:8200/v1/sys/internal/ui/mounts/secret/jenkins: http: server gave HTTP response to HTTPS client
+</span></span></code></pre></div><p>我们通过<code>vault kv put</code>来添加一组 secret 信息，会出现上面的错误，我们可以导入<code>VAULT_ADDR</code>和<code>VAULT_TOKEN</code>环境变量来解决上面的问题：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>/ <span style="color:#6272a4"># export VAULT_ADDR=&#39;http://0.0.0.0:8200&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 下面的TOKEN也需要导入，否则执行下面的命令会出现missing client token的错误</span>
+</span></span><span style="display:flex;"><span>/ <span style="color:#6272a4"># export VAULT_TOKEN=s.vf0oCbRDGrLNvfYjRfcdcZLg</span>
+</span></span><span style="display:flex;"><span>/ <span style="color:#6272a4"># vault kv put secret/jenkins rootPassword=&lt;替换成你的jenkins访问密码&gt; githubPassword=&lt;替换成你的github用户密码&gt;</span>
+</span></span><span style="display:flex;"><span>Key              Value
+</span></span><span style="display:flex;"><span>---              -----
+</span></span><span style="display:flex;"><span>created_time     2019-06-13T03:04:04.9804179Z
+</span></span><span style="display:flex;"><span>deletion_time    n/a
+</span></span><span style="display:flex;"><span>destroyed        <span style="color:#8be9fd;font-style:italic">false</span>
+</span></span><span style="display:flex;"><span>version          <span style="color:#bd93f9">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4"># 通过命令`vault kv get secret/jenkins`验证信息是否创建</span>
+</span></span><span style="display:flex;"><span>/ <span style="color:#6272a4"># vault kv get secret/jenkins</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">======</span> <span style="color:#8be9fd;font-style:italic">Metadata</span> <span style="color:#ff79c6">======</span>
+</span></span><span style="display:flex;"><span>Key              Value
+</span></span><span style="display:flex;"><span>---              -----
+</span></span><span style="display:flex;"><span>created_time     2019-06-13T03:04:04.9804179Z
+</span></span><span style="display:flex;"><span>deletion_time    n/a
+</span></span><span style="display:flex;"><span>destroyed        <span style="color:#8be9fd;font-style:italic">false</span>
+</span></span><span style="display:flex;"><span>version          <span style="color:#8be9fd;font-style:italic">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">=========</span> <span style="color:#8be9fd;font-style:italic">Data</span> <span style="color:#ff79c6">=========</span>
+</span></span><span style="display:flex;"><span>Key               Value
+</span></span><span style="display:flex;"><span>---               -----
+</span></span><span style="display:flex;"><span>githubPassword    &lt;xxxxxx&gt;
+</span></span><span style="display:flex;"><span>rootPassword      &lt;xxxxxx&gt;
+</span></span></code></pre></div><h2 id="配置信息">配置信息</h2>
 <p><code>JcasC</code>插件提供了许多配置设置，允许我们配置<code>Jenkins</code>的各种组件，我们这里主要来配置构建示例 Java 应用程序的基本配置，<code>Jcasc</code>插件官网文档：<a href="https://github.com/jenkinsci/configuration-as-code-plugin">https://github.com/jenkinsci/configuration-as-code-plugin</a> 中也提供了很多其他配置的示例，有需要的可以前往查看。</p>
-
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-5376999672787220"
-     data-ad-slot="9165834656"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-
-
+<!-- raw HTML omitted -->
 <p>我们这里需要的是在启动后配置一下 Jenkins 组件：</p>
-
 <ul>
 <li>一组 Jenkins 插件，运行创建声明式 Pipeline，从 Github 仓库检出源代码，使用 Maven 进行构建</li>
 <li>包含 Jenkins 用户的登录凭据，通过<code>Vault</code>服务器上面的<code>rootPassword</code>属性来读取用户密码</li>
 <li>Maven 工具的安装设置：默认情况下，Jenkins 中未安装 Maven，所以我们需要设置所需的版本和工具名称</li>
 <li>用户访问包含应用程序源代码的 Git 仓库的凭据（如果是私有仓库的话）</li>
 </ul>
-
 <p>最终的配置信息如下：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">jenkins:
-  agentProtocols:
-  - <span style="color:#f1fa8c">&#34;JNLP4-connect&#34;</span>
-  - <span style="color:#f1fa8c">&#34;Ping&#34;</span>
-  authorizationStrategy:
-    loggedInUsersCanDoAnything:
-      allowAnonymousRead: <span style="color:#ff79c6">false</span>
-  crumbIssuer:
-    standard:
-      excludeClientIPFromCrumb: <span style="color:#ff79c6">false</span>
-  disableRememberMe: <span style="color:#ff79c6">false</span>
-  mode: NORMAL
-  numExecutors: <span style="color:#bd93f9">2</span>
-  primaryView:
-    all:
-      name: <span style="color:#f1fa8c">&#34;all&#34;</span>
-  quietPeriod: <span style="color:#bd93f9">5</span>
-  scmCheckoutRetryCount: <span style="color:#bd93f9">0</span>
-  securityRealm:
-    local:
-      allowsSignup: <span style="color:#ff79c6">false</span>
-      enableCaptcha: <span style="color:#ff79c6">false</span>
-      users:
-      - id: <span style="color:#f1fa8c">&#34;cnych&#34;</span>
-        password: ${rootPassword}
-  slaveAgentPort: <span style="color:#bd93f9">50000</span>
-  views:
-  - all:
-      name: <span style="color:#f1fa8c">&#34;all&#34;</span>
-tool:
-  git:
-    installations:
-    - home: <span style="color:#f1fa8c">&#34;git&#34;</span>
-      name: <span style="color:#f1fa8c">&#34;Default&#34;</span>
-  jdk:
-    installations:
-    - home: <span style="color:#f1fa8c">&#34;/docker-java-home&#34;</span>
-      name: <span style="color:#f1fa8c">&#34;jdk&#34;</span>
-  maven:
-    installations:
-    - name: <span style="color:#f1fa8c">&#34;maven&#34;</span>
-      properties:
-      - installSource:
-          installers:
-          - maven:
-              id: <span style="color:#f1fa8c">&#34;3.5.4&#34;</span>
-credentials:
-  system:
-    domainCredentials:
-      - domain :
-          name: <span style="color:#f1fa8c">&#34;github.com&#34;</span>
-          description: <span style="color:#f1fa8c">&#34;GitHub&#34;</span>
-        credentials:
-          - usernamePassword:
-              scope: SYSTEM
-              id: github-cnych
-              username: cnych</code></pre></div>
-<h2 id="构建-jenkins-镜像">构建 Jenkins 镜像</h2>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">jenkins</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">agentProtocols</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#f1fa8c">&#34;JNLP4-connect&#34;</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#f1fa8c">&#34;Ping&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">authorizationStrategy</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">loggedInUsersCanDoAnything</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">allowAnonymousRead</span>: <span style="color:#ff79c6">false</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">crumbIssuer</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">standard</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">excludeClientIPFromCrumb</span>: <span style="color:#ff79c6">false</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">disableRememberMe</span>: <span style="color:#ff79c6">false</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">mode</span>: NORMAL
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">numExecutors</span>: <span style="color:#bd93f9">2</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">primaryView</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">all</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">name</span>: <span style="color:#f1fa8c">&#34;all&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">quietPeriod</span>: <span style="color:#bd93f9">5</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">scmCheckoutRetryCount</span>: <span style="color:#bd93f9">0</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">securityRealm</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">local</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">allowsSignup</span>: <span style="color:#ff79c6">false</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">enableCaptcha</span>: <span style="color:#ff79c6">false</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">users</span>:
+</span></span><span style="display:flex;"><span>        - <span style="color:#ff79c6">id</span>: <span style="color:#f1fa8c">&#34;cnych&#34;</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">password</span>: ${rootPassword}
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">slaveAgentPort</span>: <span style="color:#bd93f9">50000</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">views</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ff79c6">all</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">name</span>: <span style="color:#f1fa8c">&#34;all&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">tool</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">git</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">installations</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ff79c6">home</span>: <span style="color:#f1fa8c">&#34;git&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">name</span>: <span style="color:#f1fa8c">&#34;Default&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">jdk</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">installations</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ff79c6">home</span>: <span style="color:#f1fa8c">&#34;/docker-java-home&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">name</span>: <span style="color:#f1fa8c">&#34;jdk&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">maven</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">installations</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ff79c6">name</span>: <span style="color:#f1fa8c">&#34;maven&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">properties</span>:
+</span></span><span style="display:flex;"><span>          - <span style="color:#ff79c6">installSource</span>:
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">installers</span>:
+</span></span><span style="display:flex;"><span>                - <span style="color:#ff79c6">maven</span>:
+</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">id</span>: <span style="color:#f1fa8c">&#34;3.5.4&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">credentials</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">system</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">domainCredentials</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ff79c6">domain</span>:
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">name</span>: <span style="color:#f1fa8c">&#34;github.com&#34;</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#ff79c6">description</span>: <span style="color:#f1fa8c">&#34;GitHub&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">credentials</span>:
+</span></span><span style="display:flex;"><span>          - <span style="color:#ff79c6">usernamePassword</span>:
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">scope</span>: SYSTEM
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">id</span>: github-cnych
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">username</span>: cnych
+</span></span></code></pre></div><h2 id="构建-jenkins-镜像">构建 Jenkins 镜像</h2>
 <p>和 Vault 服务一样，我们也可以直接用 Docker 容器来运行 Jenkins，但是在官方镜像基础上我们需要添加一个配置，比如添加<code>Configuration as Code</code>插件，该插件需要设置一个指向 YAML 文件位置的环境变量，该变量可以指向一下内容：</p>
-
 <ul>
 <li>包含一组配置文件的文件夹的路径</li>
 <li>单个配置文件的完整路径</li>
 <li>指向 Web 的一个配置文件 URL</li>
 </ul>
-
 <p>然后我们设置 Jenkins 和 Vault 之间的通信，需要传递访问 Vault 的身份令牌、密钥的路径和 Vault 服务器地址，这些配置都可以通过环境变量进行设置，也可以放置在一个统一文件中通过环境变量<code>CASC_VAULT_FILE</code>来指向这个文件也可以，以下是定义的扩展 Jenkins 镜像的 Dockerfile，添加了使用 JcasC 插件运行的一些参数以及从 Vault 获取数据的信息：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-docker" data-lang="docker"><span style="color:#ff79c6">FROM</span><span style="color:#f1fa8c"> jenkins/jenkins:lts</span>
-
-<span style="color:#ff79c6">ENV</span><span style="color:#f1fa8c"> CASC_JENKINS_CONFIG=&#34;/var/jenkins_home/jenkins.yml&#34;</span>
-<span style="color:#ff79c6">ENV</span><span style="color:#f1fa8c"> CASC_VAULT_FILE=&#34;/var/jenkins_home/vault.yml&#34;</span>
-
-COPY jenkins.yml <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CASC_JENKINS_CONFIG</span><span style="color:#f1fa8c">}</span>
-COPY vault.yml <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CASC_VAULT_FILE</span><span style="color:#f1fa8c">}</span>
-
-USER jenkins
-
-<span style="color:#ff79c6">RUN</span> /usr/local/bin/install-plugins.sh configuration-as-code configuration-as-code-support git workflow-cps-global-lib</code></pre></div>
-<p>其中<code>jenkins.yml</code>就是上面我们准备好的配置文件，<code>vault.yml</code>文件内容如下所示：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">CASC_VAULT_TOKEN=s.vf0oCbRDGrLNvfYjRfcdcZLg
-CASC_VAULT_PATHS=secret/jenkins
-CASC_VAULT_URL=http://<span style="color:#bd93f9">192.168</span>.<span style="color:#bd93f9">31.9</span>:<span style="color:#bd93f9">8200</span></code></pre></div>
-<p>完整的 Dockerfile 文件可以在 []() 获取。</p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-docker" data-lang="docker"><span style="display:flex;"><span><span style="color:#ff79c6">FROM</span><span style="color:#f1fa8c"> jenkins/jenkins:lts</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">ENV</span> <span style="color:#8be9fd;font-style:italic">CASC_JENKINS_CONFIG</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;/var/jenkins_home/jenkins.yml&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">ENV</span> <span style="color:#8be9fd;font-style:italic">CASC_VAULT_FILE</span><span style="color:#ff79c6">=</span><span style="color:#f1fa8c">&#34;/var/jenkins_home/vault.yml&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">COPY</span> jenkins.yml <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CASC_JENKINS_CONFIG</span><span style="color:#f1fa8c">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">COPY</span> vault.yml <span style="color:#f1fa8c">${</span><span style="color:#8be9fd;font-style:italic">CASC_VAULT_FILE</span><span style="color:#f1fa8c">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">USER</span><span style="color:#f1fa8c"> jenkins</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">RUN</span> /usr/local/bin/install-plugins.sh configuration-as-code configuration-as-code-support git workflow-cps-global-lib
+</span></span></code></pre></div><p>其中<code>jenkins.yml</code>就是上面我们准备好的配置文件，<code>vault.yml</code>文件内容如下所示：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>CASC_VAULT_TOKEN=s.vf0oCbRDGrLNvfYjRfcdcZLg
+</span></span><span style="display:flex;"><span>CASC_VAULT_PATHS=secret/jenkins
+</span></span><span style="display:flex;"><span>CASC_VAULT_URL=http://192.168.31.9:8200
+</span></span></code></pre></div><p>完整的 Dockerfile 文件可以在 <a href=""></a> 获取。</p>
 <p>接下来使用上面的 Dockerfile 来构建镜像：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ docker build -t cnych/jenkins-casc:1.0 .</code></pre></div>
-<p>构建完成后可以直接通过下面的命令运行该容器：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">$ docker run -d --name jenkins -p <span style="color:#bd93f9">8080</span>:8080 -p <span style="color:#bd93f9">50000</span>:50000 cnych/jenkins-casc:1.0</code></pre></div>
-<p>运行成功后可以在本地通过 8080 端口去访问 Jenkins：
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/jenkins-casc-login.png" alt="jenkins-casc-login" /></p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ docker build -t cnych/jenkins-casc:1.0 .
+</span></span></code></pre></div><p>构建完成后可以直接通过下面的命令运行该容器：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ docker run -d --name jenkins -p 8080:8080 -p 50000:50000 cnych/jenkins-casc:1.0
+</span></span></code></pre></div><p>运行成功后可以在本地通过 8080 端口去访问 Jenkins：
+<img src="https://picdn.youdianzhishi.com/images/jenkins-casc-login.png" alt="jenkins-casc-login"></p>
 <p>我们可以使用上面 jenkins.yml 配置文件中的用户信息进行登录，用户名为 cnych，密码为我们存入 Vault 中的<code>rootPassword</code>：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">securityRealm:
-    local:
-      allowsSignup: <span style="color:#ff79c6">false</span>
-      enableCaptcha: <span style="color:#ff79c6">false</span>
-      users:
-      - id: <span style="color:#f1fa8c">&#34;cnych&#34;</span>
-        password: ${rootPassword}</code></pre></div>
-<p>登录成功后可以进入<code>Manage Jenkins</code>页面，在最下方可以看到<code>Configuration as Code</code>的入口：
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/jenkins-casc.png" alt="jenkins casc entry" /></p>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">securityRealm</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">local</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">allowsSignup</span>: <span style="color:#ff79c6">false</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">enableCaptcha</span>: <span style="color:#ff79c6">false</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">users</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ff79c6">id</span>: <span style="color:#f1fa8c">&#34;cnych&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">password</span>: ${rootPassword}
+</span></span></code></pre></div><p>登录成功后可以进入<code>Manage Jenkins</code>页面，在最下方可以看到<code>Configuration as Code</code>的入口：
+<img src="https://picdn.youdianzhishi.com/images/jenkins-casc.png" alt="jenkins casc entry"></p>
 <p>点击可以进入插件的配置页面：
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/jenkins-casc-config.png" alt="jenkins casc config" /></p>
-
+<img src="https://picdn.youdianzhishi.com/images/jenkins-casc-config.png" alt="jenkins casc config"></p>
 <p>我们可以在该页面查看 Jenkins 配置信息，也可以下载配置信息、替换新的配置文件，比如我们这里将登录用户名更改为<code>cnych2</code>，为了方便我将该配置文件放置到 Github 上，地址为：<a href="https://raw.githubusercontent.com/cnych/jenkins-casc/master/jenkins2.yml">https://raw.githubusercontent.com/cnych/jenkins-casc/master/jenkins2.yml</a>，使用该地址去替换配置源，点击“应用新配置”，然后我们注销后，可以尝试使用<code>cnych2</code>来进行登录。</p>
-
 <h2 id="运行测试-pipeline">运行测试 Pipeline</h2>
-
 <p>最后，您可以为示例应用程序创建和运行 Pipeline。下面是我这里的一个简单的 Pipeline 示例：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-groovy" data-lang="groovy">pipeline <span style="color:#ff79c6">{</span>
-    agent any
-    tools <span style="color:#ff79c6">{</span>
-        maven <span style="color:#f1fa8c">&#39;maven&#39;</span>
-    <span style="color:#ff79c6">}</span>
-    stages <span style="color:#ff79c6">{</span>
-        stage<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#39;Checkout&#39;</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-            steps <span style="color:#ff79c6">{</span>
-                git <span style="color:#8be9fd;font-style:italic">url:</span> <span style="color:#f1fa8c">&#39;https://github.com/cnych/jenkins-casc-example-service.git&#39;</span><span style="color:#ff79c6">,</span> <span style="color:#8be9fd;font-style:italic">credentialsId:</span> <span style="color:#f1fa8c">&#39;github-cnych&#39;</span><span style="color:#ff79c6">,</span> <span style="color:#8be9fd;font-style:italic">branch:</span> <span style="color:#f1fa8c">&#39;master&#39;</span>
-            <span style="color:#ff79c6">}</span>
-        <span style="color:#ff79c6">}</span>
-        stage<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#39;Test&#39;</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-            steps <span style="color:#ff79c6">{</span>
-                sh <span style="color:#f1fa8c">&#39;mvn clean test&#39;</span>
-            <span style="color:#ff79c6">}</span>
-        <span style="color:#ff79c6">}</span>
-        stage<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#39;Build&#39;</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
-            steps <span style="color:#ff79c6">{</span>
-                sh <span style="color:#f1fa8c">&#39;mvn clean install&#39;</span>
-            <span style="color:#ff79c6">}</span>
-        <span style="color:#ff79c6">}</span>
-    <span style="color:#ff79c6">}</span>
-<span style="color:#ff79c6">}</span></code></pre></div>
-<p>由于我们上面的配置信息中有 maven 这个工具的配置，所以我们在 tools 中声明<code>maven 'maven'</code>的时候会根据需求去下 maven 工具的：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4">Started by user cnych
-Running in Durability level: MAX_SURVIVABILITY
-[Pipeline] Start of Pipeline
-[Pipeline] node
-Running on Jenkins in /var/jenkins_home/workspace/test-jenkins-casc-pipeline
-[Pipeline] {
-[Pipeline] stage
-[Pipeline] { (Declarative: Tool Install)
-[Pipeline] tool
-Unpacking https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.5.4/apache-maven-3.5.4-bin.zip to /var/jenkins_home/tools/
-......</pre></div>
-<p>可以看到下载的是<code>3.5.4</code>版本，和上面的配置是一致的：</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-yaml" data-lang="yaml">tool:
-  maven:
-    installations:
-    - name: <span style="color:#f1fa8c">&#34;maven&#34;</span>
-      properties:
-      - installSource:
-          installers:
-          - maven:
-              id: <span style="color:#f1fa8c">&#34;3.5.4&#34;</span></code></pre></div>
-<figure><img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/jenkins-casc-pipeline-demo.png" alt="jenkins casc pipeline demo"><figcaption>jenkins casc pipeline demo</figcaption></figure>
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-groovy" data-lang="groovy"><span style="display:flex;"><span>pipeline <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>    agent any
+</span></span><span style="display:flex;"><span>    tools <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        maven <span style="color:#f1fa8c">&#39;maven&#39;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    stages <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>        stage<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#39;Checkout&#39;</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            steps <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>                git <span style="color:#8be9fd;font-style:italic">url:</span> <span style="color:#f1fa8c">&#39;https://github.com/cnych/jenkins-casc-example-service.git&#39;</span><span style="color:#ff79c6">,</span> <span style="color:#8be9fd;font-style:italic">credentialsId:</span> <span style="color:#f1fa8c">&#39;github-cnych&#39;</span><span style="color:#ff79c6">,</span> <span style="color:#8be9fd;font-style:italic">branch:</span> <span style="color:#f1fa8c">&#39;master&#39;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        stage<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#39;Test&#39;</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            steps <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>                sh <span style="color:#f1fa8c">&#39;mvn clean test&#39;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        stage<span style="color:#ff79c6">(</span><span style="color:#f1fa8c">&#39;Build&#39;</span><span style="color:#ff79c6">)</span> <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>            steps <span style="color:#ff79c6">{</span>
+</span></span><span style="display:flex;"><span>                sh <span style="color:#f1fa8c">&#39;mvn clean install&#39;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">}</span>
+</span></span></code></pre></div><p>由于我们上面的配置信息中有 maven 这个工具的配置，所以我们在 tools 中声明<code>maven 'maven'</code>的时候会根据需求去下 maven 工具的：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>Started by user cnych
+</span></span><span style="display:flex;"><span>Running in Durability level: MAX_SURVIVABILITY
+</span></span><span style="display:flex;"><span>[Pipeline] Start of Pipeline
+</span></span><span style="display:flex;"><span>[Pipeline] node
+</span></span><span style="display:flex;"><span>Running on Jenkins in /var/jenkins_home/workspace/test-jenkins-casc-pipeline
+</span></span><span style="display:flex;"><span>[Pipeline] {
+</span></span><span style="display:flex;"><span>[Pipeline] stage
+</span></span><span style="display:flex;"><span>[Pipeline] { (Declarative: Tool Install)
+</span></span><span style="display:flex;"><span>[Pipeline] tool
+</span></span><span style="display:flex;"><span>Unpacking https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.5.4/apache-maven-3.5.4-bin.zip to /var/jenkins_home/tools/
+</span></span><span style="display:flex;"><span>......
+</span></span></code></pre></div><p>可以看到下载的是<code>3.5.4</code>版本，和上面的配置是一致的：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#ff79c6">tool</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#ff79c6">maven</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#ff79c6">installations</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ff79c6">name</span>: <span style="color:#f1fa8c">&#34;maven&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#ff79c6">properties</span>:
+</span></span><span style="display:flex;"><span>          - <span style="color:#ff79c6">installSource</span>:
+</span></span><span style="display:flex;"><span>              <span style="color:#ff79c6">installers</span>:
+</span></span><span style="display:flex;"><span>                - <span style="color:#ff79c6">maven</span>:
+</span></span><span style="display:flex;"><span>                    <span style="color:#ff79c6">id</span>: <span style="color:#f1fa8c">&#34;3.5.4&#34;</span>
+</span></span></code></pre></div><p><img src="https://picdn.youdianzhishi.com/images/jenkins-casc-pipeline-demo.png" alt="jenkins casc pipeline demo"></p>
 <h2 id="相关链接">相关链接</h2>
-
 <ul>
 <li><a href="https://www.vaultproject.io/">https://www.vaultproject.io/</a></li>
 <li><a href="https://github.com/jenkinsci/configuration-as-code-plugin">https://github.com/jenkinsci/configuration-as-code-plugin</a></li>
 <li><a href="https://github.com/cnych/jenkins-casc">https://github.com/cnych/jenkins-casc</a></li>
 <li><a href="https://github.com/cnych/jenkins-casc-example-service">https://github.com/cnych/jenkins-casc-example-service</a></li>
 </ul>
-
-<p><a href="https://youdianzhishi.com/web/course/1030" title="从 Docker 到 Kubernetes 进阶课程"><img src="https://sdn.youdianzhishi.com/images/2019/10/24/65f2cfb229184268a18745fe202b281b.jpg?imageView2/2/format/webp" alt="Kubernetes进阶训练营"></a></p>
-
+<!-- raw HTML omitted -->
 
           <h2>微信公众号</h2>
-<p>扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的 kubernetes 讨论群里面共同学习。</p>
-<img src="https://bxdc-static.oss-cn-beijing.aliyuncs.com/images/qrcode.png" alt="wechat-account-qrcode">
+<p>
+  扫描下面的二维码关注我们的微信公众帐号，在微信公众帐号中回复◉加群◉即可加入到我们的
+  kubernetes 讨论群里面共同学习。
+</p>
+<img
+  src="https://picdn.youdianzhishi.com/images/qrcode.png"
+  alt="wechat-account-qrcode"
+/>
 
   
           
@@ -802,7 +763,7 @@ Unpacking https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.5
           
 
           &nbsp;&bull;&nbsp;
-          2022
+          2023
 
           
             &nbsp;&bull;&nbsp;
@@ -814,7 +775,7 @@ Unpacking https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.5
             &nbsp;&bull;&nbsp;
             <a href="https://www.qikqiak.com/page/friend/">友链</a>
             &nbsp;&bull;&nbsp;
-            <a href="http://www.beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
+            <a href="https://beian.miit.gov.cn/" target="_blank">蜀ICP备11027319号-5</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.io">kubernetes.io</a>
             <a class="h" href="https://www.qikqiak.com/page/kubernetes.org.cn">Kubernetes中文社区</a>
           
@@ -831,7 +792,7 @@ Unpacking https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.5
         </p>
         
         <p class="credits theme-by text-muted">
-          由 <a href="http://gohugo.io">Hugo v0.55.6</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a> 移植自 <a href="https://github.com/rootsongjc/beautifulhugo">Beautiful Hugo</a>
+          由 <a href="http://gohugo.io">Hugo v0.115.4</a> 强力驱动 &nbsp;&bull;&nbsp; 主题 <a href="https://github.com/cnych/qikqiak.com">qikqiak-blog</a>
           
         </p>
       </div>
@@ -840,7 +801,7 @@ Unpacking https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/3.5
 </footer>
 
 
-<script src='https://www.qikqiak.com/js/bundle.min.8242ab5c3c016acc49d8c7717b5c1a9f24511d0b9e5d1c0e44f2b907c76b5987.js' integrity='sha256-gkKrXDwBasxJ2Mdxe1wanyRRHQueXRwORPK5B8drWYc='></script>
+<script src='https://www.qikqiak.com/js/bundle.min.af02a2d23b6651a566f0135a12e65fc2560faa7a969b3d1ad58d0afe0c9164ae.js' integrity='sha256-rwKi0jtmUaVm8BNaEuZfwlYPqnqWmz0a1Y0K/gyRZK4='></script>
 
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-69668147-3"></script>
